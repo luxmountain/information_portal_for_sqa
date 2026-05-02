@@ -1,0 +1,11 @@
+endpoint,method,body,token_type,expected_status
+/api/news,GET,,none,200
+/api/events,GET,,none,200
+/api/recruitment,GET,,none,200
+/api/departments,GET,,none,200
+/api/news?page=1&limit=10,GET,,none,200
+/api/majors,GET,,none,200
+/api/banners,GET,,none,200
+/api/enterprises,GET,,none,200
+/api/home,GET,,none,200
+/api/health,GET,,none,200

@@ -1,0 +1,12 @@
+timestamp,endpoint,method,http_code,time_ms,size_bytes,success
+1777697228329,/api/health,GET,200,2.068000,54,true
+1777697228352,/api/home,GET,200,6.825000,195,true
+1777697228373,/api/news,GET,200,5.559000,2,true
+1777697228394,/api/events,GET,200,4.255000,2,true
+1777697228413,/api/recruitment,GET,200,2.779000,2,true
+1777697228437,/api/departments,GET,200,5.725000,1397,true
+1777697228455,/api/majors,GET,200,3.336000,457,true
+1777697228474,/api/banners,GET,200,2.597000,2,true
+1777697228492,/api/enterprises,GET,200,2.785000,2,true
+1777697228514,/api/news?page=1&limit=10,GET,200,4.740000,71,true
+1777697228532,/api/news,POST_NOAUTH,401,1.719000,42,true

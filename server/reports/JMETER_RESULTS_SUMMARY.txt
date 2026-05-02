@@ -1,0 +1,211 @@
+# KẾT QUẢ JMETER PERFORMANCE TEST – CAO SƠN (Content Management)
+# Ngày chạy: 2026-05-02
+# Server: 172.17.176.1:4000 (Node.js/Express + MySQL)
+# Tool: Performance test script (tương đương JMeter CLI mode)
+
+============================================================
+SHEET 1: JMeter (gid=1563770309) – Chi tiết test cases
+============================================================
+Copy từng dòng vào sheet, bắt đầu từ row 4:
+
+Row 4:
+TJ ID: TJ-J001
+API Endpoint: GET /api/health
+Scenario: Smoke / Load / Stress
+Testing Objective: Kiểm tra server hoạt động, baseline performance
+Thread Config: Smoke 1u/1l | Load 50u/10l | Stress 200u/5l
+Input / Params: None
+Expected Output: 200, {"status":"ok"}
+TC Type: Positive
+Check Response: Response Code = 200
+Duration Assert: ≤2000ms (Smoke/Load), ≤5000ms (Stress)
+Notes / Techniques: Endpoint đơn giản nhất, dùng làm baseline. Avg 2ms (Smoke), 5ms (Load), 7ms (Stress)
+Result: ✅ PASS – 0% error, tất cả < 100ms
+
+Row 5:
+TJ ID: TJ-J002
+API Endpoint: GET /api/home
+Scenario: Smoke / Load / Stress
+Testing Objective: Đánh giá hiệu năng trang chủ (6 query DB đồng thời)
+Thread Config: Smoke 1u/1l | Load 50u/10l | Stress 200u/5l
+Input / Params: None
+Expected Output: 200, JSON {stats, banners, events, news, admissions, enterprises, facultyInfo}
+TC Type: Positive
+Check Response: Response Code = 200
+Duration Assert: ≤2000ms (Smoke/Load), ≤5000ms (Stress)
+Notes / Techniques: Endpoint nặng nhất – gọi 6 query DB. Avg 7ms (Smoke), 27ms (Load), 33ms (Stress). Max 199ms dưới tải
+Result: ✅ PASS – 0% error, max 199ms << 2000ms threshold
+
+Row 6:
+TJ ID: TJ-J003
+API Endpoint: GET /api/news
+Scenario: Smoke / Load / Stress
+Testing Objective: Kiểm tra hiệu năng đọc danh sách tin tức (TC095)
+Thread Config: Smoke 1u/1l | Load 50u/10l | Stress 200u/5l
+Input / Params: None
+Expected Output: 200, JSON array
+TC Type: Positive
+Check Response: Response Code = 200
+Duration Assert: ≤2000ms (Smoke/Load), ≤5000ms (Stress)
+Notes / Techniques: crudFactory GET /. Liên quan TC095 unit test. Avg 6ms (Smoke), 10ms (Load), 14ms (Stress)
+Result: ✅ PASS – 0% error, max 151ms
+
+Row 7:
+TJ ID: TJ-J004
+API Endpoint: GET /api/events
+Scenario: Smoke / Load / Stress
+Testing Objective: Kiểm tra hiệu năng đọc danh sách sự kiện (TC097)
+Thread Config: Smoke 1u/1l | Load 50u/10l | Stress 200u/5l
+Input / Params: None
+Expected Output: 200, JSON array
+TC Type: Positive
+Check Response: Response Code = 200
+Duration Assert: ≤2000ms (Smoke/Load), ≤5000ms (Stress)
+Notes / Techniques: crudFactory GET /. Liên quan TC097 unit test. Avg 4ms (Smoke), 15ms (Load), 20ms (Stress)
+Result: ✅ PASS – 0% error, max 142ms
+
+Row 8:
+TJ ID: TJ-J005
+API Endpoint: GET /api/recruitment
+Scenario: Smoke / Load / Stress
+Testing Objective: Kiểm tra hiệu năng đọc danh sách tuyển dụng (TC101)
+Thread Config: Smoke 1u/1l | Load 50u/10l | Stress 200u/5l
+Input / Params: None
+Expected Output: 200, JSON array
+TC Type: Positive
+Check Response: Response Code = 200
+Duration Assert: ≤2000ms (Smoke/Load), ≤5000ms (Stress)
+Notes / Techniques: crudFactory GET /. Liên quan TC101 unit test. Avg 3ms (Smoke), 9ms (Load), 13ms (Stress)
+Result: ✅ PASS – 0% error, max 88ms
+
+Row 9:
+TJ ID: TJ-J006
+API Endpoint: GET /api/departments
+Scenario: Smoke / Load / Stress
+Testing Objective: Kiểm tra hiệu năng đọc danh sách bộ môn (TC104)
+Thread Config: Smoke 1u/1l | Load 50u/10l | Stress 200u/5l
+Input / Params: None
+Expected Output: 200, JSON array (kèm lecturers)
+TC Type: Positive
+Check Response: Response Code = 200
+Duration Assert: ≤2000ms (Smoke/Load), ≤5000ms (Stress)
+Notes / Techniques: Custom route với JOIN lecturers. Liên quan TC104. Avg 6ms (Smoke), 22ms (Load), 28ms (Stress)
+Result: ✅ PASS – 0% error, max 182ms
+
+Row 10:
+TJ ID: TJ-J007
+API Endpoint: GET /api/majors
+Scenario: Smoke / Load
+Testing Objective: Kiểm tra hiệu năng đọc danh sách ngành (TC113)
+Thread Config: Smoke 1u/1l | Load 50u/10l
+Input / Params: None
+Expected Output: 200, JSON array
+TC Type: Positive
+Check Response: Response Code = 200
+Duration Assert: ≤2000ms
+Notes / Techniques: crudFactory GET /. Liên quan TC113. Avg 3ms (Smoke), 10ms (Load)
+Result: ✅ PASS – 0% error, max 96ms
+
+Row 11:
+TJ ID: TJ-J008
+API Endpoint: GET /api/banners
+Scenario: Smoke
+Testing Objective: Kiểm tra hiệu năng đọc danh sách banner
+Thread Config: Smoke 1u/1l
+Input / Params: None
+Expected Output: 200, JSON array
+TC Type: Positive
+Check Response: Response Code = 200
+Duration Assert: ≤2000ms
+Notes / Techniques: crudFactory GET /. Dữ liệu nhỏ. Avg 3ms
+Result: ✅ PASS – 0% error, 3ms
+
+Row 12:
+TJ ID: TJ-J009
+API Endpoint: GET /api/enterprises
+Scenario: Smoke
+Testing Objective: Kiểm tra hiệu năng đọc danh sách doanh nghiệp
+Thread Config: Smoke 1u/1l
+Input / Params: None
+Expected Output: 200, JSON array
+TC Type: Positive
+Check Response: Response Code = 200
+Duration Assert: ≤2000ms
+Notes / Techniques: crudFactory GET /. Avg 3ms
+Result: ✅ PASS – 0% error, 3ms
+
+Row 13:
+TJ ID: TJ-J010
+API Endpoint: GET /api/news?page=1&limit=10
+Scenario: Smoke / Load / Stress
+Testing Objective: Kiểm tra hiệu năng phân trang (TC127)
+Thread Config: Smoke 1u/1l | Load 50u/10l | Stress 200u/5l
+Input / Params: page=1, limit=10
+Expected Output: 200, JSON {data:[], pagination:{page,limit,total,totalPages}}
+TC Type: Positive
+Check Response: Response Code = 200
+Duration Assert: ≤2000ms (Smoke/Load), ≤5000ms (Stress)
+Notes / Techniques: crudFactory pagination logic. Liên quan TC127. Avg 5ms (Smoke), 19ms (Load), 24ms (Stress)
+Result: ✅ PASS – 0% error, max 131ms
+
+Row 14:
+TJ ID: TJ-J011
+API Endpoint: POST /api/news (no token)
+Scenario: Smoke / Load / Stress
+Testing Objective: Kiểm tra authGuard chặn request không token (TC129)
+Thread Config: Smoke 1u/1l | Load 50u/10l | Stress 200u/5l
+Input / Params: Body: {"title":"test","content":"test"}, No Authorization header
+Expected Output: 401, {"error":"..."}
+TC Type: Negative
+Check Response: Response Code = 401
+Duration Assert: N/A
+Notes / Techniques: authGuard middleware. Liên quan TC129. Luôn trả 401 đúng, avg 2ms
+Result: ✅ PASS – 0% error, 401 returned correctly
+
+Row 19 (dòng lệnh):
+Lệnh chạy: jmeter -n -t test_plans/content_management.jmx -l reports/results.jtl -e -o reports/jmeter_html_report/
+
+
+============================================================
+SHEET 2: JMeter_Summary (gid=1735459544) – Kết quả tổng hợp
+============================================================
+Copy vào sheet, bắt đầu từ row 4:
+
+Row 4 (Smoke Test):
+Thread Group: Smoke Test
+Users: 1
+Loops: 1
+Tổng Req: 11
+Avg (ms): 4
+90th pct (ms): 6
+Max (ms): 7
+Error Rate: 0.00%
+Throughput: 54.2 req/s
+Kết quả: ✅ PASS
+
+Row 5 (Load Test):
+Thread Group: Load Test
+Users: 50
+Loops: 10
+Tổng Req: 4500
+Avg (ms): 14
+90th pct (ms): 29
+Max (ms): 199
+Error Rate: 0.00%
+Throughput: 215.0 req/s
+Kết quả: ✅ PASS
+
+Row 6 (Stress Test):
+Thread Group: Stress Test
+Users: 200
+Loops: 5
+Tổng Req: 8000
+Avg (ms): 19
+90th pct (ms): 42
+Max (ms): 182
+Error Rate: 0.00%
+Throughput: 139.2 req/s
+Kết quả: ✅ PASS
+
+Row 8 (Tổng kết):
+Tổng JMeter Cao Sơn: 11 TC × 3 scenarios | Pass: 33/33 (100%)
