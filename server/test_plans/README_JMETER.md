@@ -1,8 +1,8 @@
 # HƯỚNG DẪN CHẠY JMETER PERFORMANCE TEST – CAO SƠN (Content Management)
 
-## ⚠️ LƯU Ý QUAN TRỌNG: TC IDs ĐÚNG
-Google Doc hướng dẫn ghi TC138–TC177 là **SAI**.
-TC thực tế của Cao Sơn trong dự án: **TC091–TC130** (xem unit test files).
+## ⚠️ LƯU Ý: TC IDs
+
+TC thực tế của Cao Sơn trong dự án: **TC138–TC177** (đồng bộ với Google Sheets).
 
 ## 1. Cài đặt JMeter
 ```bash
@@ -82,12 +82,12 @@ start reports/jmeter_html_report/index.html   # Windows
 |---|---|---|---|
 | TJ-S01/L01/X01 | GET /api/health | - | Health check |
 | TJ-S02/L02/X02 | GET /api/home | - | Trang chủ (aggregate) |
-| TJ-S03/L03/X03 | GET /api/news | TC095 | Danh sách tin tức |
-| TJ-S04/L04/X04 | GET /api/events | TC097 | Danh sách sự kiện |
-| TJ-S05/L05/X05 | GET /api/recruitment | TC101 | Danh sách tuyển dụng |
-| TJ-S06/L06/X06 | GET /api/departments | TC104 | Danh sách bộ môn |
-| TJ-S07/L07 | GET /api/majors | TC113 | Danh sách ngành |
+| TJ-S03/L03/X03 | GET /api/news | TC142 | Danh sách tin tức |
+| TJ-S04/L04/X04 | GET /api/events | TC144 | Danh sách sự kiện |
+| TJ-S05/L05/X05 | GET /api/recruitment | TC148 | Danh sách tuyển dụng |
+| TJ-S06/L06/X06 | GET /api/departments | TC156 | Danh sách bộ môn |
+| TJ-S07/L07 | GET /api/majors | TC168 | Danh sách ngành |
 | TJ-S08 | GET /api/banners | - | Danh sách banner |
 | TJ-S09 | GET /api/enterprises | - | Danh sách doanh nghiệp |
-| TJ-S10/L08/X07 | GET /api/news?page=1&limit=10 | TC127 | Pagination |
-| TJ-S11/L09/X08 | POST /api/news (no token) | TC129 | Auth middleware → 401 |
+| TJ-S10/L08/X07 | GET /api/news?page=1&limit=10 | TC174 | Pagination |
+| TJ-S11/L09/X08 | POST /api/news (no token) | TC172 | Auth middleware → 401 |

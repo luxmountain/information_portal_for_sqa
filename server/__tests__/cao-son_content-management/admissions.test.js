@@ -1,12 +1,12 @@
 /**
  * ============================================================
  * TEST SUITE: Admissions Module (crudFactory – table: admissions)
- * Test Cases: TC129 → TC130
+ * Test Cases: TC176 → TC177
  * File under test: src/utils/crudFactory.js
  * Route config:    /api/admissions (server.js)
  * ============================================================
- *   - TC129: Tạo tin tuyển sinh hợp lệ       (Chuẩn,  CheckDB ✓, Rollback ✓)
- *   - TC130: Tạo tin tuyển sinh thiếu year    (Ngoại lệ)
+ *   - TC176: Tạo tin tuyển sinh hợp lệ       (Chuẩn,  CheckDB ✓, Rollback ✓)
+ *   - TC177: Tạo tin tuyển sinh thiếu year    (Ngoại lệ)
  * ============================================================
  */
 
@@ -31,13 +31,13 @@ afterAll(async () => {
 });
 
 /* ============================================================
- * TC129 – Tạo tin tuyển sinh hợp lệ
+ * TC176 – Tạo tin tuyển sinh hợp lệ
  * Loại: Chuẩn | CheckDB: Y | Rollback: Y
  * ============================================================ */
-describe('TC129 – createAdmission: tạo tin tuyển sinh hợp lệ', () => {
+describe('TC176 – createAdmission: tạo tin tuyển sinh hợp lệ', () => {
   it('should return 201 and persist admission to database', async () => {
     const validAdmissionPayload = {
-      title: 'Tuyển sinh 2025 TC129',
+      title: 'Tuyển sinh 2025 TC176',
       admission_year: 2025,
       description: 'Mô tả tuyển sinh',
     };
@@ -62,12 +62,12 @@ describe('TC129 – createAdmission: tạo tin tuyển sinh hợp lệ', () => {
 });
 
 /* ============================================================
- * TC130 – Tạo tin tuyển sinh thiếu title (NOT NULL)
+ * TC177 – Tạo tin tuyển sinh thiếu title (NOT NULL)
  * Loại: Ngoại lệ | CheckDB: N | Rollback: N
  * Ghi chú: admission_year là nullable, nên test thiếu title thay thế
  * Expect: HTTP 500 (ER_NO_DEFAULT_FOR_FIELD – title NOT NULL)
  * ============================================================ */
-describe('TC130 – createAdmission: thiếu title (NOT NULL)', () => {
+describe('TC177 – createAdmission: thiếu title (NOT NULL)', () => {
   it('should reject when title is missing (NOT NULL constraint)', async () => {
     const missingTitlePayload = { admission_year: 2025 };
 
