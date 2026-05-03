@@ -1,0 +1,4 @@
+Thread Group,Users,Loops,Tổng Req,Avg (ms),90th pct (ms),Max (ms),Error Rate,Throughput,Kết quả
+Smoke Test,1,1,14,12,75,75,0.00%,13.3 req/s,✅ PASS
+Load Test,50,10,6000,53,105,2180,0.22%,38.5 req/s,⚠️ PASS (13 errors – DB write contention)
+Stress Test,200,5,9200,21,86,940,0.00%,33.2 req/s,✅ PASS

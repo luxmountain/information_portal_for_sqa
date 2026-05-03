@@ -1,29 +1,894 @@
-2026-05-02 14:20:01,642 INFO o.a.j.u.JMeterUtils: Setting Locale to en_EN
-2026-05-02 14:20:01,664 INFO o.a.j.JMeter: Loading user properties from: D:\bin\apache-jmeter-5.6.3\bin\user.properties
-2026-05-02 14:20:01,665 INFO o.a.j.JMeter: Loading system properties from: D:\bin\apache-jmeter-5.6.3\bin\system.properties
-2026-05-02 14:20:01,676 INFO o.a.j.JMeter: Copyright (c) 1998-2024 The Apache Software Foundation
-2026-05-02 14:20:01,677 INFO o.a.j.JMeter: Version 5.6.3
-2026-05-02 14:20:01,677 INFO o.a.j.JMeter: java.version=24.0.1
-2026-05-02 14:20:01,677 INFO o.a.j.JMeter: java.vm.name=Java HotSpot(TM) 64-Bit Server VM
-2026-05-02 14:20:01,677 INFO o.a.j.JMeter: os.name=Windows 11
-2026-05-02 14:20:01,677 INFO o.a.j.JMeter: os.arch=amd64
-2026-05-02 14:20:01,677 INFO o.a.j.JMeter: os.version=10.0
-2026-05-02 14:20:01,678 INFO o.a.j.JMeter: file.encoding=UTF-8
-2026-05-02 14:20:01,678 INFO o.a.j.JMeter: java.awt.headless=true
-2026-05-02 14:20:01,678 INFO o.a.j.JMeter: Max memory     =1073741824
-2026-05-02 14:20:01,678 INFO o.a.j.JMeter: Available Processors =16
-2026-05-02 14:20:01,696 INFO o.a.j.JMeter: Default Locale=English (EN)
-2026-05-02 14:20:01,697 INFO o.a.j.JMeter: JMeter  Locale=English (EN)
-2026-05-02 14:20:01,697 INFO o.a.j.JMeter: JMeterHome=D:\bin\apache-jmeter-5.6.3
-2026-05-02 14:20:01,697 INFO o.a.j.JMeter: user.dir  =D:\project\ptit\sqa\information_portal
-2026-05-02 14:20:01,697 INFO o.a.j.JMeter: PWD       =D:\project\ptit\sqa\information_portal
-2026-05-02 14:20:01,699 INFO o.a.j.JMeter: IP: 192.168.1.56 Name: Lux FullName: Lux
-2026-05-02 14:20:01,714 INFO o.a.j.JMeter: Setting property 'jmeter.reportgenerator.outputdir' to:'D:\project\ptit\sqa\information_portal\reports\jmeter_html_report'
-2026-05-02 14:20:01,715 ERROR o.a.j.JMeter: An error occurred: 
-org.apache.jmeter.report.config.ConfigurationException: The file D:\project\ptit\sqa\information_portal\test_plans\content_management.jmx doesn't exist or can't be opened
-	at org.apache.jmeter.JMeter.runNonGui(JMeter.java:950) ~[ApacheJMeter_core.jar:5.6.3]
-	at org.apache.jmeter.JMeter.startNonGui(JMeter.java:940) ~[ApacheJMeter_core.jar:5.6.3]
-	at org.apache.jmeter.JMeter.start(JMeter.java:508) [ApacheJMeter_core.jar:5.6.3]
-	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104) ~[?:?]
-	at java.base/java.lang.reflect.Method.invoke(Method.java:565) ~[?:?]
-	at org.apache.jmeter.NewDriver.main(NewDriver.java:259) [ApacheJMeter.jar:5.6.3]
+2026-05-03 15:00:51,643 INFO o.a.j.u.JMeterUtils: Setting Locale to en_EN
+2026-05-03 15:00:51,661 INFO o.a.j.JMeter: Loading user properties from: D:\bin\apache-jmeter-5.6.3\bin\user.properties
+2026-05-03 15:00:51,663 INFO o.a.j.JMeter: Loading system properties from: D:\bin\apache-jmeter-5.6.3\bin\system.properties
+2026-05-03 15:00:51,669 INFO o.a.j.JMeter: Copyright (c) 1998-2024 The Apache Software Foundation
+2026-05-03 15:00:51,669 INFO o.a.j.JMeter: Version 5.6.3
+2026-05-03 15:00:51,669 INFO o.a.j.JMeter: java.version=24.0.1
+2026-05-03 15:00:51,669 INFO o.a.j.JMeter: java.vm.name=Java HotSpot(TM) 64-Bit Server VM
+2026-05-03 15:00:51,669 INFO o.a.j.JMeter: os.name=Windows 11
+2026-05-03 15:00:51,670 INFO o.a.j.JMeter: os.arch=amd64
+2026-05-03 15:00:51,670 INFO o.a.j.JMeter: os.version=10.0
+2026-05-03 15:00:51,670 INFO o.a.j.JMeter: file.encoding=UTF-8
+2026-05-03 15:00:51,670 INFO o.a.j.JMeter: java.awt.headless=true
+2026-05-03 15:00:51,670 INFO o.a.j.JMeter: Max memory     =1073741824
+2026-05-03 15:00:51,670 INFO o.a.j.JMeter: Available Processors =16
+2026-05-03 15:00:51,682 INFO o.a.j.JMeter: Default Locale=English (EN)
+2026-05-03 15:00:51,683 INFO o.a.j.JMeter: JMeter  Locale=English (EN)
+2026-05-03 15:00:51,683 INFO o.a.j.JMeter: JMeterHome=D:\bin\apache-jmeter-5.6.3
+2026-05-03 15:00:51,683 INFO o.a.j.JMeter: user.dir  =D:\project\ptit\sqa\information_portal
+2026-05-03 15:00:51,684 INFO o.a.j.JMeter: PWD       =D:\project\ptit\sqa\information_portal
+2026-05-03 15:00:51,685 INFO o.a.j.JMeter: IP: 192.168.1.56 Name: Lux FullName: Lux
+2026-05-03 15:00:51,693 INFO o.a.j.JMeter: Setting property 'jmeter.reportgenerator.outputdir' to:'D:\project\ptit\sqa\information_portal\server\reports\jmeter_html_report'
+2026-05-03 15:00:51,696 INFO o.a.j.s.FileServer: Default base='D:\project\ptit\sqa\information_portal'
+2026-05-03 15:00:51,697 INFO o.a.j.s.FileServer: Set new base='D:\project\ptit\sqa\information_portal\server\test_plans'
+2026-05-03 15:00:51,963 INFO o.a.j.s.SaveService: Testplan (JMX) version: 2.2. Testlog (JTL) version: 2.2
+2026-05-03 15:00:51,994 INFO o.a.j.s.SaveService: Using SaveService properties version 5.0
+2026-05-03 15:00:51,997 INFO o.a.j.s.SaveService: Using SaveService properties file encoding UTF-8
+2026-05-03 15:00:52,002 INFO o.a.j.s.SaveService: Loading file: D:\project\ptit\sqa\information_portal\server\test_plans\content_management.jmx
+2026-05-03 15:00:52,063 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/html is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2026-05-03 15:00:52,063 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for application/xhtml+xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2026-05-03 15:00:52,063 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for application/xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2026-05-03 15:00:52,063 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2026-05-03 15:00:52,063 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/vnd.wap.wml is org.apache.jmeter.protocol.http.parser.RegexpHTMLParser
+2026-05-03 15:00:52,063 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/css is org.apache.jmeter.protocol.http.parser.CssParser
+2026-05-03 15:00:52,145 INFO o.a.j.JMeter: Creating summariser <summary>
+2026-05-03 15:00:52,150 INFO o.a.j.r.d.ReportGenerator: ReportGenerator will use for Parsing the separator: ','
+2026-05-03 15:00:52,150 INFO o.a.j.r.d.ReportGenerator: Will generate report at end of test from  results file: D:\project\ptit\sqa\information_portal\server\reports\results.jtl
+2026-05-03 15:00:52,150 INFO o.a.j.r.d.ReportGenerator: Reading report generator properties from: D:\bin\apache-jmeter-5.6.3\bin\reportgenerator.properties
+2026-05-03 15:00:52,151 INFO o.a.j.r.d.ReportGenerator: Merging with JMeter properties
+2026-05-03 15:00:52,155 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.temp_dir' not found, using default value 'temp' instead.
+2026-05-03 15:00:52,160 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.apdex_per_transaction' not found, using default value 'null' instead.
+2026-05-03 15:00:52,160 INFO o.a.j.r.c.ReportGeneratorConfiguration: apdex_per_transaction is empty, not APDEX per transaction customization
+2026-05-03 15:00:52,161 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.sample_filter' not found, using default value 'null' instead.
+2026-05-03 15:00:52,161 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.report_title' not found, using default value 'null' instead.
+2026-05-03 15:00:52,161 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.start_date' not found, using default value 'null' instead.
+2026-05-03 15:00:52,161 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.end_date' not found, using default value 'null' instead.
+2026-05-03 15:00:52,161 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.date_format' not found, using default value 'null' instead.
+2026-05-03 15:00:52,161 INFO o.a.j.r.c.ReportGeneratorConfiguration: Will use date range start date: null, end date: null
+2026-05-03 15:00:52,165 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.totalTPS.exclude_controllers' not found, using default value 'false' instead.
+2026-05-03 15:00:52,165 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.activeThreadsOverTime.exclude_controllers' not found, using default value 'false' instead.
+2026-05-03 15:00:52,166 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.timeVsThreads.exclude_controllers' not found, using default value 'false' instead.
+2026-05-03 15:00:52,166 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.responseTimeDistribution.exclude_controllers' not found, using default value 'false' instead.
+2026-05-03 15:00:52,166 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.transactionsPerSecond.exclude_controllers' not found, using default value 'false' instead.
+2026-05-03 15:00:52,167 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.responseTimePercentiles.exclude_controllers' not found, using default value 'false' instead.
+2026-05-03 15:00:52,167 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.responseTimePercentilesOverTime.exclude_controllers' not found, using default value 'false' instead.
+2026-05-03 15:00:52,167 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.responseTimesOverTime.exclude_controllers' not found, using default value 'false' instead.
+2026-05-03 15:00:52,167 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.connectTimeOverTime.exclude_controllers' not found, using default value 'false' instead.
+2026-05-03 15:00:52,167 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.latenciesOverTime.exclude_controllers' not found, using default value 'false' instead.
+2026-05-03 15:00:52,168 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.json.filters_only_sample_series' not found, using default value 'true' instead.
+2026-05-03 15:00:52,168 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.json.series_filter' not found, using default value '' instead.
+2026-05-03 15:00:52,168 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.json.show_controllers_only' not found, using default value 'false' instead.
+2026-05-03 15:00:52,169 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.html.filters_only_sample_series' not found, using default value 'true' instead.
+2026-05-03 15:00:52,169 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.html.series_filter' not found, using default value '' instead.
+2026-05-03 15:00:52,169 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.html.show_controllers_only' not found, using default value 'false' instead.
+2026-05-03 15:00:52,185 INFO o.a.j.e.StandardJMeterEngine: Running the test!
+2026-05-03 15:00:52,186 INFO o.a.j.s.SampleEvent: List of sample_variables: []
+2026-05-03 15:00:52,187 INFO o.a.j.s.SampleEvent: List of sample_variables: []
+2026-05-03 15:00:52,192 INFO o.a.j.e.u.CompoundVariable: Note: Function class names must contain the string: '.functions.'
+2026-05-03 15:00:52,192 INFO o.a.j.e.u.CompoundVariable: Note: Function class names must not contain the string: '.gui.'
+2026-05-03 15:00:52,285 INFO o.a.j.JMeter: Running test (1777795252284)
+2026-05-03 15:00:52,302 INFO o.a.j.e.StandardJMeterEngine: Starting ThreadGroup: 1 : Smoke Test - 1 User
+2026-05-03 15:00:52,303 INFO o.a.j.e.StandardJMeterEngine: Starting 1 threads for group Smoke Test - 1 User.
+2026-05-03 15:00:52,303 INFO o.a.j.e.StandardJMeterEngine: Thread will continue on error
+2026-05-03 15:00:52,303 INFO o.a.j.t.ThreadGroup: Starting thread group... number=1 threads=1 ramp-up=1 delayedStart=false
+2026-05-03 15:00:52,308 INFO o.a.j.t.ThreadGroup: Started thread group number 1
+2026-05-03 15:00:52,308 INFO o.a.j.e.StandardJMeterEngine: Waiting for thread group: Smoke Test - 1 User to finish before starting next group
+2026-05-03 15:00:52,312 INFO o.a.j.t.JMeterThread: Thread started: Smoke Test - 1 User 1-1
+2026-05-03 15:00:52,329 INFO o.a.j.p.h.s.HTTPHCAbstractImpl: Local host = Lux
+2026-05-03 15:00:52,337 INFO o.a.j.p.h.s.HTTPHC4Impl: HTTP request retry count = 0
+2026-05-03 15:00:52,338 INFO o.a.j.s.SampleResult: Note: Sample TimeStamps are START times
+2026-05-03 15:00:52,339 INFO o.a.j.s.SampleResult: sampleresult.default.encoding is set to UTF-8
+2026-05-03 15:00:52,339 INFO o.a.j.s.SampleResult: sampleresult.useNanoTime=true
+2026-05-03 15:00:52,339 INFO o.a.j.s.SampleResult: sampleresult.nanoThreadSleep=5000
+2026-05-03 15:00:52,613 INFO o.a.j.t.JMeterThread: Thread is done: Smoke Test - 1 User 1-1
+2026-05-03 15:00:52,613 INFO o.a.j.t.JMeterThread: Thread finished: Smoke Test - 1 User 1-1
+2026-05-03 15:00:52,614 INFO o.a.j.e.StandardJMeterEngine: Starting ThreadGroup: 2 : Load Test - 50 Users
+2026-05-03 15:00:52,614 INFO o.a.j.e.StandardJMeterEngine: Starting 50 threads for group Load Test - 50 Users.
+2026-05-03 15:00:52,614 INFO o.a.j.e.StandardJMeterEngine: Thread will continue on error
+2026-05-03 15:00:52,614 INFO o.a.j.t.ThreadGroup: Starting thread group... number=2 threads=50 ramp-up=10 delayedStart=false
+2026-05-03 15:00:52,616 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-1
+2026-05-03 15:00:52,657 INFO o.a.j.t.ThreadGroup: Started thread group number 2
+2026-05-03 15:00:52,658 INFO o.a.j.e.StandardJMeterEngine: Waiting for thread group: Load Test - 50 Users to finish before starting next group
+2026-05-03 15:00:52,817 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-2
+2026-05-03 15:00:53,016 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-3
+2026-05-03 15:00:53,217 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-4
+2026-05-03 15:00:53,417 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-5
+2026-05-03 15:00:53,617 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-6
+2026-05-03 15:00:53,816 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-7
+2026-05-03 15:00:53,982 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-1
+2026-05-03 15:00:53,982 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-1
+2026-05-03 15:00:54,016 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-8
+2026-05-03 15:00:54,230 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-9
+2026-05-03 15:00:54,418 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-10
+2026-05-03 15:00:54,607 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-2
+2026-05-03 15:00:54,607 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-2
+2026-05-03 15:00:54,616 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-11
+2026-05-03 15:00:54,816 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-12
+2026-05-03 15:00:55,017 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-13
+2026-05-03 15:00:55,044 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-3
+2026-05-03 15:00:55,044 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-3
+2026-05-03 15:00:55,219 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-14
+2026-05-03 15:00:55,416 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-15
+2026-05-03 15:00:55,617 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-16
+2026-05-03 15:00:55,816 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-17
+2026-05-03 15:00:56,016 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-18
+2026-05-03 15:00:56,218 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-19
+2026-05-03 15:00:56,417 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-20
+2026-05-03 15:00:56,617 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-21
+2026-05-03 15:00:56,777 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-4
+2026-05-03 15:00:56,777 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-4
+2026-05-03 15:00:56,817 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-22
+2026-05-03 15:00:57,015 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-23
+2026-05-03 15:00:57,215 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-24
+2026-05-03 15:00:57,415 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-25
+2026-05-03 15:00:57,618 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-26
+2026-05-03 15:00:57,816 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-27
+2026-05-03 15:00:58,017 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-28
+2026-05-03 15:00:58,215 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-29
+2026-05-03 15:00:58,417 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-30
+2026-05-03 15:00:58,617 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-31
+2026-05-03 15:00:58,815 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-32
+2026-05-03 15:00:59,015 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-33
+2026-05-03 15:00:59,215 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-34
+2026-05-03 15:00:59,416 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-35
+2026-05-03 15:00:59,616 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-36
+2026-05-03 15:00:59,817 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-37
+2026-05-03 15:01:00,017 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-38
+2026-05-03 15:01:00,072 INFO o.a.j.r.Summariser: summary +   1271 in 00:00:08 =  163.2/s Avg:    89 Min:     0 Max:  2180 Err:    13 (1.02%) Active: 34 Started: 39 Finished: 5
+2026-05-03 15:01:00,216 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-39
+2026-05-03 15:01:00,335 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-5
+2026-05-03 15:01:00,335 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-5
+2026-05-03 15:01:00,416 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-40
+2026-05-03 15:01:00,615 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-41
+2026-05-03 15:01:00,815 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-42
+2026-05-03 15:01:01,017 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-43
+2026-05-03 15:01:01,216 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-44
+2026-05-03 15:01:01,416 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-45
+2026-05-03 15:01:01,455 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-6
+2026-05-03 15:01:01,455 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-6
+2026-05-03 15:01:01,614 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-46
+2026-05-03 15:01:01,817 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-47
+2026-05-03 15:01:02,015 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-48
+2026-05-03 15:01:02,141 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-7
+2026-05-03 15:01:02,141 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-7
+2026-05-03 15:01:02,215 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-49
+2026-05-03 15:01:02,416 INFO o.a.j.t.JMeterThread: Thread started: Load Test - 50 Users 2-50
+2026-05-03 15:01:02,470 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-8
+2026-05-03 15:01:02,470 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-8
+2026-05-03 15:01:02,942 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-9
+2026-05-03 15:01:02,942 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-9
+2026-05-03 15:01:03,069 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-10
+2026-05-03 15:01:03,069 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-10
+2026-05-03 15:01:03,179 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-11
+2026-05-03 15:01:03,181 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-11
+2026-05-03 15:01:03,383 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-12
+2026-05-03 15:01:03,383 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-12
+2026-05-03 15:01:03,822 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-13
+2026-05-03 15:01:03,823 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-13
+2026-05-03 15:01:04,787 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-14
+2026-05-03 15:01:04,787 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-14
+2026-05-03 15:01:05,067 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-16
+2026-05-03 15:01:05,068 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-16
+2026-05-03 15:01:05,069 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-15
+2026-05-03 15:01:05,069 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-15
+2026-05-03 15:01:05,108 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-18
+2026-05-03 15:01:05,108 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-18
+2026-05-03 15:01:05,127 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-21
+2026-05-03 15:01:05,127 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-21
+2026-05-03 15:01:05,131 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-20
+2026-05-03 15:01:05,131 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-20
+2026-05-03 15:01:05,139 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-17
+2026-05-03 15:01:05,139 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-17
+2026-05-03 15:01:05,141 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-22
+2026-05-03 15:01:05,141 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-22
+2026-05-03 15:01:05,141 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-23
+2026-05-03 15:01:05,141 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-23
+2026-05-03 15:01:05,141 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-27
+2026-05-03 15:01:05,141 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-19
+2026-05-03 15:01:05,141 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-27
+2026-05-03 15:01:05,141 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-19
+2026-05-03 15:01:05,203 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-24
+2026-05-03 15:01:05,204 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-24
+2026-05-03 15:01:05,210 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-30
+2026-05-03 15:01:05,210 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-30
+2026-05-03 15:01:05,210 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-25
+2026-05-03 15:01:05,210 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-25
+2026-05-03 15:01:05,216 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-26
+2026-05-03 15:01:05,216 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-26
+2026-05-03 15:01:05,279 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-29
+2026-05-03 15:01:05,280 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-29
+2026-05-03 15:01:05,302 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-28
+2026-05-03 15:01:05,302 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-28
+2026-05-03 15:01:05,307 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-32
+2026-05-03 15:01:05,307 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-32
+2026-05-03 15:01:05,330 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-31
+2026-05-03 15:01:05,330 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-31
+2026-05-03 15:01:05,330 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-35
+2026-05-03 15:01:05,330 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-35
+2026-05-03 15:01:05,346 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-37
+2026-05-03 15:01:05,346 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-37
+2026-05-03 15:01:05,346 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-33
+2026-05-03 15:01:05,346 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-33
+2026-05-03 15:01:05,346 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-34
+2026-05-03 15:01:05,346 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-34
+2026-05-03 15:01:05,351 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-36
+2026-05-03 15:01:05,351 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-36
+2026-05-03 15:01:05,379 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-38
+2026-05-03 15:01:05,379 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-39
+2026-05-03 15:01:05,379 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-38
+2026-05-03 15:01:05,379 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-39
+2026-05-03 15:01:05,451 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-43
+2026-05-03 15:01:05,451 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-43
+2026-05-03 15:01:05,451 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-41
+2026-05-03 15:01:05,451 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-41
+2026-05-03 15:01:05,452 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-40
+2026-05-03 15:01:05,452 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-40
+2026-05-03 15:01:05,452 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-42
+2026-05-03 15:01:05,452 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-42
+2026-05-03 15:01:05,519 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-44
+2026-05-03 15:01:05,519 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-44
+2026-05-03 15:01:05,524 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-45
+2026-05-03 15:01:05,524 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-45
+2026-05-03 15:01:05,528 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-46
+2026-05-03 15:01:05,528 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-46
+2026-05-03 15:01:05,541 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-47
+2026-05-03 15:01:05,541 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-47
+2026-05-03 15:01:05,597 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-49
+2026-05-03 15:01:05,597 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-48
+2026-05-03 15:01:05,599 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-49
+2026-05-03 15:01:05,599 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-48
+2026-05-03 15:01:05,652 INFO o.a.j.t.JMeterThread: Thread is done: Load Test - 50 Users 2-50
+2026-05-03 15:01:05,652 INFO o.a.j.t.JMeterThread: Thread finished: Load Test - 50 Users 2-50
+2026-05-03 15:01:05,653 INFO o.a.j.e.StandardJMeterEngine: Starting ThreadGroup: 3 : Stress Test - 200 Users
+2026-05-03 15:01:05,653 INFO o.a.j.e.StandardJMeterEngine: Starting 200 threads for group Stress Test - 200 Users.
+2026-05-03 15:01:05,653 INFO o.a.j.e.StandardJMeterEngine: Thread will continue on error
+2026-05-03 15:01:05,653 INFO o.a.j.t.ThreadGroup: Starting thread group... number=3 threads=200 ramp-up=30 delayedStart=false
+2026-05-03 15:01:05,654 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-1
+2026-05-03 15:01:05,718 INFO o.a.j.t.ThreadGroup: Started thread group number 3
+2026-05-03 15:01:05,719 INFO o.a.j.e.StandardJMeterEngine: All thread groups have been started
+2026-05-03 15:01:05,805 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-2
+2026-05-03 15:01:05,955 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-3
+2026-05-03 15:01:06,105 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-4
+2026-05-03 15:01:06,256 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-5
+2026-05-03 15:01:06,406 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-6
+2026-05-03 15:01:06,508 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-1
+2026-05-03 15:01:06,508 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-1
+2026-05-03 15:01:06,551 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-2
+2026-05-03 15:01:06,551 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-2
+2026-05-03 15:01:06,556 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-7
+2026-05-03 15:01:06,704 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-8
+2026-05-03 15:01:06,719 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-3
+2026-05-03 15:01:06,720 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-3
+2026-05-03 15:01:06,853 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-9
+2026-05-03 15:01:06,997 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-4
+2026-05-03 15:01:06,997 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-4
+2026-05-03 15:01:07,003 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-10
+2026-05-03 15:01:07,133 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-5
+2026-05-03 15:01:07,133 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-5
+2026-05-03 15:01:07,154 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-11
+2026-05-03 15:01:07,244 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-6
+2026-05-03 15:01:07,244 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-6
+2026-05-03 15:01:07,305 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-12
+2026-05-03 15:01:07,321 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-7
+2026-05-03 15:01:07,321 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-7
+2026-05-03 15:01:07,412 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-8
+2026-05-03 15:01:07,412 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-8
+2026-05-03 15:01:07,453 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-13
+2026-05-03 15:01:07,458 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-9
+2026-05-03 15:01:07,458 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-9
+2026-05-03 15:01:07,604 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-14
+2026-05-03 15:01:07,612 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-10
+2026-05-03 15:01:07,613 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-10
+2026-05-03 15:01:07,747 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-11
+2026-05-03 15:01:07,747 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-11
+2026-05-03 15:01:07,754 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-15
+2026-05-03 15:01:07,893 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-12
+2026-05-03 15:01:07,894 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-12
+2026-05-03 15:01:07,905 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-16
+2026-05-03 15:01:08,031 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-13
+2026-05-03 15:01:08,031 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-13
+2026-05-03 15:01:08,053 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-17
+2026-05-03 15:01:08,180 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-14
+2026-05-03 15:01:08,181 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-14
+2026-05-03 15:01:08,203 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-18
+2026-05-03 15:01:08,349 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-15
+2026-05-03 15:01:08,349 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-15
+2026-05-03 15:01:08,353 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-19
+2026-05-03 15:01:08,503 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-20
+2026-05-03 15:01:08,626 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-16
+2026-05-03 15:01:08,626 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-16
+2026-05-03 15:01:08,655 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-21
+2026-05-03 15:01:08,755 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-17
+2026-05-03 15:01:08,755 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-17
+2026-05-03 15:01:08,806 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-22
+2026-05-03 15:01:08,908 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-18
+2026-05-03 15:01:08,908 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-18
+2026-05-03 15:01:08,955 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-23
+2026-05-03 15:01:09,069 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-19
+2026-05-03 15:01:09,069 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-19
+2026-05-03 15:01:09,104 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-24
+2026-05-03 15:01:09,204 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-20
+2026-05-03 15:01:09,204 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-20
+2026-05-03 15:01:09,255 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-25
+2026-05-03 15:01:09,263 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-21
+2026-05-03 15:01:09,263 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-21
+2026-05-03 15:01:09,405 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-26
+2026-05-03 15:01:09,410 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-22
+2026-05-03 15:01:09,410 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-22
+2026-05-03 15:01:09,541 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-23
+2026-05-03 15:01:09,542 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-23
+2026-05-03 15:01:09,554 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-27
+2026-05-03 15:01:09,698 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-24
+2026-05-03 15:01:09,699 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-24
+2026-05-03 15:01:09,703 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-28
+2026-05-03 15:01:09,814 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-25
+2026-05-03 15:01:09,815 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-25
+2026-05-03 15:01:09,854 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-29
+2026-05-03 15:01:09,971 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-26
+2026-05-03 15:01:09,971 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-26
+2026-05-03 15:01:10,004 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-30
+2026-05-03 15:01:10,153 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-31
+2026-05-03 15:01:10,156 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-27
+2026-05-03 15:01:10,156 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-27
+2026-05-03 15:01:10,294 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-28
+2026-05-03 15:01:10,294 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-28
+2026-05-03 15:01:10,303 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-32
+2026-05-03 15:01:10,454 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-33
+2026-05-03 15:01:10,567 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-29
+2026-05-03 15:01:10,567 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-29
+2026-05-03 15:01:10,604 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-34
+2026-05-03 15:01:10,724 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-30
+2026-05-03 15:01:10,724 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-30
+2026-05-03 15:01:10,754 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-35
+2026-05-03 15:01:10,871 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-31
+2026-05-03 15:01:10,871 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-31
+2026-05-03 15:01:10,904 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-36
+2026-05-03 15:01:10,994 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-32
+2026-05-03 15:01:10,994 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-32
+2026-05-03 15:01:11,054 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-37
+2026-05-03 15:01:11,165 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-33
+2026-05-03 15:01:11,165 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-33
+2026-05-03 15:01:11,196 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-34
+2026-05-03 15:01:11,196 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-34
+2026-05-03 15:01:11,204 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-38
+2026-05-03 15:01:11,311 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-35
+2026-05-03 15:01:11,312 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-35
+2026-05-03 15:01:11,354 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-39
+2026-05-03 15:01:11,504 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-40
+2026-05-03 15:01:11,520 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-36
+2026-05-03 15:01:11,520 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-36
+2026-05-03 15:01:11,655 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-41
+2026-05-03 15:01:11,670 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-37
+2026-05-03 15:01:11,670 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-37
+2026-05-03 15:01:11,805 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-42
+2026-05-03 15:01:11,929 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-38
+2026-05-03 15:01:11,929 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-38
+2026-05-03 15:01:11,954 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-43
+2026-05-03 15:01:12,080 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-39
+2026-05-03 15:01:12,080 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-39
+2026-05-03 15:01:12,104 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-44
+2026-05-03 15:01:12,237 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-40
+2026-05-03 15:01:12,237 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-40
+2026-05-03 15:01:12,254 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-45
+2026-05-03 15:01:12,404 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-46
+2026-05-03 15:01:12,410 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-41
+2026-05-03 15:01:12,410 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-41
+2026-05-03 15:01:12,507 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-42
+2026-05-03 15:01:12,508 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-42
+2026-05-03 15:01:12,554 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-47
+2026-05-03 15:01:12,658 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-43
+2026-05-03 15:01:12,658 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-43
+2026-05-03 15:01:12,701 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-44
+2026-05-03 15:01:12,701 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-44
+2026-05-03 15:01:12,704 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-48
+2026-05-03 15:01:12,848 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-45
+2026-05-03 15:01:12,849 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-45
+2026-05-03 15:01:12,854 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-49
+2026-05-03 15:01:12,997 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-46
+2026-05-03 15:01:12,997 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-46
+2026-05-03 15:01:13,005 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-50
+2026-05-03 15:01:13,146 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-47
+2026-05-03 15:01:13,146 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-47
+2026-05-03 15:01:13,155 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-51
+2026-05-03 15:01:13,279 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-48
+2026-05-03 15:01:13,279 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-48
+2026-05-03 15:01:13,303 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-52
+2026-05-03 15:01:13,435 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-49
+2026-05-03 15:01:13,435 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-49
+2026-05-03 15:01:13,454 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-53
+2026-05-03 15:01:13,582 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-50
+2026-05-03 15:01:13,582 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-50
+2026-05-03 15:01:13,603 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-54
+2026-05-03 15:01:13,754 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-55
+2026-05-03 15:01:13,904 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-56
+2026-05-03 15:01:13,911 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-51
+2026-05-03 15:01:13,912 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-51
+2026-05-03 15:01:14,053 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-57
+2026-05-03 15:01:14,203 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-58
+2026-05-03 15:01:14,228 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-52
+2026-05-03 15:01:14,228 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-52
+2026-05-03 15:01:14,353 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-59
+2026-05-03 15:01:14,505 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-60
+2026-05-03 15:01:14,652 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-53
+2026-05-03 15:01:14,652 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-53
+2026-05-03 15:01:14,655 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-61
+2026-05-03 15:01:14,804 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-62
+2026-05-03 15:01:14,805 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-54
+2026-05-03 15:01:14,805 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-54
+2026-05-03 15:01:14,953 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-63
+2026-05-03 15:01:14,953 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-55
+2026-05-03 15:01:14,953 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-55
+2026-05-03 15:01:14,968 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-56
+2026-05-03 15:01:14,968 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-56
+2026-05-03 15:01:15,090 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-58
+2026-05-03 15:01:15,090 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-57
+2026-05-03 15:01:15,090 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-58
+2026-05-03 15:01:15,090 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-57
+2026-05-03 15:01:15,104 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-64
+2026-05-03 15:01:15,227 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-59
+2026-05-03 15:01:15,227 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-59
+2026-05-03 15:01:15,240 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-60
+2026-05-03 15:01:15,240 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-60
+2026-05-03 15:01:15,255 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-65
+2026-05-03 15:01:15,385 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-61
+2026-05-03 15:01:15,385 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-61
+2026-05-03 15:01:15,405 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-66
+2026-05-03 15:01:15,497 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-62
+2026-05-03 15:01:15,497 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-62
+2026-05-03 15:01:15,554 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-67
+2026-05-03 15:01:15,568 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-63
+2026-05-03 15:01:15,568 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-63
+2026-05-03 15:01:15,695 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-64
+2026-05-03 15:01:15,696 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-64
+2026-05-03 15:01:15,703 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-68
+2026-05-03 15:01:15,831 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-65
+2026-05-03 15:01:15,831 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-65
+2026-05-03 15:01:15,854 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-69
+2026-05-03 15:01:16,005 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-70
+2026-05-03 15:01:16,007 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-66
+2026-05-03 15:01:16,007 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-66
+2026-05-03 15:01:16,145 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-67
+2026-05-03 15:01:16,145 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-67
+2026-05-03 15:01:16,155 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-71
+2026-05-03 15:01:16,303 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-68
+2026-05-03 15:01:16,304 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-68
+2026-05-03 15:01:16,305 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-72
+2026-05-03 15:01:16,454 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-73
+2026-05-03 15:01:16,581 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-69
+2026-05-03 15:01:16,581 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-69
+2026-05-03 15:01:16,604 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-74
+2026-05-03 15:01:16,634 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-70
+2026-05-03 15:01:16,634 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-70
+2026-05-03 15:01:16,756 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-75
+2026-05-03 15:01:16,904 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-76
+2026-05-03 15:01:16,906 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-71
+2026-05-03 15:01:16,906 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-71
+2026-05-03 15:01:17,053 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-77
+2026-05-03 15:01:17,059 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-72
+2026-05-03 15:01:17,059 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-72
+2026-05-03 15:01:17,193 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-73
+2026-05-03 15:01:17,193 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-73
+2026-05-03 15:01:17,203 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-78
+2026-05-03 15:01:17,354 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-79
+2026-05-03 15:01:17,368 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-75
+2026-05-03 15:01:17,368 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-75
+2026-05-03 15:01:17,368 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-74
+2026-05-03 15:01:17,368 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-74
+2026-05-03 15:01:17,505 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-80
+2026-05-03 15:01:17,508 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-76
+2026-05-03 15:01:17,508 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-76
+2026-05-03 15:01:17,652 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-77
+2026-05-03 15:01:17,652 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-77
+2026-05-03 15:01:17,654 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-81
+2026-05-03 15:01:17,751 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-78
+2026-05-03 15:01:17,751 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-78
+2026-05-03 15:01:17,803 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-82
+2026-05-03 15:01:17,895 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-79
+2026-05-03 15:01:17,895 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-79
+2026-05-03 15:01:17,954 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-83
+2026-05-03 15:01:18,052 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-80
+2026-05-03 15:01:18,052 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-80
+2026-05-03 15:01:18,104 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-84
+2026-05-03 15:01:18,211 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-81
+2026-05-03 15:01:18,211 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-81
+2026-05-03 15:01:18,253 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-85
+2026-05-03 15:01:18,376 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-82
+2026-05-03 15:01:18,376 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-82
+2026-05-03 15:01:18,404 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-86
+2026-05-03 15:01:18,530 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-83
+2026-05-03 15:01:18,530 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-83
+2026-05-03 15:01:18,554 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-87
+2026-05-03 15:01:18,661 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-84
+2026-05-03 15:01:18,661 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-84
+2026-05-03 15:01:18,704 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-88
+2026-05-03 15:01:18,845 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-85
+2026-05-03 15:01:18,845 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-85
+2026-05-03 15:01:18,853 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-89
+2026-05-03 15:01:18,981 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-86
+2026-05-03 15:01:18,981 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-86
+2026-05-03 15:01:19,005 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-90
+2026-05-03 15:01:19,132 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-87
+2026-05-03 15:01:19,132 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-87
+2026-05-03 15:01:19,155 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-91
+2026-05-03 15:01:19,274 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-88
+2026-05-03 15:01:19,275 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-88
+2026-05-03 15:01:19,303 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-92
+2026-05-03 15:01:19,417 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-89
+2026-05-03 15:01:19,418 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-89
+2026-05-03 15:01:19,454 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-93
+2026-05-03 15:01:19,582 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-90
+2026-05-03 15:01:19,582 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-90
+2026-05-03 15:01:19,604 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-94
+2026-05-03 15:01:19,722 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-91
+2026-05-03 15:01:19,722 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-91
+2026-05-03 15:01:19,753 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-95
+2026-05-03 15:01:19,844 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-92
+2026-05-03 15:01:19,844 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-92
+2026-05-03 15:01:19,905 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-96
+2026-05-03 15:01:20,002 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-93
+2026-05-03 15:01:20,002 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-93
+2026-05-03 15:01:20,054 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-97
+2026-05-03 15:01:20,179 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-94
+2026-05-03 15:01:20,180 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-94
+2026-05-03 15:01:20,203 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-98
+2026-05-03 15:01:20,325 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-95
+2026-05-03 15:01:20,325 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-95
+2026-05-03 15:01:20,354 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-99
+2026-05-03 15:01:20,492 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-96
+2026-05-03 15:01:20,492 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-96
+2026-05-03 15:01:20,503 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-100
+2026-05-03 15:01:20,624 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-97
+2026-05-03 15:01:20,624 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-97
+2026-05-03 15:01:20,655 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-101
+2026-05-03 15:01:20,774 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-98
+2026-05-03 15:01:20,775 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-98
+2026-05-03 15:01:20,804 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-102
+2026-05-03 15:01:20,923 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-99
+2026-05-03 15:01:20,923 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-99
+2026-05-03 15:01:20,953 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-103
+2026-05-03 15:01:21,079 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-100
+2026-05-03 15:01:21,079 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-100
+2026-05-03 15:01:21,105 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-104
+2026-05-03 15:01:21,219 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-101
+2026-05-03 15:01:21,219 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-101
+2026-05-03 15:01:21,255 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-105
+2026-05-03 15:01:21,374 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-102
+2026-05-03 15:01:21,374 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-102
+2026-05-03 15:01:21,404 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-106
+2026-05-03 15:01:21,554 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-107
+2026-05-03 15:01:21,705 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-108
+2026-05-03 15:01:21,855 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-109
+2026-05-03 15:01:22,004 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-110
+2026-05-03 15:01:22,154 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-111
+2026-05-03 15:01:22,305 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-112
+2026-05-03 15:01:22,454 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-113
+2026-05-03 15:01:22,603 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-114
+2026-05-03 15:01:22,754 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-115
+2026-05-03 15:01:22,904 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-116
+2026-05-03 15:01:23,054 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-117
+2026-05-03 15:01:23,204 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-118
+2026-05-03 15:01:23,354 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-119
+2026-05-03 15:01:23,504 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-120
+2026-05-03 15:01:23,654 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-121
+2026-05-03 15:01:23,719 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-103
+2026-05-03 15:01:23,719 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-103
+2026-05-03 15:01:23,804 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-122
+2026-05-03 15:01:23,953 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-123
+2026-05-03 15:01:24,104 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-124
+2026-05-03 15:01:24,254 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-125
+2026-05-03 15:01:24,403 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-126
+2026-05-03 15:01:24,555 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-127
+2026-05-03 15:01:24,704 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-128
+2026-05-03 15:01:24,854 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-129
+2026-05-03 15:01:24,868 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-104
+2026-05-03 15:01:24,868 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-104
+2026-05-03 15:01:25,005 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-130
+2026-05-03 15:01:25,154 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-131
+2026-05-03 15:01:25,304 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-132
+2026-05-03 15:01:25,454 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-133
+2026-05-03 15:01:25,561 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-105
+2026-05-03 15:01:25,561 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-105
+2026-05-03 15:01:25,603 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-134
+2026-05-03 15:01:25,754 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-135
+2026-05-03 15:01:25,905 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-136
+2026-05-03 15:01:25,980 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-106
+2026-05-03 15:01:25,980 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-106
+2026-05-03 15:01:26,055 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-137
+2026-05-03 15:01:26,198 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-107
+2026-05-03 15:01:26,198 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-107
+2026-05-03 15:01:26,205 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-138
+2026-05-03 15:01:26,311 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-108
+2026-05-03 15:01:26,311 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-108
+2026-05-03 15:01:26,311 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-111
+2026-05-03 15:01:26,311 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-111
+2026-05-03 15:01:26,316 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-109
+2026-05-03 15:01:26,316 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-109
+2026-05-03 15:01:26,326 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-110
+2026-05-03 15:01:26,326 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-110
+2026-05-03 15:01:26,354 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-139
+2026-05-03 15:01:26,454 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-112
+2026-05-03 15:01:26,454 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-112
+2026-05-03 15:01:26,481 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-115
+2026-05-03 15:01:26,482 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-115
+2026-05-03 15:01:26,493 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-114
+2026-05-03 15:01:26,493 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-114
+2026-05-03 15:01:26,497 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-117
+2026-05-03 15:01:26,497 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-117
+2026-05-03 15:01:26,504 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-140
+2026-05-03 15:01:26,578 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-113
+2026-05-03 15:01:26,578 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-113
+2026-05-03 15:01:26,579 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-116
+2026-05-03 15:01:26,579 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-116
+2026-05-03 15:01:26,605 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-118
+2026-05-03 15:01:26,605 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-118
+2026-05-03 15:01:26,655 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-141
+2026-05-03 15:01:26,696 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-119
+2026-05-03 15:01:26,696 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-119
+2026-05-03 15:01:26,696 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-120
+2026-05-03 15:01:26,696 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-120
+2026-05-03 15:01:26,786 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-122
+2026-05-03 15:01:26,786 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-122
+2026-05-03 15:01:26,787 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-121
+2026-05-03 15:01:26,787 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-121
+2026-05-03 15:01:26,804 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-142
+2026-05-03 15:01:26,819 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-123
+2026-05-03 15:01:26,819 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-123
+2026-05-03 15:01:26,911 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-124
+2026-05-03 15:01:26,912 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-124
+2026-05-03 15:01:26,954 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-143
+2026-05-03 15:01:27,013 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-125
+2026-05-03 15:01:27,013 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-125
+2026-05-03 15:01:27,013 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-126
+2026-05-03 15:01:27,013 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-126
+2026-05-03 15:01:27,105 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-144
+2026-05-03 15:01:27,139 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-127
+2026-05-03 15:01:27,139 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-127
+2026-05-03 15:01:27,223 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-128
+2026-05-03 15:01:27,224 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-128
+2026-05-03 15:01:27,255 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-145
+2026-05-03 15:01:27,322 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-129
+2026-05-03 15:01:27,322 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-129
+2026-05-03 15:01:27,323 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-130
+2026-05-03 15:01:27,323 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-130
+2026-05-03 15:01:27,404 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-146
+2026-05-03 15:01:27,439 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-131
+2026-05-03 15:01:27,439 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-131
+2026-05-03 15:01:27,483 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-132
+2026-05-03 15:01:27,483 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-132
+2026-05-03 15:01:27,556 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-147
+2026-05-03 15:01:27,561 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-133
+2026-05-03 15:01:27,561 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-133
+2026-05-03 15:01:27,705 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-148
+2026-05-03 15:01:27,722 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-134
+2026-05-03 15:01:27,722 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-134
+2026-05-03 15:01:27,726 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-136
+2026-05-03 15:01:27,726 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-136
+2026-05-03 15:01:27,727 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-135
+2026-05-03 15:01:27,727 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-135
+2026-05-03 15:01:27,855 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-149
+2026-05-03 15:01:27,859 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-137
+2026-05-03 15:01:27,859 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-137
+2026-05-03 15:01:27,876 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-138
+2026-05-03 15:01:27,876 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-138
+2026-05-03 15:01:27,985 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-139
+2026-05-03 15:01:27,985 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-139
+2026-05-03 15:01:28,002 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-140
+2026-05-03 15:01:28,002 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-140
+2026-05-03 15:01:28,005 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-150
+2026-05-03 15:01:28,098 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-141
+2026-05-03 15:01:28,098 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-141
+2026-05-03 15:01:28,098 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-142
+2026-05-03 15:01:28,098 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-142
+2026-05-03 15:01:28,155 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-151
+2026-05-03 15:01:28,242 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-144
+2026-05-03 15:01:28,242 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-144
+2026-05-03 15:01:28,243 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-143
+2026-05-03 15:01:28,243 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-143
+2026-05-03 15:01:28,287 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-145
+2026-05-03 15:01:28,287 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-145
+2026-05-03 15:01:28,305 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-152
+2026-05-03 15:01:28,320 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-146
+2026-05-03 15:01:28,320 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-146
+2026-05-03 15:01:28,443 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-147
+2026-05-03 15:01:28,443 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-147
+2026-05-03 15:01:28,455 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-153
+2026-05-03 15:01:28,542 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-148
+2026-05-03 15:01:28,542 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-148
+2026-05-03 15:01:28,603 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-154
+2026-05-03 15:01:28,608 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-149
+2026-05-03 15:01:28,608 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-149
+2026-05-03 15:01:28,726 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-150
+2026-05-03 15:01:28,726 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-150
+2026-05-03 15:01:28,754 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-155
+2026-05-03 15:01:28,763 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-151
+2026-05-03 15:01:28,763 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-151
+2026-05-03 15:01:28,905 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-156
+2026-05-03 15:01:28,908 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-152
+2026-05-03 15:01:28,908 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-152
+2026-05-03 15:01:29,021 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-153
+2026-05-03 15:01:29,021 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-153
+2026-05-03 15:01:29,055 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-157
+2026-05-03 15:01:29,204 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-158
+2026-05-03 15:01:29,322 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-154
+2026-05-03 15:01:29,322 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-154
+2026-05-03 15:01:29,354 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-159
+2026-05-03 15:01:29,450 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-155
+2026-05-03 15:01:29,450 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-155
+2026-05-03 15:01:29,506 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-160
+2026-05-03 15:01:29,605 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-156
+2026-05-03 15:01:29,605 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-156
+2026-05-03 15:01:29,656 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-161
+2026-05-03 15:01:29,675 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-157
+2026-05-03 15:01:29,675 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-157
+2026-05-03 15:01:29,767 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-158
+2026-05-03 15:01:29,767 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-158
+2026-05-03 15:01:29,804 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-162
+2026-05-03 15:01:29,939 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-159
+2026-05-03 15:01:29,939 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-159
+2026-05-03 15:01:29,954 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-163
+2026-05-03 15:01:30,045 INFO o.a.j.r.Summariser: summary +  12508 in 00:00:30 =  417.3/s Avg:    32 Min:     0 Max:   940 Err:     0 (0.00%) Active: 4 Started: 214 Finished: 210
+2026-05-03 15:01:30,045 INFO o.a.j.r.Summariser: summary =  13779 in 00:00:38 =  364.9/s Avg:    38 Min:     0 Max:  2180 Err:    13 (0.09%)
+2026-05-03 15:01:30,083 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-160
+2026-05-03 15:01:30,084 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-160
+2026-05-03 15:01:30,105 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-164
+2026-05-03 15:01:30,253 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-165
+2026-05-03 15:01:30,260 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-161
+2026-05-03 15:01:30,260 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-161
+2026-05-03 15:01:30,403 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-162
+2026-05-03 15:01:30,403 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-162
+2026-05-03 15:01:30,404 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-166
+2026-05-03 15:01:30,554 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-167
+2026-05-03 15:01:30,705 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-168
+2026-05-03 15:01:30,794 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-163
+2026-05-03 15:01:30,794 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-163
+2026-05-03 15:01:30,854 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-169
+2026-05-03 15:01:31,005 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-170
+2026-05-03 15:01:31,153 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-171
+2026-05-03 15:01:31,304 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-172
+2026-05-03 15:01:31,455 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-173
+2026-05-03 15:01:31,548 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-164
+2026-05-03 15:01:31,548 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-164
+2026-05-03 15:01:31,604 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-174
+2026-05-03 15:01:31,732 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-165
+2026-05-03 15:01:31,732 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-165
+2026-05-03 15:01:31,755 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-175
+2026-05-03 15:01:31,904 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-176
+2026-05-03 15:01:32,007 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-166
+2026-05-03 15:01:32,007 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-166
+2026-05-03 15:01:32,054 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-177
+2026-05-03 15:01:32,197 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-169
+2026-05-03 15:01:32,197 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-169
+2026-05-03 15:01:32,197 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-170
+2026-05-03 15:01:32,198 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-170
+2026-05-03 15:01:32,205 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-178
+2026-05-03 15:01:32,213 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-167
+2026-05-03 15:01:32,213 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-167
+2026-05-03 15:01:32,214 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-172
+2026-05-03 15:01:32,214 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-172
+2026-05-03 15:01:32,221 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-171
+2026-05-03 15:01:32,221 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-171
+2026-05-03 15:01:32,290 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-168
+2026-05-03 15:01:32,290 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-168
+2026-05-03 15:01:32,309 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-173
+2026-05-03 15:01:32,309 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-173
+2026-05-03 15:01:32,355 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-179
+2026-05-03 15:01:32,359 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-174
+2026-05-03 15:01:32,359 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-174
+2026-05-03 15:01:32,492 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-175
+2026-05-03 15:01:32,492 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-175
+2026-05-03 15:01:32,503 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-180
+2026-05-03 15:01:32,592 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-176
+2026-05-03 15:01:32,592 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-176
+2026-05-03 15:01:32,652 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-177
+2026-05-03 15:01:32,652 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-177
+2026-05-03 15:01:32,654 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-181
+2026-05-03 15:01:32,777 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-178
+2026-05-03 15:01:32,777 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-178
+2026-05-03 15:01:32,804 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-182
+2026-05-03 15:01:32,902 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-179
+2026-05-03 15:01:32,902 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-179
+2026-05-03 15:01:32,955 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-183
+2026-05-03 15:01:33,075 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-180
+2026-05-03 15:01:33,075 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-180
+2026-05-03 15:01:33,104 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-184
+2026-05-03 15:01:33,253 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-185
+2026-05-03 15:01:33,345 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-181
+2026-05-03 15:01:33,346 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-181
+2026-05-03 15:01:33,403 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-186
+2026-05-03 15:01:33,423 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-182
+2026-05-03 15:01:33,423 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-182
+2026-05-03 15:01:33,555 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-187
+2026-05-03 15:01:33,705 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-188
+2026-05-03 15:01:33,844 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-183
+2026-05-03 15:01:33,844 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-183
+2026-05-03 15:01:33,856 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-189
+2026-05-03 15:01:33,983 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-184
+2026-05-03 15:01:33,983 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-184
+2026-05-03 15:01:34,004 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-190
+2026-05-03 15:01:34,153 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-191
+2026-05-03 15:01:34,306 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-192
+2026-05-03 15:01:34,457 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-193
+2026-05-03 15:01:34,506 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-185
+2026-05-03 15:01:34,507 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-185
+2026-05-03 15:01:34,603 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-194
+2026-05-03 15:01:34,732 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-186
+2026-05-03 15:01:34,732 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-186
+2026-05-03 15:01:34,753 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-195
+2026-05-03 15:01:34,903 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-196
+2026-05-03 15:01:35,021 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-187
+2026-05-03 15:01:35,021 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-187
+2026-05-03 15:01:35,036 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-189
+2026-05-03 15:01:35,036 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-188
+2026-05-03 15:01:35,036 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-189
+2026-05-03 15:01:35,036 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-188
+2026-05-03 15:01:35,053 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-197
+2026-05-03 15:01:35,179 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-190
+2026-05-03 15:01:35,179 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-190
+2026-05-03 15:01:35,204 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-198
+2026-05-03 15:01:35,218 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-191
+2026-05-03 15:01:35,218 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-191
+2026-05-03 15:01:35,310 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-192
+2026-05-03 15:01:35,310 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-192
+2026-05-03 15:01:35,310 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-193
+2026-05-03 15:01:35,310 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-193
+2026-05-03 15:01:35,310 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-194
+2026-05-03 15:01:35,311 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-194
+2026-05-03 15:01:35,355 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-199
+2026-05-03 15:01:35,477 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-195
+2026-05-03 15:01:35,477 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-195
+2026-05-03 15:01:35,504 INFO o.a.j.t.JMeterThread: Thread started: Stress Test - 200 Users 3-200
+2026-05-03 15:01:35,616 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-196
+2026-05-03 15:01:35,616 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-196
+2026-05-03 15:01:35,631 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-197
+2026-05-03 15:01:35,632 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-197
+2026-05-03 15:01:35,727 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-198
+2026-05-03 15:01:35,727 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-198
+2026-05-03 15:01:35,809 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-199
+2026-05-03 15:01:35,809 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-199
+2026-05-03 15:01:35,874 INFO o.a.j.t.JMeterThread: Thread is done: Stress Test - 200 Users 3-200
+2026-05-03 15:01:35,874 INFO o.a.j.t.JMeterThread: Thread finished: Stress Test - 200 Users 3-200
+2026-05-03 15:01:35,874 INFO o.a.j.e.StandardJMeterEngine: Notifying test listeners of end of test
+2026-05-03 15:01:35,875 INFO o.a.j.r.Summariser: summary +   1985 in 00:00:06 =  340.4/s Avg:    18 Min:     0 Max:   471 Err:     0 (0.00%) Active: 0 Started: 251 Finished: 251
+2026-05-03 15:01:35,875 INFO o.a.j.r.Summariser: summary =  15764 in 00:00:44 =  361.6/s Avg:    35 Min:     0 Max:  2180 Err:    13 (0.08%)
+2026-05-03 15:01:35,875 INFO o.a.j.JMeter: Generating Dashboard
+2026-05-03 15:01:35,875 INFO o.a.j.r.d.ReportGenerator: Flushing result collector before report Generation
+2026-05-03 15:01:35,889 INFO o.a.j.r.p.NormalizerSampleConsumer: Using format, 'ms', to parse timeStamp field
+2026-05-03 15:01:36,643 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.AggregateConsumer#stopProducing(): beginDate produced 0 samples
+2026-05-03 15:01:36,643 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.AggregateConsumer#stopProducing(): endDate produced 0 samples
+2026-05-03 15:01:36,654 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.ApdexSummaryConsumer#stopProducing(): apdexSummary produced 0 samples
+2026-05-03 15:01:36,654 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.RequestsSummaryConsumer#stopProducing(): requestsSummary produced 0 samples
+2026-05-03 15:01:36,675 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.StatisticsSummaryConsumer#stopProducing(): statisticsSummary produced 0 samples
+2026-05-03 15:01:36,678 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.Top5ErrorsBySamplerConsumer#stopProducing(): top5ErrorsBySampler produced 0 samples
+2026-05-03 15:01:36,678 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.ErrorsSummaryConsumer#stopProducing(): errorsSummary produced 0 samples
+2026-05-03 15:01:36,678 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.HitsPerSecondGraphConsumer#stopProducing(): hitsPerSecond produced 0 samples
+2026-05-03 15:01:36,841 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.LatencyVSRequestGraphConsumer#stopProducing(): latencyVsRequest produced 0 samples
+2026-05-03 15:01:36,843 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.SyntheticResponseTimeDistributionGraphConsumer#stopProducing(): syntheticResponseTimeDistribution produced 0 samples
+2026-05-03 15:01:36,843 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.BytesThroughputGraphConsumer#stopProducing(): bytesThroughputOverTime produced 0 samples
+2026-05-03 15:01:36,843 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.CodesPerSecondGraphConsumer#stopProducing(): codesPerSecond produced 0 samples
+2026-05-03 15:01:36,978 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ResponseTimeVSRequestGraphConsumer#stopProducing(): responseTimeVsRequest produced 0 samples
+2026-05-03 15:01:36,980 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.FilterConsumer#stopProducing(): startIntervalControlerFilter produced 110348 samples
+2026-05-03 15:01:36,980 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.TotalTPSGraphConsumer#stopProducing(): totalTPS produced 0 samples
+2026-05-03 15:01:36,980 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ActiveThreadsGraphConsumer#stopProducing(): activeThreadsOverTime produced 0 samples
+2026-05-03 15:01:36,980 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.TimeVSThreadGraphConsumer#stopProducing(): timeVsThreads produced 0 samples
+2026-05-03 15:01:36,982 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ResponseTimeDistributionGraphConsumer#stopProducing(): responseTimeDistribution produced 0 samples
+2026-05-03 15:01:36,982 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.TransactionsPerSecondGraphConsumer#stopProducing(): transactionsPerSecond produced 0 samples
+2026-05-03 15:01:36,982 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ResponseTimePercentilesGraphConsumer#stopProducing(): responseTimePercentiles produced 0 samples
+2026-05-03 15:01:36,992 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ResponseTimePercentilesOverTimeGraphConsumer#stopProducing(): responseTimePercentilesOverTime produced 0 samples
+2026-05-03 15:01:36,994 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ResponseTimeOverTimeGraphConsumer#stopProducing(): responseTimesOverTime produced 0 samples
+2026-05-03 15:01:36,994 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ConnectTimeOverTimeGraphConsumer#stopProducing(): connectTimeOverTime produced 0 samples
+2026-05-03 15:01:36,994 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.LatencyOverTimeGraphConsumer#stopProducing(): latenciesOverTime produced 0 samples
+2026-05-03 15:01:36,994 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.FilterConsumer#stopProducing(): nameFilter produced 236460 samples
+2026-05-03 15:01:36,994 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.FilterConsumer#stopProducing(): dateRangeFilter produced 47292 samples
+2026-05-03 15:01:36,994 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.NormalizerSampleConsumer#stopProducing(): normalizer produced 15764 samples
+2026-05-03 15:01:36,995 INFO o.a.j.r.p.CsvFileSampleSource: produce(): 15764 samples produced in 1s 76 ms on channel 0
+2026-05-03 15:01:36,995 INFO o.a.j.r.d.ReportGenerator: Exporting data using exporter:'json' of className:'org.apache.jmeter.report.dashboard.JsonExporter'
+2026-05-03 15:01:37,071 INFO o.a.j.r.d.JsonExporter: Found data for consumer statisticsSummary in context
+2026-05-03 15:01:37,071 INFO o.a.j.r.d.JsonExporter: Creating statistics for overall
+2026-05-03 15:01:37,071 INFO o.a.j.r.d.JsonExporter: Creating statistics for other transactions
+2026-05-03 15:01:37,072 INFO o.a.j.r.d.JsonExporter: Checking output folder
+2026-05-03 15:01:37,072 INFO o.a.j.r.d.JsonExporter: Writing statistics JSON to D:\project\ptit\sqa\information_portal\server\reports\jmeter_html_report\statistics.json
+2026-05-03 15:01:37,131 INFO o.a.j.r.d.ReportGenerator: Exporting data using exporter:'html' of className:'org.apache.jmeter.report.dashboard.HtmlTemplateExporter'
+2026-05-03 15:01:37,135 INFO o.a.j.r.d.HtmlTemplateExporter: Will generate dashboard in folder: D:\project\ptit\sqa\information_portal\server\reports\jmeter_html_report
+2026-05-03 15:01:37,456 INFO o.a.j.r.d.HtmlTemplateExporter: Report will be generated in: D:\project\ptit\sqa\information_portal\server\reports\jmeter_html_report, creating folder structure
+2026-05-03 15:01:37,459 INFO o.a.j.r.d.TemplateVisitor: Copying folder from 'D:\bin\apache-jmeter-5.6.3\bin\report-template' to 'D:\project\ptit\sqa\information_portal\server\reports\jmeter_html_report', got message: D:\project\ptit\sqa\information_portal\server\reports\jmeter_html_report, found non empty folder with following content [D:\project\ptit\sqa\information_portal\server\reports\jmeter_html_report\statistics.json], will be ignored
+2026-05-03 15:01:38,041 INFO o.a.j.JMeter: Dashboard generated
