@@ -1,7 +1,7 @@
 /**
  * ============================================================
  * TEST SUITE: Lecturers Module (crudFactory – table: lecturers)
- * Test Cases: TC104 → TC108
+ * Test Cases: TC114 → TC118
  * File under test: src/utils/crudFactory.js
  * Route config:    /api/lecturers (server.js)
  * ============================================================
@@ -9,11 +9,11 @@
  *            email, phone (UNIQUE via crudFactory), academic_degree,
  *            academic_rank (nullable), department_id (FK)
  * ============================================================
- *   - TC104: Tạo giảng viên hợp lệ       (Chuẩn,  CheckDB ✓, Rollback ✓)
- *   - TC105: Tạo GV thiếu name           (Ngoại lệ)
- *   - TC106: Cập nhật giảng viên         (Chuẩn,  CheckDB ✓, Rollback ✓)
- *   - TC107: Xóa giảng viên             (Chuẩn,  CheckDB ✓, Rollback ✓)
- *   - TC108: Tìm kiếm GV theo tên       (Chuẩn)
+ *   - TC114: Tạo giảng viên hợp lệ       (Chuẩn,  CheckDB ✓, Rollback ✓)
+ *   - TC115: Tạo GV thiếu name           (Ngoại lệ)
+ *   - TC116: Cập nhật giảng viên         (Chuẩn,  CheckDB ✓, Rollback ✓)
+ *   - TC117: Xóa giảng viên             (Chuẩn,  CheckDB ✓, Rollback ✓)
+ *   - TC118: Tìm kiếm GV theo tên       (Chuẩn)
  * ============================================================
  */
 
@@ -37,7 +37,7 @@ const lecturersApp = createCrudApp('/api/lecturers', {
  * nhưng DB schema thực tế không có cột này (có 'research_direction').
  * Khi search với ?q=..., crudFactory sẽ gặp ER_BAD_FIELD_ERROR.
  * Trong test, ta dùng đúng cấu hình như server.js để phản ánh thực tế.
- * TC108 sẽ test GET không có ?q (list all) thay vì search.
+ * TC118 sẽ test GET không có ?q (list all) thay vì search.
  */
 
 let createdLecturerId;
@@ -53,15 +53,15 @@ afterAll(async () => {
 });
 
 /* ============================================================
- * TC104 – Tạo giảng viên hợp lệ
+ * TC114 – Tạo giảng viên hợp lệ
  * Loại: Chuẩn | CheckDB: Y | Rollback: Y
  * Input: lecturer_code, name, email, phone (đầy đủ required fields)
  * ============================================================ */
-describe('TC104 – createLecturer: tạo giảng viên hợp lệ', () => {
+describe('TC114 – createLecturer: tạo giảng viên hợp lệ', () => {
   it('should return 201 and persist lecturer to database', async () => {
     const validLecturerPayload = {
-      lecturer_code: 'TC104-001',
-      name: 'GS. Nguyen Van A TC104',
+      lecturer_code: 'TC114-001',
+      name: 'GS. Nguyen Van A TC114',
       email: 'tc104@ptit.edu.vn',
       phone: '0901040001',
     };
@@ -88,14 +88,14 @@ describe('TC104 – createLecturer: tạo giảng viên hợp lệ', () => {
 });
 
 /* ============================================================
- * TC105 – Tạo giảng viên thiếu name (NOT NULL)
+ * TC115 – Tạo giảng viên thiếu name (NOT NULL)
  * Loại: Ngoại lệ | CheckDB: N | Rollback: N
  * Expect: HTTP 500 (ER_NO_DEFAULT_FOR_FIELD)
  * ============================================================ */
-describe('TC105 – createLecturer: thiếu name', () => {
+describe('TC115 – createLecturer: thiếu name', () => {
   it('should reject when name is missing (NOT NULL constraint)', async () => {
     const missingNamePayload = {
-      lecturer_code: 'TC105-FAIL',
+      lecturer_code: 'TC115-FAIL',
       email: 'noname@ptit.edu.vn',
     };
 
@@ -109,10 +109,10 @@ describe('TC105 – createLecturer: thiếu name', () => {
 });
 
 /* ============================================================
- * TC106 – Cập nhật giảng viên (phone)
+ * TC116 – Cập nhật giảng viên (phone)
  * Loại: Chuẩn | CheckDB: Y | Rollback: Y
  * ============================================================ */
-describe('TC106 – updateLecturer: cập nhật phone', () => {
+describe('TC116 – updateLecturer: cập nhật phone', () => {
   it('should return 200 and update phone in database', async () => {
     /* Dùng phone duy nhất để tránh conflict uniqueFields */
     const updatedPhone = '0906' + Date.now().toString().slice(-6);
@@ -134,10 +134,10 @@ describe('TC106 – updateLecturer: cập nhật phone', () => {
 });
 
 /* ============================================================
- * TC107 – Xóa giảng viên
+ * TC117 – Xóa giảng viên
  * Loại: Chuẩn | CheckDB: Y | Rollback: Y
  * ============================================================ */
-describe('TC107 – deleteLecturer: xóa giảng viên', () => {
+describe('TC117 – deleteLecturer: xóa giảng viên', () => {
   it('should return 200 and remove lecturer from database', async () => {
     const response = await request(lecturersApp)
       .delete(`/api/lecturers/${createdLecturerId}`)
@@ -155,20 +155,20 @@ describe('TC107 – deleteLecturer: xóa giảng viên', () => {
 });
 
 /* ============================================================
- * TC108 – Lấy danh sách giảng viên (GET /api/lecturers)
+ * TC118 – Lấy danh sách giảng viên (GET /api/lecturers)
  * Loại: Chuẩn | CheckDB: N | Rollback: N
  * Ghi chú: server.js cấu hình searchableFields có 'specialization'
  *          nhưng DB schema không có cột này → search ?q= sẽ lỗi.
  *          Test GET list (không search) để verify endpoint hoạt động.
  * ============================================================ */
-describe('TC108 – getLecturers: lấy danh sách giảng viên', () => {
+describe('TC118 – getLecturers: lấy danh sách giảng viên', () => {
   beforeAll(async () => {
     await request(lecturersApp)
       .post('/api/lecturers')
       .set('Authorization', `Bearer ${ADMIN_TOKEN}`)
       .send({
-        lecturer_code: 'TC108-001',
-        name: 'Nguyen Van B TC108',
+        lecturer_code: 'TC118-001',
+        name: 'Nguyen Van B TC118',
         email: 'tc108@ptit.edu.vn',
         phone: '0908' + Date.now().toString().slice(-6),
       });

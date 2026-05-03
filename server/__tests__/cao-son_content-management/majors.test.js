@@ -1,13 +1,13 @@
 /**
  * ============================================================
  * TEST SUITE: Majors & Courses Module (custom route – tables: majors, courses)
- * Test Cases: TC121 → TC124
+ * Test Cases: TC131 → TC134
  * File under test: src/routes/majors.js
  * ============================================================
- *   - TC121: Tạo ngành học hợp lệ            (Chuẩn,  CheckDB ✓, Rollback ✓)
- *   - TC122: Tạo ngành học thiếu name         (Ngoại lệ)
- *   - TC123: Thêm môn học vào ngành           (Chuẩn,  CheckDB ✓, Rollback ✓)
- *   - TC124: Thêm môn học thiếu code          (Ngoại lệ)
+ *   - TC131: Tạo ngành học hợp lệ            (Chuẩn,  CheckDB ✓, Rollback ✓)
+ *   - TC132: Tạo ngành học thiếu name         (Ngoại lệ)
+ *   - TC133: Thêm môn học vào ngành           (Chuẩn,  CheckDB ✓, Rollback ✓)
+ *   - TC134: Thêm môn học thiếu code          (Ngoại lệ)
  * ============================================================
  */
 
@@ -33,13 +33,13 @@ afterAll(async () => {
 });
 
 /* ============================================================
- * TC121 – Tạo ngành học hợp lệ
+ * TC131 – Tạo ngành học hợp lệ
  * Loại: Chuẩn | CheckDB: Y | Rollback: Y
  * ============================================================ */
-describe('TC121 – createMajor: tạo ngành học hợp lệ', () => {
+describe('TC131 – createMajor: tạo ngành học hợp lệ', () => {
   it('should return 201 and persist major to database', async () => {
     const validMajorPayload = {
-      name: 'Kỹ thuật phần mềm TC121',
+      name: 'Kỹ thuật phần mềm TC131',
       sort_order: 1,
     };
 
@@ -64,11 +64,11 @@ describe('TC121 – createMajor: tạo ngành học hợp lệ', () => {
 });
 
 /* ============================================================
- * TC122 – Tạo ngành học thiếu name
+ * TC132 – Tạo ngành học thiếu name
  * Loại: Ngoại lệ | CheckDB: N | Rollback: N
  * Expect: HTTP 500 (ER_NO_DEFAULT_FOR_FIELD – name NOT NULL)
  * ============================================================ */
-describe('TC122 – createMajor: thiếu name', () => {
+describe('TC132 – createMajor: thiếu name', () => {
   it('should reject when name is missing (NOT NULL constraint)', async () => {
     const missingNamePayload = { sort_order: 2 };
 
@@ -82,15 +82,15 @@ describe('TC122 – createMajor: thiếu name', () => {
 });
 
 /* ============================================================
- * TC123 – Thêm môn học vào ngành
+ * TC133 – Thêm môn học vào ngành
  * Loại: Chuẩn | CheckDB: Y | Rollback: Y
  * Input:  majorId hợp lệ, name, code, credits, semester
  * Expect: HTTP 201, courses.major_id = majorId
  * ============================================================ */
-describe('TC123 – addCourseToMajor: thêm môn học hợp lệ', () => {
+describe('TC133 – addCourseToMajor: thêm môn học hợp lệ', () => {
   it('should return 201 and persist course linked to major', async () => {
     const validCoursePayload = {
-      name: 'Lập trình web TC123',
+      name: 'Lập trình web TC133',
       code: 'IT3456',
       credits: 3,
       semester: 5,
@@ -117,10 +117,10 @@ describe('TC123 – addCourseToMajor: thêm môn học hợp lệ', () => {
 });
 
 /* ============================================================
- * TC124 – Thêm môn học thiếu code
+ * TC134 – Thêm môn học thiếu code
  * Loại: Ngoại lệ | CheckDB: N | Rollback: N
  * ============================================================ */
-describe('TC124 – addCourseToMajor: thiếu code', () => {
+describe('TC134 – addCourseToMajor: thiếu code', () => {
   it('should reject when code is missing (NOT NULL constraint)', async () => {
     const missingCodePayload = { name: 'Lập trình web', credits: 3 };
 

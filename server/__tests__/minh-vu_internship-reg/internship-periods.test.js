@@ -38,8 +38,8 @@ describeIf('internship-periods.js', () => {
     authGuard._setUser({ id: 99, role: 'admin' });
   });
 
-  // TC-IP-01
-  test('TC-IP-01 | GET / -> 200, danh sách đợt sắp xếp DESC', async () => {
+  // TC021
+  test('TC021 | GET / -> 200, danh sách đợt sắp xếp DESC', async () => {
     const fakeRows = [
       { id: 2, name: 'Đợt 2', start_date: '2025-03-01', end_date: '2025-04-01', is_active: 1 },
       { id: 1, name: 'Đợt 1', start_date: '2025-01-01', end_date: '2025-02-01', is_active: 0 },
@@ -51,32 +51,32 @@ describeIf('internship-periods.js', () => {
     expect(db.query.mock.calls[0][0]).toMatch(/ORDER BY start_date DESC/);
   });
 
-  // TC-IP-02
-  test('TC-IP-02 | GET / -> 500 khi DB lỗi', async () => {
+  // TC022
+  test('TC022 | GET / -> 500 khi DB lỗi', async () => {
     db.__queueError(new Error('DB down'));
     const res = await request(app).get('/api/internship-periods');
     expect(res.status).toBe(500);
     expect(res.body.error).toBe('Lỗi khi lấy danh sách đợt đăng ký');
   });
 
-  // TC-IP-03
-  test('TC-IP-03 | GET /active -> 200', async () => {
+  // TC023
+  test('TC023 | GET /active -> 200', async () => {
     db.__queue([{ id: 5, name: 'Active', is_active: 1 }]);
     const res = await request(app).get('/api/internship-periods/active');
     expect(res.status).toBe(200);
     expect(res.body.id).toBe(5);
   });
 
-  // TC-IP-04
-  test('TC-IP-04 | GET /active -> 404 khi không có đợt active', async () => {
+  // TC024
+  test('TC024 | GET /active -> 404 khi không có đợt active', async () => {
     db.__queue([]);
     const res = await request(app).get('/api/internship-periods/active');
     expect(res.status).toBe(404);
     expect(res.body.error).toMatch(/Không có đợt đăng ký/);
   });
 
-  // TC-IP-05
-  test('TC-IP-05 | GET /:id -> 200', async () => {
+  // TC025
+  test('TC025 | GET /:id -> 200', async () => {
     db.__queue([{ id: 7, name: 'Đợt 7' }]);
     const res = await request(app).get('/api/internship-periods/7');
     expect(res.status).toBe(200);
@@ -84,15 +84,15 @@ describeIf('internship-periods.js', () => {
     expect(db.query.mock.calls[0][1]).toEqual(['7']);
   });
 
-  // TC-IP-06
-  test('TC-IP-06 | GET /:id -> 404 không tìm thấy', async () => {
+  // TC026
+  test('TC026 | GET /:id -> 404 không tìm thấy', async () => {
     db.__queue([]);
     const res = await request(app).get('/api/internship-periods/9999');
     expect(res.status).toBe(404);
   });
 
-  // TC-IP-07
-  test('TC-IP-07 | POST / -> 400 khi có overlap với đợt khác', async () => {
+  // TC027
+  test('TC027 | POST / -> 400 khi có overlap với đợt khác', async () => {
     db.__queue([
       { id: 1, name: 'Đợt cũ', start_date: '2025-01-01', end_date: '2025-03-01' },
     ]);
@@ -106,8 +106,8 @@ describeIf('internship-periods.js', () => {
     expect(res.body.error).toMatch(/Đã có đợt "Đợt cũ"/);
   });
 
-  // TC-IP-08
-  test('TC-IP-08 | POST / -> 201, set inactive đợt khác + tạo academy enterprise', async () => {
+  // TC028
+  test('TC028 | POST / -> 201, set inactive đợt khác + tạo academy enterprise', async () => {
     db.__queue(
       [],                 // overlap rỗng
       { affectedRows: 5 }, // UPDATE inactive khác
@@ -129,8 +129,8 @@ describeIf('internship-periods.js', () => {
     expect(db.query.mock.calls[3][1][1]).toBe('Học viện Công nghệ Bưu chính Viễn thông');
   });
 
-  // TC-IP-09
-  test('TC-IP-09 | POST / -> 201 dù INSERT academy enterprise lỗi (catch & log)', async () => {
+  // TC029
+  test('TC029 | POST / -> 201 dù INSERT academy enterprise lỗi (catch & log)', async () => {
     db.__queue([], { insertId: 50 });
     db.__queueError(new Error('academy insert failed'));
     const res = await request(app).post('/api/internship-periods').send({
@@ -143,8 +143,8 @@ describeIf('internship-periods.js', () => {
     expect(res.body.id).toBe(50);
   });
 
-  // TC-IP-10
-  test('TC-IP-10 | PUT /:id -> 200 cập nhật thành công', async () => {
+  // TC030
+  test('TC030 | PUT /:id -> 200 cập nhật thành công', async () => {
     db.__queue([], { affectedRows: 3 }, { affectedRows: 1 });
     const res = await request(app).put('/api/internship-periods/8').send({
       name: 'Đợt 8 sửa',
@@ -157,8 +157,8 @@ describeIf('internship-periods.js', () => {
     expect(db.query.mock.calls[0][1]).toEqual(['8', '2025-06-01', '2025-05-01']);
   });
 
-  // TC-IP-11
-  test('TC-IP-11 | PUT /:id -> 400 khi overlap với đợt khác', async () => {
+  // TC031
+  test('TC031 | PUT /:id -> 400 khi overlap với đợt khác', async () => {
     db.__queue([
       { id: 11, name: 'Khác', start_date: '2025-04-01', end_date: '2025-06-01' },
     ]);
@@ -172,8 +172,8 @@ describeIf('internship-periods.js', () => {
     expect(res.body.error).toMatch(/Không thể cập nhật đợt đăng ký/);
   });
 
-  // TC-IP-12
-  test('TC-IP-12 | DELETE /:id -> 200', async () => {
+  // TC032
+  test('TC032 | DELETE /:id -> 200', async () => {
     db.__queue({ affectedRows: 1 });
     const res = await request(app).delete('/api/internship-periods/15');
     expect(res.status).toBe(200);

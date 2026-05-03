@@ -1,15 +1,15 @@
 /**
  * ============================================================
  * TEST SUITE: Events Module (crudFactory – table: events)
- * Test Cases: TC097 → TC100
+ * Test Cases: TC107 → TC110
  * File under test: src/utils/crudFactory.js
  * Route config:    /api/events (server.js)
  * ============================================================
  * Mô tả: Kiểm thử CRUD sự kiện.
- *   - TC097: Tạo sự kiện hợp lệ       (Chuẩn,  CheckDB ✓, Rollback ✓)
- *   - TC098: Tạo sự kiện thiếu title   (Ngoại lệ)
- *   - TC099: Cập nhật sự kiện          (Chuẩn,  CheckDB ✓, Rollback ✓)
- *   - TC100: Xóa sự kiện              (Chuẩn,  CheckDB ✓, Rollback ✓)
+ *   - TC107: Tạo sự kiện hợp lệ       (Chuẩn,  CheckDB ✓, Rollback ✓)
+ *   - TC108: Tạo sự kiện thiếu title   (Ngoại lệ)
+ *   - TC109: Cập nhật sự kiện          (Chuẩn,  CheckDB ✓, Rollback ✓)
+ *   - TC110: Xóa sự kiện              (Chuẩn,  CheckDB ✓, Rollback ✓)
  * ============================================================
  */
 
@@ -37,13 +37,13 @@ afterAll(async () => {
 });
 
 /* ============================================================
- * TC097 – Tạo sự kiện hợp lệ
+ * TC107 – Tạo sự kiện hợp lệ
  * Loại: Chuẩn | CheckDB: Y | Rollback: Y
  * ============================================================ */
-describe('TC097 – createEvent: tạo sự kiện hợp lệ', () => {
+describe('TC107 – createEvent: tạo sự kiện hợp lệ', () => {
   it('should return 201 and persist event to database', async () => {
     const validEventPayload = {
-      title: 'Hội thảo AI TC097',
+      title: 'Hội thảo AI TC107',
       event_date: '2025-07-01',
       location: 'A1.01',
     };
@@ -69,11 +69,11 @@ describe('TC097 – createEvent: tạo sự kiện hợp lệ', () => {
 });
 
 /* ============================================================
- * TC098 – Tạo sự kiện thiếu title
+ * TC108 – Tạo sự kiện thiếu title
  * Loại: Ngoại lệ | CheckDB: N | Rollback: N
  * Expect: HTTP 500 (ER_NO_DEFAULT_FOR_FIELD – title NOT NULL)
  * ============================================================ */
-describe('TC098 – createEvent: thiếu title', () => {
+describe('TC108 – createEvent: thiếu title', () => {
   it('should reject when title is missing (NOT NULL constraint)', async () => {
     const missingTitlePayload = { location: 'A1.01' };
 
@@ -87,10 +87,10 @@ describe('TC098 – createEvent: thiếu title', () => {
 });
 
 /* ============================================================
- * TC099 – Cập nhật sự kiện
+ * TC109 – Cập nhật sự kiện
  * Loại: Chuẩn | CheckDB: Y | Rollback: Y
  * ============================================================ */
-describe('TC099 – updateEvent: cập nhật location', () => {
+describe('TC109 – updateEvent: cập nhật location', () => {
   it('should return 200 and update location in database', async () => {
     const updatedLocation = 'B2.02';
 
@@ -111,10 +111,10 @@ describe('TC099 – updateEvent: cập nhật location', () => {
 });
 
 /* ============================================================
- * TC100 – Xóa sự kiện
+ * TC110 – Xóa sự kiện
  * Loại: Chuẩn | CheckDB: Y | Rollback: Y
  * ============================================================ */
-describe('TC100 – deleteEvent: xóa sự kiện', () => {
+describe('TC110 – deleteEvent: xóa sự kiện', () => {
   it('should return 200 and remove event from database', async () => {
     const response = await request(eventsApp)
       .delete(`/api/events/${createdEventId}`)

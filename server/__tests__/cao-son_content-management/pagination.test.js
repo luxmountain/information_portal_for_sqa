@@ -1,11 +1,11 @@
 /**
  * ============================================================
  * TEST SUITE: Pagination (crudFactory GET / with ?page&limit)
- * Test Cases: TC127 → TC128
+ * Test Cases: TC137 → TC138
  * File under test: src/utils/crudFactory.js (router.get '/'))
  * ============================================================
- *   - TC127: Phân trang hợp lệ (page=1, limit=5)   (Chuẩn)
- *   - TC128: Page vượt tổng số trang                (Ngoại lệ / Boundary)
+ *   - TC137: Phân trang hợp lệ (page=1, limit=5)   (Chuẩn)
+ *   - TC138: Page vượt tổng số trang                (Ngoại lệ / Boundary)
  * ============================================================
  */
 
@@ -44,12 +44,12 @@ afterAll(async () => {
 });
 
 /* ============================================================
- * TC127 – Phân trang hợp lệ
+ * TC137 – Phân trang hợp lệ
  * Loại: Chuẩn | CheckDB: N | Rollback: N
  * Input:  GET /api/news?page=1&limit=5
  * Expect: HTTP 200, data array ≤ 5 items, pagination object
  * ============================================================ */
-describe('TC127 – pagination: page=1, limit=5', () => {
+describe('TC137 – pagination: page=1, limit=5', () => {
   it('should return paginated response with data and pagination info', async () => {
     const response = await request(paginationApp)
       .get('/api/news?page=1&limit=5');
@@ -65,12 +65,12 @@ describe('TC127 – pagination: page=1, limit=5', () => {
 });
 
 /* ============================================================
- * TC128 – Page vượt tổng số trang (boundary)
+ * TC138 – Page vượt tổng số trang (boundary)
  * Loại: Ngoại lệ | CheckDB: N | Rollback: N
  * Input:  GET /api/news?page=999&limit=5
  * Expect: HTTP 200, data = [] (mảng rỗng)
  * ============================================================ */
-describe('TC128 – pagination: page vượt tổng (boundary)', () => {
+describe('TC138 – pagination: page vượt tổng (boundary)', () => {
   it('should return 200 with empty data array', async () => {
     const response = await request(paginationApp)
       .get('/api/news?page=999&limit=5');

@@ -1,15 +1,15 @@
 /**
  * ============================================================
  * TEST SUITE: Student Documents Module (crudFactory – table: student_documents)
- * Test Cases: TC116 → TC120
+ * Test Cases: TC126 → TC130
  * File under test: src/utils/crudFactory.js
  * Route config:    /api/student-documents (server.js)
  * ============================================================
- *   - TC116: Tạo tài liệu SV hợp lệ       (Chuẩn,  CheckDB ✓, Rollback ✓)
- *   - TC117: Tạo tài liệu thiếu title      (Ngoại lệ)
- *   - TC118: Lọc tài liệu theo category    (Chuẩn)
- *   - TC119: Cập nhật tài liệu             (Chuẩn,  CheckDB ✓, Rollback ✓)
- *   - TC120: Xóa tài liệu                  (Chuẩn,  CheckDB ✓, Rollback ✓)
+ *   - TC126: Tạo tài liệu SV hợp lệ       (Chuẩn,  CheckDB ✓, Rollback ✓)
+ *   - TC127: Tạo tài liệu thiếu title      (Ngoại lệ)
+ *   - TC128: Lọc tài liệu theo category    (Chuẩn)
+ *   - TC129: Cập nhật tài liệu             (Chuẩn,  CheckDB ✓, Rollback ✓)
+ *   - TC130: Xóa tài liệu                  (Chuẩn,  CheckDB ✓, Rollback ✓)
  * ============================================================
  */
 
@@ -34,13 +34,13 @@ afterAll(async () => {
 });
 
 /* ============================================================
- * TC116 – Tạo tài liệu SV hợp lệ
+ * TC126 – Tạo tài liệu SV hợp lệ
  * Loại: Chuẩn | CheckDB: Y | Rollback: Y
  * ============================================================ */
-describe('TC116 – createDocument: tạo tài liệu SV hợp lệ', () => {
+describe('TC126 – createDocument: tạo tài liệu SV hợp lệ', () => {
   it('should return 201 and persist document to database', async () => {
     const validDocumentPayload = {
-      title: 'Quy định thực tập TC116',
+      title: 'Quy định thực tập TC126',
       category: 'regulation',
       file_url: 'https://example.com/file.pdf',
     };
@@ -65,10 +65,10 @@ describe('TC116 – createDocument: tạo tài liệu SV hợp lệ', () => {
 });
 
 /* ============================================================
- * TC117 – Tạo tài liệu thiếu title
+ * TC127 – Tạo tài liệu thiếu title
  * Loại: Ngoại lệ | CheckDB: N | Rollback: N
  * ============================================================ */
-describe('TC117 – createDocument: thiếu title', () => {
+describe('TC127 – createDocument: thiếu title', () => {
   it('should reject when title is missing (NOT NULL constraint)', async () => {
     const missingTitlePayload = { category: 'regulation' };
 
@@ -82,10 +82,10 @@ describe('TC117 – createDocument: thiếu title', () => {
 });
 
 /* ============================================================
- * TC118 – Lọc tài liệu theo category
+ * TC128 – Lọc tài liệu theo category
  * Loại: Chuẩn | CheckDB: N | Rollback: N
  * ============================================================ */
-describe('TC118 – filterDocuments: lọc theo category', () => {
+describe('TC128 – filterDocuments: lọc theo category', () => {
   it('should return 200 with results matching category keyword', async () => {
     const response = await request(studentDocsApp)
       .get('/api/student-documents?q=regulation');
@@ -97,12 +97,12 @@ describe('TC118 – filterDocuments: lọc theo category', () => {
 });
 
 /* ============================================================
- * TC119 – Cập nhật tài liệu
+ * TC129 – Cập nhật tài liệu
  * Loại: Chuẩn | CheckDB: Y | Rollback: Y
  * ============================================================ */
-describe('TC119 – updateDocument: cập nhật title', () => {
+describe('TC129 – updateDocument: cập nhật title', () => {
   it('should return 200 and update title in database', async () => {
-    const updatedTitle = 'Tiêu đề mới TC119';
+    const updatedTitle = 'Tiêu đề mới TC129';
 
     const response = await request(studentDocsApp)
       .put(`/api/student-documents/${createdDocumentId}`)
@@ -121,10 +121,10 @@ describe('TC119 – updateDocument: cập nhật title', () => {
 });
 
 /* ============================================================
- * TC120 – Xóa tài liệu
+ * TC130 – Xóa tài liệu
  * Loại: Chuẩn | CheckDB: Y | Rollback: Y
  * ============================================================ */
-describe('TC120 – deleteDocument: xóa tài liệu', () => {
+describe('TC130 – deleteDocument: xóa tài liệu', () => {
   it('should return 200 and remove document from database', async () => {
     const response = await request(studentDocsApp)
       .delete(`/api/student-documents/${createdDocumentId}`)

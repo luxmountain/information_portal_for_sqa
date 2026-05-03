@@ -1,13 +1,13 @@
 /**
  * ============================================================
  * TEST SUITE: Research Module (crudFactory – table: research_projects)
- * Test Cases: TC113 → TC115
+ * Test Cases: TC123 → TC125
  * File under test: src/utils/crudFactory.js
  * Route config:    /api/research (server.js)
  * ============================================================
- *   - TC113: Tạo dự án nghiên cứu hợp lệ   (Chuẩn,  CheckDB ✓, Rollback ✓)
- *   - TC114: Tạo dự án thiếu title          (Ngoại lệ)
- *   - TC115: Tìm kiếm nghiên cứu           (Chuẩn)
+ *   - TC123: Tạo dự án nghiên cứu hợp lệ   (Chuẩn,  CheckDB ✓, Rollback ✓)
+ *   - TC124: Tạo dự án thiếu title          (Ngoại lệ)
+ *   - TC125: Tìm kiếm nghiên cứu           (Chuẩn)
  * ============================================================
  */
 
@@ -32,13 +32,13 @@ afterAll(async () => {
 });
 
 /* ============================================================
- * TC113 – Tạo dự án nghiên cứu hợp lệ
+ * TC123 – Tạo dự án nghiên cứu hợp lệ
  * Loại: Chuẩn | CheckDB: Y | Rollback: Y
  * ============================================================ */
-describe('TC113 – createResearch: tạo dự án nghiên cứu hợp lệ', () => {
+describe('TC123 – createResearch: tạo dự án nghiên cứu hợp lệ', () => {
   it('should return 201 and persist research project to database', async () => {
     const validResearchPayload = {
-      title: 'Nghiên cứu AI TC113',
+      title: 'Nghiên cứu AI TC123',
       lead_lecturer: 'GS. Tran Van A',
       co_authors: 'TS. Le Van B',
     };
@@ -63,10 +63,10 @@ describe('TC113 – createResearch: tạo dự án nghiên cứu hợp lệ', ()
 });
 
 /* ============================================================
- * TC114 – Tạo dự án thiếu title
+ * TC124 – Tạo dự án thiếu title
  * Loại: Ngoại lệ | CheckDB: N | Rollback: N
  * ============================================================ */
-describe('TC114 – createResearch: thiếu title', () => {
+describe('TC124 – createResearch: thiếu title', () => {
   it('should reject when title is missing (NOT NULL constraint)', async () => {
     const missingTitlePayload = { lead_lecturer: 'GS. A' };
 
@@ -80,10 +80,10 @@ describe('TC114 – createResearch: thiếu title', () => {
 });
 
 /* ============================================================
- * TC115 – Tìm kiếm nghiên cứu
+ * TC125 – Tìm kiếm nghiên cứu
  * Loại: Chuẩn | CheckDB: N | Rollback: N
  * ============================================================ */
-describe('TC115 – searchResearch: tìm nghiên cứu theo keyword', () => {
+describe('TC125 – searchResearch: tìm nghiên cứu theo keyword', () => {
   it('should return 200 with results matching keyword', async () => {
     const response = await request(researchApp)
       .get('/api/research?q=AI');

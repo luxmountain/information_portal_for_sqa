@@ -47,8 +47,8 @@ function makeRes() {
 }
 
 describe('validateInternshipPeriod middleware', () => {
-  // TC-VAL-01
-  test('TC-VAL-01 | Cả 2 ngày hợp lệ, end > start -> next() được gọi', () => {
+  // TC059
+  test('TC059 | Cả 2 ngày hợp lệ, end > start -> next() được gọi', () => {
     const req = { body: { start_date: '2025-01-01', end_date: '2025-02-01' } };
     const res = makeRes();
     const next = jest.fn();
@@ -57,8 +57,8 @@ describe('validateInternshipPeriod middleware', () => {
     expect(res.status).not.toHaveBeenCalled();
   });
 
-  // TC-VAL-02
-  test('TC-VAL-02 | end_date < start_date -> 400 với message thứ tự ngày', () => {
+  // TC060
+  test('TC060 | end_date < start_date -> 400 với message thứ tự ngày', () => {
     const req = { body: { start_date: '2025-02-10', end_date: '2025-02-01' } };
     const res = makeRes();
     const next = jest.fn();
@@ -70,8 +70,8 @@ describe('validateInternshipPeriod middleware', () => {
     expect(next).not.toHaveBeenCalled();
   });
 
-  // TC-VAL-03 (boundary)
-  test('TC-VAL-03 | end_date == start_date -> 400 (biên: <=)', () => {
+  // TC061 (boundary)
+  test('TC061 | end_date == start_date -> 400 (biên: <=)', () => {
     const req = { body: { start_date: '2025-02-10', end_date: '2025-02-10' } };
     const res = makeRes();
     const next = jest.fn();
@@ -80,8 +80,8 @@ describe('validateInternshipPeriod middleware', () => {
     expect(next).not.toHaveBeenCalled();
   });
 
-  // TC-VAL-04
-  test('TC-VAL-04 | start_date không hợp lệ -> 400 (Ngày tháng không hợp lệ)', () => {
+  // TC062
+  test('TC062 | start_date không hợp lệ -> 400 (Ngày tháng không hợp lệ)', () => {
     const req = { body: { start_date: 'abc', end_date: '2025-02-10' } };
     const res = makeRes();
     const next = jest.fn();
@@ -91,8 +91,8 @@ describe('validateInternshipPeriod middleware', () => {
     expect(next).not.toHaveBeenCalled();
   });
 
-  // TC-VAL-05
-  test('TC-VAL-05 | end_date không hợp lệ -> 400 (Ngày tháng không hợp lệ)', () => {
+  // TC063
+  test('TC063 | end_date không hợp lệ -> 400 (Ngày tháng không hợp lệ)', () => {
     const req = { body: { start_date: '2025-02-01', end_date: '32/13/2025' } };
     const res = makeRes();
     const next = jest.fn();
@@ -102,8 +102,8 @@ describe('validateInternshipPeriod middleware', () => {
     expect(next).not.toHaveBeenCalled();
   });
 
-  // TC-VAL-06 (chỉ có 1 trường)
-  test('TC-VAL-06 | Chỉ có start_date (thiếu end_date) -> bỏ qua validate, gọi next()', () => {
+  // TC064 (chỉ có 1 trường)
+  test('TC064 | Chỉ có start_date (thiếu end_date) -> bỏ qua validate, gọi next()', () => {
     const req = { body: { start_date: '2025-01-01' } };
     const res = makeRes();
     const next = jest.fn();
@@ -112,8 +112,8 @@ describe('validateInternshipPeriod middleware', () => {
     expect(res.status).not.toHaveBeenCalled();
   });
 
-  // TC-VAL-07 (body rỗng)
-  test('TC-VAL-07 | body không có cả 2 trường -> next() (không validate)', () => {
+  // TC065 (body rỗng)
+  test('TC065 | body không có cả 2 trường -> next() (không validate)', () => {
     const req = { body: {} };
     const res = makeRes();
     const next = jest.fn();

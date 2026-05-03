@@ -1,13 +1,13 @@
 /**
  * ============================================================
  * TEST SUITE: Recruitment Module (crudFactory – table: recruitment_posts)
- * Test Cases: TC101 → TC103
+ * Test Cases: TC111 → TC113
  * File under test: src/utils/crudFactory.js
  * Route config:    /api/recruitment (server.js)
  * ============================================================
- *   - TC101: Tạo tin tuyển dụng hợp lệ   (Chuẩn,  CheckDB ✓, Rollback ✓)
- *   - TC102: Tạo tin thiếu title          (Ngoại lệ)
- *   - TC103: Lọc tuyển dụng theo keyword  (Chuẩn)
+ *   - TC111: Tạo tin tuyển dụng hợp lệ   (Chuẩn,  CheckDB ✓, Rollback ✓)
+ *   - TC112: Tạo tin thiếu title          (Ngoại lệ)
+ *   - TC113: Lọc tuyển dụng theo keyword  (Chuẩn)
  * ============================================================
  */
 
@@ -32,13 +32,13 @@ afterAll(async () => {
 });
 
 /* ============================================================
- * TC101 – Tạo tin tuyển dụng hợp lệ
+ * TC111 – Tạo tin tuyển dụng hợp lệ
  * Loại: Chuẩn | CheckDB: Y | Rollback: Y
  * ============================================================ */
-describe('TC101 – createRecruitment: tạo tin tuyển dụng hợp lệ', () => {
+describe('TC111 – createRecruitment: tạo tin tuyển dụng hợp lệ', () => {
   it('should return 201 and persist recruitment post to database', async () => {
     const validRecruitmentPayload = {
-      title: 'Backend Developer TC101',
+      title: 'Backend Developer TC111',
       company_name: 'Google',
       position: 'Senior',
     };
@@ -63,10 +63,10 @@ describe('TC101 – createRecruitment: tạo tin tuyển dụng hợp lệ', () 
 });
 
 /* ============================================================
- * TC102 – Tạo tin tuyển dụng thiếu title
+ * TC112 – Tạo tin tuyển dụng thiếu title
  * Loại: Ngoại lệ | CheckDB: N | Rollback: N
  * ============================================================ */
-describe('TC102 – createRecruitment: thiếu title', () => {
+describe('TC112 – createRecruitment: thiếu title', () => {
   it('should reject when title is missing (NOT NULL constraint)', async () => {
     const missingTitlePayload = { company_name: 'Google' };
 
@@ -80,10 +80,10 @@ describe('TC102 – createRecruitment: thiếu title', () => {
 });
 
 /* ============================================================
- * TC103 – Lọc tuyển dụng theo company_name
+ * TC113 – Lọc tuyển dụng theo company_name
  * Loại: Chuẩn | CheckDB: N | Rollback: N
  * ============================================================ */
-describe('TC103 – filterRecruitment: tìm theo company_name', () => {
+describe('TC113 – filterRecruitment: tìm theo company_name', () => {
   it('should return 200 with results matching keyword', async () => {
     const response = await request(recruitmentApp)
       .get('/api/recruitment?q=Google');

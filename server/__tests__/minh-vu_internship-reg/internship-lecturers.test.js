@@ -37,16 +37,16 @@ describeIf('internship-lecturers.js', () => {
     authGuard._setUser({ id: 1, role: 'admin' });
   });
 
-  // TC-IL-01
-  test('TC-IL-01 | GET / thiếu period_id -> 400', async () => {
+  // TC033
+  test('TC033 | GET / thiếu period_id -> 400', async () => {
     const res = await request(app).get('/api/internship-lecturers');
     expect(res.status).toBe(400);
     expect(res.body.error).toMatch(/Thiếu period_id/);
     expect(db.query).not.toHaveBeenCalled();
   });
 
-  // TC-IL-02
-  test('TC-IL-02 | GET /?period_id=1 -> 200 trả về danh sách giảng viên', async () => {
+  // TC034
+  test('TC034 | GET /?period_id=1 -> 200 trả về danh sách giảng viên', async () => {
     const fake = [
       { id: 1, name: 'Nguyễn A', can_guide: 1, max_slots: 10, current_slots: 2, available_slots: 8 },
       { id: 2, name: 'Trần B', can_guide: 0, max_slots: 5, current_slots: 0, available_slots: 5 },
@@ -58,8 +58,8 @@ describeIf('internship-lecturers.js', () => {
     expect(db.query.mock.calls[0][1]).toEqual(['1']);
   });
 
-  // TC-IL-03
-  test('TC-IL-03 | GET /?period_id=1&can_guide=true -> 200 thêm filter can_guide', async () => {
+  // TC035
+  test('TC035 | GET /?period_id=1&can_guide=true -> 200 thêm filter can_guide', async () => {
     db.__queue([]);
     const res = await request(app)
       .get('/api/internship-lecturers')
@@ -69,22 +69,22 @@ describeIf('internship-lecturers.js', () => {
     expect(db.query.mock.calls[0][1]).toEqual(['1', 1]);
   });
 
-  // TC-IL-04
-  test('TC-IL-04 | GET / -> 500 khi DB lỗi', async () => {
+  // TC036
+  test('TC036 | GET / -> 500 khi DB lỗi', async () => {
     db.__queueError(new Error('DB fail'));
     const res = await request(app).get('/api/internship-lecturers').query({ period_id: 1 });
     expect(res.status).toBe(500);
     expect(res.body.error).toMatch(/Lỗi khi lấy danh sách giảng viên/);
   });
 
-  // TC-IL-05
-  test('TC-IL-05 | GET /available thiếu period_id -> 400', async () => {
+  // TC037
+  test('TC037 | GET /available thiếu period_id -> 400', async () => {
     const res = await request(app).get('/api/internship-lecturers/available');
     expect(res.status).toBe(400);
   });
 
-  // TC-IL-06
-  test('TC-IL-06 | GET /available -> 200 chỉ trả về giảng viên còn slot', async () => {
+  // TC038
+  test('TC038 | GET /available -> 200 chỉ trả về giảng viên còn slot', async () => {
     db.__queue([
       { id: 10, name: 'GV A', max_slots: 10, current_slots: 5, available_slots: 5 },
     ]);
@@ -96,8 +96,8 @@ describeIf('internship-lecturers.js', () => {
     expect(db.query.mock.calls[0][0]).toMatch(/lp\.can_guide = TRUE AND \(lp\.max_slots - lp\.current_slots\) > 0/);
   });
 
-  // TC-IL-07
-  test('TC-IL-07 | POST / thiếu lecturer_id -> 400', async () => {
+  // TC039
+  test('TC039 | POST / thiếu lecturer_id -> 400', async () => {
     const res = await request(app)
       .post('/api/internship-lecturers')
       .send({ period_id: 1 });
@@ -105,8 +105,8 @@ describeIf('internship-lecturers.js', () => {
     expect(db.query).not.toHaveBeenCalled();
   });
 
-  // TC-IL-08
-  test('TC-IL-08 | POST / -> 200 INSERT...ON DUPLICATE KEY UPDATE', async () => {
+  // TC040
+  test('TC040 | POST / -> 200 INSERT...ON DUPLICATE KEY UPDATE', async () => {
     db.__queue({ affectedRows: 1, insertId: 5 });
     const res = await request(app).post('/api/internship-lecturers').send({
       period_id: 1,
@@ -120,8 +120,8 @@ describeIf('internship-lecturers.js', () => {
     expect(db.query.mock.calls[0][1]).toEqual([1, 7, true, 15]);
   });
 
-  // TC-IL-09
-  test('TC-IL-09 | PUT /batch -> 200 commit transaction', async () => {
+  // TC041
+  test('TC041 | PUT /batch -> 200 commit transaction', async () => {
     db.__queue(
       [], // START TRANSACTION
       { affectedRows: 1 },
@@ -142,8 +142,8 @@ describeIf('internship-lecturers.js', () => {
     expect(sqlCalls).not.toContain('ROLLBACK');
   });
 
-  // TC-IL-10
-  test('TC-IL-10 | PUT /batch -> 500 và ROLLBACK khi INSERT trong loop bị lỗi', async () => {
+  // TC042
+  test('TC042 | PUT /batch -> 500 và ROLLBACK khi INSERT trong loop bị lỗi', async () => {
     db.__queue([]);                 // START TRANSACTION
     db.__queue({ affectedRows: 1 }); // INSERT 1 OK
     db.__queueError(new Error('duplicate or fk'));
