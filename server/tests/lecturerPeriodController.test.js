@@ -15,9 +15,9 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 
 jest.mock('../src/config/db', () => ({ query: jest.fn() }));
-const db = require('../../src/config/db');
+const db = require('../src/config/db');
 
-const lecturersRouter = require('../../src/routes/internship-lecturers');
+const lecturersRouter = require('../src/routes/internship-lecturers');
 
 const app = express();
 app.use(express.json());
