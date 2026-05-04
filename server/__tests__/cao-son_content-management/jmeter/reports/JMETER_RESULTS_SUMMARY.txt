@@ -40,7 +40,7 @@ Row 6:
 TJ ID: TJ-J003
 API Endpoint: GET /api/news
 Scenario: Smoke / Load / Stress
-Testing Objective: Kiểm tra hiệu năng đọc danh sách tin tức (TC142)
+Testing Objective: Kiểm tra hiệu năng đọc danh sách tin tức (TC105)
 Thread Config: Smoke 1u/1l | Load 50u/10l | Stress 200u/5l
 Input / Params: None
 Expected Output: 200, JSON array
@@ -54,7 +54,7 @@ Row 7:
 TJ ID: TJ-J004
 API Endpoint: GET /api/events
 Scenario: Smoke / Load / Stress
-Testing Objective: Kiểm tra hiệu năng đọc danh sách sự kiện (TC144)
+Testing Objective: Kiểm tra hiệu năng đọc danh sách sự kiện (TC107)
 Thread Config: Smoke 1u/1l | Load 50u/10l | Stress 200u/5l
 Input / Params: None
 Expected Output: 200, JSON array
@@ -68,7 +68,7 @@ Row 8:
 TJ ID: TJ-J005
 API Endpoint: GET /api/recruitment
 Scenario: Smoke / Load / Stress
-Testing Objective: Kiểm tra hiệu năng đọc danh sách tuyển dụng (TC148)
+Testing Objective: Kiểm tra hiệu năng đọc danh sách tuyển dụng (TC111)
 Thread Config: Smoke 1u/1l | Load 50u/10l | Stress 200u/5l
 Input / Params: None
 Expected Output: 200, JSON array
@@ -82,7 +82,7 @@ Row 9:
 TJ ID: TJ-J006
 API Endpoint: GET /api/departments
 Scenario: Smoke / Load / Stress
-Testing Objective: Kiểm tra hiệu năng đọc danh sách bộ môn (TC156)
+Testing Objective: Kiểm tra hiệu năng đọc danh sách bộ môn (TC119)
 Thread Config: Smoke 1u/1l | Load 50u/10l | Stress 200u/5l
 Input / Params: None
 Expected Output: 200, JSON array (kèm lecturers)
@@ -96,7 +96,7 @@ Row 10:
 TJ ID: TJ-J007
 API Endpoint: GET /api/majors
 Scenario: Smoke / Load
-Testing Objective: Kiểm tra hiệu năng đọc danh sách ngành (TC168)
+Testing Objective: Kiểm tra hiệu năng đọc danh sách ngành (TC131)
 Thread Config: Smoke 1u/1l | Load 50u/10l
 Input / Params: None
 Expected Output: 200, JSON array
@@ -138,7 +138,7 @@ Row 13:
 TJ ID: TJ-J010
 API Endpoint: GET /api/news?page=1&limit=10
 Scenario: Smoke / Load / Stress
-Testing Objective: Kiểm tra hiệu năng phân trang (TC174)
+Testing Objective: Kiểm tra hiệu năng phân trang (TC137)
 Thread Config: Smoke 1u/1l | Load 50u/10l | Stress 200u/5l
 Input / Params: page=1, limit=10
 Expected Output: 200, JSON {data:[], pagination:{page,limit,total,totalPages}}
@@ -152,7 +152,7 @@ Row 14:
 TJ ID: TJ-J011
 API Endpoint: Login → POST/PUT/DELETE /api/news (with token)
 Scenario: Smoke / Load / Stress
-Testing Objective: Kiểm tra CRUD news dưới tải với auth token (TC138/TC140/TC141)
+Testing Objective: Kiểm tra CRUD news dưới tải với auth token (TC101/TC103/TC104)
 Thread Config: Smoke 1u/1l | Load 50u/10l | Stress 200u/5l
 Input / Params: Login: {email,password}; Create: {title,summary,content}; Update: {title}; Delete: /:id
 Expected Output: Login→200+token; Create→201; Update→200; Delete→200

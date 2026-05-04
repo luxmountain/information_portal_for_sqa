@@ -2,7 +2,7 @@
 
 ## ⚠️ LƯU Ý: TC IDs
 
-TC thực tế của Cao Sơn trong dự án: **TC138–TC177** (đồng bộ với Google Sheets).
+TC thực tế của Cao Sơn trong dự án: **TC101–TC140** (đồng bộ với Google Sheets).
 
 ## 1. Cài đặt JMeter
 ```bash
@@ -33,32 +33,36 @@ node scripts/create-admin.js "Admin User" admin@fit.edu.vn admin123 admin
 ### Bash / Git Bash / WSL
 ```bash
 cd server
-mkdir -p reports
-rm -f reports/results.jtl
-rm -rf reports/jmeter_html_report/
+JMETER_DIR=__tests__/cao-son_content-management/jmeter
+
+mkdir -p $JMETER_DIR/reports
+rm -f $JMETER_DIR/reports/results.jtl
+rm -rf $JMETER_DIR/reports/jmeter_html_report/
 
 jmeter -n \
-  -t test_plans/content_management.jmx \
-  -l reports/results.jtl \
-  -e -o reports/jmeter_html_report/
+  -t $JMETER_DIR/content_management.jmx \
+  -l $JMETER_DIR/reports/results.jtl \
+  -e -o $JMETER_DIR/reports/jmeter_html_report/
 ```
 
 ### PowerShell
 ```powershell
 cd server
-New-Item -ItemType Directory -Force -Path reports
-Remove-Item -Force -ErrorAction SilentlyContinue reports/results.jtl
-Remove-Item -Recurse -Force -ErrorAction SilentlyContinue reports/jmeter_html_report/
+$JMETER_DIR = "__tests__\cao-son_content-management\jmeter"
+
+New-Item -ItemType Directory -Force -Path "$JMETER_DIR\reports"
+Remove-Item -Force -ErrorAction SilentlyContinue "$JMETER_DIR\reports\results.jtl"
+Remove-Item -Recurse -Force -ErrorAction SilentlyContinue "$JMETER_DIR\reports\jmeter_html_report"
 
 jmeter -n `
-  -t test_plans/content_management.jmx `
-  -l reports/results.jtl `
-  -e -o reports/jmeter_html_report/
+  -t "$JMETER_DIR\content_management.jmx" `
+  -l "$JMETER_DIR\reports\results.jtl" `
+  -e -o "$JMETER_DIR\reports\jmeter_html_report"
 ```
 
 ## 4. Xem báo cáo
 ```bash
-start reports/jmeter_html_report/index.html   # Windows
+start __tests__/cao-son_content-management/jmeter/reports/jmeter_html_report/index.html   # Windows
 ```
 
 ## 5. Cấu trúc Test Plan
@@ -75,18 +79,18 @@ start reports/jmeter_html_report/index.html   # Windows
 |---|---|---|---|
 | TJ-S01/L01/X01 | GET /api/health | - | Health check |
 | TJ-S02/L02/X02 | GET /api/home | - | Trang chủ (aggregate 6 queries) |
-| TJ-S03/L03/X03 | GET /api/news | TC142 | Danh sách tin tức |
-| TJ-S04/L04/X04 | GET /api/events | TC144 | Danh sách sự kiện |
-| TJ-S05/L05/X05 | GET /api/recruitment | TC148 | Danh sách tuyển dụng |
-| TJ-S06/L06/X06 | GET /api/departments | TC156 | Danh sách bộ môn (JOIN lecturers) |
-| TJ-S07/L07 | GET /api/majors | TC168 | Danh sách ngành |
+| TJ-S03/L03/X03 | GET /api/news | TC105 | Danh sách tin tức |
+| TJ-S04/L04/X04 | GET /api/events | TC107 | Danh sách sự kiện |
+| TJ-S05/L05/X05 | GET /api/recruitment | TC111 | Danh sách tuyển dụng |
+| TJ-S06/L06/X06 | GET /api/departments | TC119 | Danh sách bộ môn (JOIN lecturers) |
+| TJ-S07/L07 | GET /api/majors | TC131 | Danh sách ngành |
 | TJ-S08 | GET /api/banners | - | Danh sách banner |
 | TJ-S09 | GET /api/enterprises | - | Danh sách doanh nghiệp |
-| TJ-S10/L08/X07 | GET /api/news?page=1&limit=10 | TC174 | Pagination |
+| TJ-S10/L08/X07 | GET /api/news?page=1&limit=10 | TC137 | Pagination |
 | TJ-S11/L09/X08 | POST /api/auth/login | - | Login lấy JWT token (OnceOnlyController) |
-| TJ-S12/L10/X09 | POST /api/news | TC138 | Create news với token |
-| TJ-S13/L11/X10 | PUT /api/news/:id | TC140 | Update news với token |
-| TJ-S14/L12/X11 | DELETE /api/news/:id | TC141 | Delete news với token |
+| TJ-S12/L10/X09 | POST /api/news | TC101 | Create news với token |
+| TJ-S13/L11/X10 | PUT /api/news/:id | TC103 | Update news với token |
+| TJ-S14/L12/X11 | DELETE /api/news/:id | TC104 | Delete news với token |
 
 ## 7. Kỹ thuật sử dụng
 

@@ -93,7 +93,7 @@
           <hashTree/>
         </hashTree>
 
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-S03 - GET /api/news (TC095)" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-S03 - GET /api/news (TC105)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/news</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -113,7 +113,7 @@
           <hashTree/>
         </hashTree>
 
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-S04 - GET /api/events (TC097)" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-S04 - GET /api/events (TC107)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/events</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -133,7 +133,7 @@
           <hashTree/>
         </hashTree>
 
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-S05 - GET /api/recruitment (TC101)" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-S05 - GET /api/recruitment (TC111)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/recruitment</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -153,7 +153,7 @@
           <hashTree/>
         </hashTree>
 
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-S06 - GET /api/departments (TC104)" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-S06 - GET /api/departments (TC119)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/departments</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -173,7 +173,7 @@
           <hashTree/>
         </hashTree>
 
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-S07 - GET /api/majors (TC113)" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-S07 - GET /api/majors (TC131)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/majors</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -233,7 +233,7 @@
           <hashTree/>
         </hashTree>
 
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-S10 - GET /api/news Pagination (TC127)" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-S10 - GET /api/news Pagination (TC137)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/news</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -308,8 +308,8 @@
           </hashTree>
         </hashTree>
 
-        <!-- TJ-S12: POST /api/news - Create News with Token (TC138) -->
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-S12 - POST /api/news Create (TC138)" enabled="true">
+        <!-- TJ-S12: POST /api/news - Create News with Token (TC101) -->
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-S12 - POST /api/news Create (TC101)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/news</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -355,8 +355,8 @@
           <hashTree/>
         </hashTree>
 
-        <!-- TJ-S13: PUT /api/news/:id - Update News with Token (TC140) -->
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-S13 - PUT /api/news Update (TC140)" enabled="true">
+        <!-- TJ-S13: PUT /api/news/:id - Update News with Token (TC103) -->
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-S13 - PUT /api/news Update (TC103)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/news/${created_news_id}</stringProp>
           <stringProp name="HTTPSampler.method">PUT</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -395,8 +395,8 @@
           <hashTree/>
         </hashTree>
 
-        <!-- TJ-S14: DELETE /api/news/:id - Delete News with Token (TC141) -->
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-S14 - DELETE /api/news Delete (TC141)" enabled="true">
+        <!-- TJ-S14: DELETE /api/news/:id - Delete News with Token (TC104) -->
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-S14 - DELETE /api/news Delete (TC104)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/news/${created_news_id}</stringProp>
           <stringProp name="HTTPSampler.method">DELETE</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -484,7 +484,7 @@
           <hashTree/>
         </hashTree>
 
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-L03 - GET /api/news (TC095)" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-L03 - GET /api/news (TC105)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/news</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -504,7 +504,7 @@
           <hashTree/>
         </hashTree>
 
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-L04 - GET /api/events (TC097)" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-L04 - GET /api/events (TC107)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/events</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -524,7 +524,7 @@
           <hashTree/>
         </hashTree>
 
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-L05 - GET /api/recruitment (TC101)" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-L05 - GET /api/recruitment (TC111)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/recruitment</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -544,7 +544,7 @@
           <hashTree/>
         </hashTree>
 
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-L06 - GET /api/departments (TC104)" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-L06 - GET /api/departments (TC119)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/departments</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -564,7 +564,7 @@
           <hashTree/>
         </hashTree>
 
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-L07 - GET /api/majors (TC113)" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-L07 - GET /api/majors (TC131)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/majors</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -584,7 +584,7 @@
           <hashTree/>
         </hashTree>
 
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-L08 - GET /api/news Pagination (TC127)" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-L08 - GET /api/news Pagination (TC137)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/news</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -659,8 +659,8 @@
           </hashTree>
         </hashTree>
 
-        <!-- TJ-L10: POST /api/news Create (TC138) -->
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-L10 - POST /api/news Create (TC138)" enabled="true">
+        <!-- TJ-L10: POST /api/news Create (TC101) -->
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-L10 - POST /api/news Create (TC101)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/news</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -706,8 +706,8 @@
           <hashTree/>
         </hashTree>
 
-        <!-- TJ-L11: PUT /api/news Update (TC140) -->
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-L11 - PUT /api/news Update (TC140)" enabled="true">
+        <!-- TJ-L11: PUT /api/news Update (TC103) -->
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-L11 - PUT /api/news Update (TC103)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/news/${created_news_id}</stringProp>
           <stringProp name="HTTPSampler.method">PUT</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -746,8 +746,8 @@
           <hashTree/>
         </hashTree>
 
-        <!-- TJ-L12: DELETE /api/news Delete (TC141) -->
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-L12 - DELETE /api/news Delete (TC141)" enabled="true">
+        <!-- TJ-L12: DELETE /api/news Delete (TC104) -->
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-L12 - DELETE /api/news Delete (TC104)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/news/${created_news_id}</stringProp>
           <stringProp name="HTTPSampler.method">DELETE</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -835,7 +835,7 @@
           <hashTree/>
         </hashTree>
 
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-X03 - GET /api/news (TC095)" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-X03 - GET /api/news (TC105)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/news</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -855,7 +855,7 @@
           <hashTree/>
         </hashTree>
 
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-X04 - GET /api/events (TC097)" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-X04 - GET /api/events (TC107)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/events</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -875,7 +875,7 @@
           <hashTree/>
         </hashTree>
 
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-X05 - GET /api/recruitment (TC101)" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-X05 - GET /api/recruitment (TC111)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/recruitment</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -895,7 +895,7 @@
           <hashTree/>
         </hashTree>
 
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-X06 - GET /api/departments (TC104)" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-X06 - GET /api/departments (TC119)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/departments</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -915,7 +915,7 @@
           <hashTree/>
         </hashTree>
 
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-X07 - GET /api/news Pagination (TC127)" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-X07 - GET /api/news Pagination (TC137)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/news</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -990,8 +990,8 @@
           </hashTree>
         </hashTree>
 
-        <!-- TJ-X09: POST /api/news Create (TC138) -->
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-X09 - POST /api/news Create (TC138)" enabled="true">
+        <!-- TJ-X09: POST /api/news Create (TC101) -->
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-X09 - POST /api/news Create (TC101)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/news</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -1037,8 +1037,8 @@
           <hashTree/>
         </hashTree>
 
-        <!-- TJ-X10: PUT /api/news Update (TC140) -->
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-X10 - PUT /api/news Update (TC140)" enabled="true">
+        <!-- TJ-X10: PUT /api/news Update (TC103) -->
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-X10 - PUT /api/news Update (TC103)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/news/${created_news_id}</stringProp>
           <stringProp name="HTTPSampler.method">PUT</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -1077,8 +1077,8 @@
           <hashTree/>
         </hashTree>
 
-        <!-- TJ-X11: DELETE /api/news Delete (TC141) -->
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-X11 - DELETE /api/news Delete (TC141)" enabled="true">
+        <!-- TJ-X11: DELETE /api/news Delete (TC104) -->
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-X11 - DELETE /api/news Delete (TC104)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/news/${created_news_id}</stringProp>
           <stringProp name="HTTPSampler.method">DELETE</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
