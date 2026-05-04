@@ -9,6 +9,7 @@
     "test": "jest --verbose --forceExit --detectOpenHandles --runInBand",
     "test:auth": "jest --verbose --runInBand test/unit/TC001_TC020_auth.test.js",
     "test:cao-son": "jest --verbose --forceExit --detectOpenHandles --runInBand __tests__/cao-son_content-management",
+    "test:cao-son:file": "jest --verbose --forceExit --runInBand",
     "test:dinh-nghia": "jest --verbose --forceExit --detectOpenHandles --runInBand __tests__/dinh-nghia_auth-password",
     "test:minh-thang": "jest --verbose --forceExit --detectOpenHandles --runInBand __tests__/minh-thang_enterprise-approval",
     "test:minh-vu": "jest --verbose --forceExit --detectOpenHandles --runInBand __tests__/minh-vu_internship-reg",
