@@ -1,17 +1,17 @@
 /**
  * ============================================================
  * TEST SUITE: News Module (crudFactory – table: news)
- * Test Cases: TC138 → TC143
+ * Test Cases: TC101 → TC106
  * File under test: src/utils/crudFactory.js
  * Route config:    /api/news (server.js)
  * ============================================================
  * Mô tả: Kiểm thử CRUD và tìm kiếm tin tức.
- *   - TC138: Tạo tin tức hợp lệ              (Chuẩn,  CheckDB ✓, Rollback ✓)
- *   - TC139: Tạo tin tức thiếu title          (Ngoại lệ)
- *   - TC140: Cập nhật tin tức                 (Chuẩn,  CheckDB ✓, Rollback ✓)
- *   - TC141: Xóa tin tức                      (Chuẩn,  CheckDB ✓, Rollback ✓)
- *   - TC142: Lấy danh sách tin tức (public)   (Chuẩn)
- *   - TC143: Tìm kiếm tin tức theo từ khóa   (Chuẩn)
+ *   - TC101: Tạo tin tức hợp lệ              (Chuẩn,  CheckDB ✓, Rollback ✓)
+ *   - TC102: Tạo tin tức thiếu title          (Ngoại lệ)
+ *   - TC103: Cập nhật tin tức                 (Chuẩn,  CheckDB ✓, Rollback ✓)
+ *   - TC104: Xóa tin tức                      (Chuẩn,  CheckDB ✓, Rollback ✓)
+ *   - TC105: Lấy danh sách tin tức (public)   (Chuẩn)
+ *   - TC106: Tìm kiếm tin tức theo từ khóa   (Chuẩn)
  * ============================================================
  */
 
@@ -40,16 +40,16 @@ afterAll(async () => {
 });
 
 /* ============================================================
- * TC138 – Tạo tin tức hợp lệ
+ * TC101 – Tạo tin tức hợp lệ
  * Loại: Chuẩn | CheckDB: Y | Rollback: Y
  * Input:  title, summary, content, image_url (đầy đủ)
  * Expect: HTTP 201, bản ghi mới trong DB
  * ============================================================ */
-describe('TC138 – createNews: tạo tin tức hợp lệ', () => {
+describe('TC101 – createNews: tạo tin tức hợp lệ', () => {
   it('should return 201 and persist news to database', async () => {
     /* --- Execute: gửi POST tạo tin tức --- */
     const validNewsPayload = {
-      title: 'Tin tức kiểm thử TC138',
+      title: 'Tin tức kiểm thử TC101',
       summary: 'Tóm tắt tin tức',
       content: 'Nội dung chi tiết tin tức',
       image_url: 'https://example.com/img.jpg',
@@ -80,13 +80,13 @@ describe('TC138 – createNews: tạo tin tức hợp lệ', () => {
 });
 
 /* ============================================================
- * TC139 – Tạo tin tức thiếu title (required field – NOT NULL in DB)
+ * TC102 – Tạo tin tức thiếu title (required field – NOT NULL in DB)
  * Loại: Ngoại lệ | CheckDB: N | Rollback: N
  * Input:  body thiếu title
  * Expect: HTTP 500 (ER_NO_DEFAULT_FOR_FIELD – MySQL strict mode)
  *         errorHandler trả về { success: false, message: ... }
  * ============================================================ */
-describe('TC139 – createNews: thiếu title', () => {
+describe('TC102 – createNews: thiếu title', () => {
   it('should reject when title is missing (NOT NULL constraint)', async () => {
     const missingTitlePayload = { summary: 'Chỉ có tóm tắt' };
 
@@ -101,14 +101,14 @@ describe('TC139 – createNews: thiếu title', () => {
 });
 
 /* ============================================================
- * TC140 – Cập nhật tin tức
+ * TC103 – Cập nhật tin tức
  * Loại: Chuẩn | CheckDB: Y | Rollback: Y
  * Input:  id hợp lệ, title mới
  * Expect: HTTP 200, DB cập nhật title
  * ============================================================ */
-describe('TC140 – updateNews: cập nhật tin tức', () => {
+describe('TC103 – updateNews: cập nhật tin tức', () => {
   it('should return 200 and update title in database', async () => {
-    const updatedTitle = 'Tiêu đề đã cập nhật TC140';
+    const updatedTitle = 'Tiêu đề đã cập nhật TC103';
 
     const response = await request(newsApp)
       .put(`/api/news/${createdNewsId}`)
@@ -129,12 +129,12 @@ describe('TC140 – updateNews: cập nhật tin tức', () => {
 });
 
 /* ============================================================
- * TC141 – Xóa tin tức
+ * TC104 – Xóa tin tức
  * Loại: Chuẩn | CheckDB: Y | Rollback: Y
  * Input:  id hợp lệ
  * Expect: HTTP 200, bản ghi bị xóa khỏi DB
  * ============================================================ */
-describe('TC141 – deleteNews: xóa tin tức', () => {
+describe('TC104 – deleteNews: xóa tin tức', () => {
   it('should return 200 and remove news from database', async () => {
     const response = await request(newsApp)
       .delete(`/api/news/${createdNewsId}`)
@@ -153,12 +153,12 @@ describe('TC141 – deleteNews: xóa tin tức', () => {
 });
 
 /* ============================================================
- * TC142 – Lấy danh sách tin tức (public, không cần auth)
+ * TC105 – Lấy danh sách tin tức (public, không cần auth)
  * Loại: Chuẩn | CheckDB: N | Rollback: N
  * Input:  GET /api/news (không có Authorization header)
  * Expect: HTTP 200, trả về array
  * ============================================================ */
-describe('TC142 – getNewsList: lấy danh sách tin tức công khai', () => {
+describe('TC105 – getNewsList: lấy danh sách tin tức công khai', () => {
   it('should return 200 and an array without auth', async () => {
     const response = await request(newsApp).get('/api/news');
 
@@ -168,12 +168,12 @@ describe('TC142 – getNewsList: lấy danh sách tin tức công khai', () => {
 });
 
 /* ============================================================
- * TC143 – Tìm kiếm tin tức theo từ khóa
+ * TC106 – Tìm kiếm tin tức theo từ khóa
  * Loại: Chuẩn | CheckDB: N | Rollback: N
  * Input:  ?q=CNTT
  * Expect: HTTP 200, kết quả lọc theo searchableFields
  * ============================================================ */
-describe('TC143 – searchNews: tìm kiếm tin tức', () => {
+describe('TC106 – searchNews: tìm kiếm tin tức', () => {
   /* Seed 1 bản ghi chứa từ khóa để đảm bảo có kết quả */
   let seedNewsId;
 

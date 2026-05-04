@@ -1,13 +1,13 @@
 /**
  * ============================================================
  * TEST SUITE: Departments Module (custom route – table: departments)
- * Test Cases: TC156 → TC159
+ * Test Cases: TC119 → TC122
  * File under test: src/routes/departments.js
  * ============================================================
- *   - TC156: Tạo bộ môn hợp lệ                (Chuẩn,  CheckDB ✓, Rollback ✓)
- *   - TC157: Tạo bộ môn thiếu name            (Ngoại lệ)
- *   - TC158: Thêm giảng viên vào bộ môn       (Chuẩn,  CheckDB ✓, Rollback ✓)
- *   - TC159: Xóa giảng viên khỏi bộ môn       (Chuẩn,  CheckDB ✓, Rollback ✓)
+ *   - TC119: Tạo bộ môn hợp lệ                (Chuẩn,  CheckDB ✓, Rollback ✓)
+ *   - TC120: Tạo bộ môn thiếu name            (Ngoại lệ)
+ *   - TC121: Thêm giảng viên vào bộ môn       (Chuẩn,  CheckDB ✓, Rollback ✓)
+ *   - TC122: Xóa giảng viên khỏi bộ môn       (Chuẩn,  CheckDB ✓, Rollback ✓)
  * ============================================================
  */
 
@@ -37,15 +37,15 @@ afterAll(async () => {
 });
 
 /* ============================================================
- * TC156 – Tạo bộ môn hợp lệ
+ * TC119 – Tạo bộ môn hợp lệ
  * Loại: Chuẩn | CheckDB: Y | Rollback: Y
  * Input:  name, description (đầy đủ)
  * Expect: HTTP 201, bản ghi mới trong departments
  * ============================================================ */
-describe('TC156 – createDepartment: tạo bộ môn hợp lệ', () => {
+describe('TC119 – createDepartment: tạo bộ môn hợp lệ', () => {
   it('should return 201 and persist department to database', async () => {
     const validDepartmentPayload = {
-      name: 'Bộ môn CNPM TC156',
+      name: 'Bộ môn CNPM TC119',
       description: 'Mô tả bộ môn kiểm thử',
     };
 
@@ -70,12 +70,12 @@ describe('TC156 – createDepartment: tạo bộ môn hợp lệ', () => {
 });
 
 /* ============================================================
- * TC157 – Tạo bộ môn thiếu name (express-validator)
+ * TC120 – Tạo bộ môn thiếu name (express-validator)
  * Loại: Ngoại lệ | CheckDB: N | Rollback: N
  * Input:  body chỉ có description, thiếu name
  * Expect: HTTP 400, message 'Validation failed'
  * ============================================================ */
-describe('TC157 – createDepartment: thiếu name', () => {
+describe('TC120 – createDepartment: thiếu name', () => {
   it('should return 400 with validation error', async () => {
     const missingNamePayload = { description: 'Chỉ có mô tả' };
 
@@ -90,16 +90,16 @@ describe('TC157 – createDepartment: thiếu name', () => {
 });
 
 /* ============================================================
- * TC158 – Thêm giảng viên vào bộ môn
+ * TC121 – Thêm giảng viên vào bộ môn
  * Loại: Chuẩn | CheckDB: Y | Rollback: Y
  * Input:  departmentId hợp lệ, lecturer_id hợp lệ
  * Expect: HTTP 201, lecturers.department_id = departmentId
  * ============================================================ */
-describe('TC158 – addLecturerToDepartment: thêm GV vào bộ môn', () => {
+describe('TC121 – addLecturerToDepartment: thêm GV vào bộ môn', () => {
   /* Seed: tạo 1 giảng viên chưa thuộc bộ môn nào (cần lecturer_code NOT NULL) */
   beforeAll(async () => {
     const [result] = await pool.query(
-      "INSERT INTO lecturers (lecturer_code, name, email, phone) VALUES ('TC158-001', 'GV Test TC158', 'tc111@ptit.edu.vn', '0900111222')"
+      "INSERT INTO lecturers (lecturer_code, name, email, phone) VALUES ('TC121-001', 'GV Test TC121', 'tc111@ptit.edu.vn', '0900111222')"
     );
     seedLecturerId = result.insertId;
   });
@@ -122,12 +122,12 @@ describe('TC158 – addLecturerToDepartment: thêm GV vào bộ môn', () => {
 });
 
 /* ============================================================
- * TC159 – Xóa giảng viên khỏi bộ môn
+ * TC122 – Xóa giảng viên khỏi bộ môn
  * Loại: Chuẩn | CheckDB: Y | Rollback: Y
  * Input:  departmentId, lecturerId hợp lệ
  * Expect: HTTP 204, lecturers.department_id = NULL
  * ============================================================ */
-describe('TC159 – removeLecturerFromDepartment: xóa GV khỏi bộ môn', () => {
+describe('TC122 – removeLecturerFromDepartment: xóa GV khỏi bộ môn', () => {
   it('should return 204 and set department_id to NULL', async () => {
     const response = await request(departmentsApp)
       .delete(`/api/departments/${createdDepartmentId}/lecturers/${seedLecturerId}`)
