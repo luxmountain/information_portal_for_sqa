@@ -45,11 +45,11 @@ let createdLecturerId;
 /* ---- Rollback: xóa tất cả GV test, đảm bảo DB sạch ---- */
 beforeAll(async () => {
   /* Dọn dẹp dữ liệu test cũ từ lần chạy trước (nếu có) */
-  await pool.query("DELETE FROM lecturers WHERE lecturer_code LIKE 'TC10%'");
+  await pool.query("DELETE FROM lecturers WHERE lecturer_code LIKE 'TC11%'");
 });
 
 afterAll(async () => {
-  await pool.query("DELETE FROM lecturers WHERE lecturer_code LIKE 'TC10%'");
+  await pool.query("DELETE FROM lecturers WHERE lecturer_code LIKE 'TC11%'");
 });
 
 /* ============================================================

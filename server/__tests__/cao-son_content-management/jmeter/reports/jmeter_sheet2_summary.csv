@@ -1,0 +1,7 @@
+Environment: Windows 11 (26200.8246) | Node.js v24.10.0 | MySQL 8.0.45 (Docker) | Java 24.0.1 | Apache JMeter 5.6.3 CLI mode,,,,,,,,,,,
+Thread Group,Users,Ramp-Up (s),Loops,Total Req,Avg (ms),90th pct (ms),Max (ms),Error Rate,Throughput,Result
+Smoke Test,1,1,1,14,12,75,75,0.00%,13.3 req/s,✅ PASS
+Load Test,50,10,10,6000,53,105,2180,0.22%,38.5 req/s,⚠️ PASS (13 errors)
+Stress Test,200,30,5,9200,21,86,940,0.00%,33.2 req/s,✅ PASS
+,,,,,,,,,,
+"Total JMeter Cao Son: 11 TC x 3 scenarios = 37 samplers | Total: 15764 req | Error: 13 (0.08%) | Bottleneck: DB write contention during Load Test – connection pool = 10 insufficient for 50 concurrent CRUD users, PUT/DELETE exceeded Duration Assert 2s (max 2180ms)",,,,,,,,,,
