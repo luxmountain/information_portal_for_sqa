@@ -1,4 +1,0 @@
-testDescription,periodName,start_date,end_date,registration_start,registration_end,lecturerId,enterprise_ids
-1 enterprise preference - minimum boundary,Newman Alpha 2026,2026-04-01,2026-07-31,2026-04-01,2026-05-31,1,1
-3 enterprise preferences - middle value,Newman Beta 2026,2026-04-01,2026-08-31,2026-04-01,2026-05-31,2,1|2|3
-5 enterprise preferences - maximum boundary,Newman Gamma 2026,2026-04-01,2026-09-30,2026-04-01,2026-05-31,1,1|2|3|4|5

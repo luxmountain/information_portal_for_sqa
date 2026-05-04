@@ -15,8 +15,7 @@
     "test:minh-vu": "jest --verbose --forceExit --detectOpenHandles --runInBand __tests__/minh-vu_internship-reg",
     "test:coverage": "jest --coverage --verbose --forceExit --detectOpenHandles --runInBand",
     "lint": "echo \"No linters configured\"",
-    "newman": "newman run postman_tests/collections/MinhVu_Internship.json -e postman_tests/environments/local_env.json --data postman_tests/data/internship_test_data.csv --reporters cli,htmlextra --reporter-htmlextra-export postman_tests/reports/report.html --reporter-htmlextra-title \"Internship Registration API Test Report\"",
-    "newman:minh-vu": "newman run postman_tests/collections/MinhVu_Internship.json -e postman_tests/environments/local_env.json --data postman_tests/data/internship_test_data.csv --reporters cli,htmlextra --reporter-htmlextra-export postman_tests/reports/MinhVu_postman_report.html --reporter-htmlextra-title \"Internship Registration API Test Report\""
+    "newman:v2": "newman run postman_tests/collections/MinhVu_Internship.json -e postman_tests/environments/local_env.json --iteration-data postman_tests/data/internship_test_data_v2.csv --reporters cli,json,htmlextra --reporter-json-export postman_tests/reports/results.json --reporter-htmlextra-export postman_tests/reports/results.html --reporter-htmlextra-title \"Internship API Test Report\""
   },
   "jest": {
     "testEnvironment": "node",

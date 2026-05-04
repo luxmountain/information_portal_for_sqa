@@ -1,0 +1,4 @@
+testDescription,periodName,start_date,end_date,numEnterprises
+BVA: 1 nguyện vọng (biên dưới),Test Period Alpha 2026,2026-04-01,2026-07-31,1
+BVA: 3 nguyện vọng (giữa khoảng),Test Period Beta 2026,2026-04-01,2026-07-31,3
+BVA: 5 nguyện vọng (biên trên),Test Period Gamma 2026,2026-04-01,2026-07-31,5
