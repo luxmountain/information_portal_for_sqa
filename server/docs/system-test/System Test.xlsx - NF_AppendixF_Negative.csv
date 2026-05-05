@@ -1,0 +1,137 @@
+NF — NEGATIVE TESTING (Appendix F: Table F.1 Screens + F.2 Reports + F.3 Web Pages),,,,,,,,
+"Reference: Mastering SQA – Appendix F: Guidelines for Negative Testing (Table F.1, F.2, F.3) + BG Bảng 6.6",,,,,,,,
+Test Case ID,Test Case Description,Precondition,"Input Data
+(Test Data)",Steps,Expected Result,Actual Result,"Status
+(Pass/Fail/Pending)",Notes
+,A. AUTHENTICATION & AUTHORIZATION,,,,,,,
+F1_01,Admin login - Valid credentials,"Server running, admin exists","{ ""email"": ""admin@test.com"", ""password"": ""valid"" }",1. POST /api/auth/login with valid email/password,"Returns JWT token, status 200",Returns token correctly,PASS,
+F1_02,Admin login - Invalid credentials,Server running,"{ ""email"": ""admin@test.com"", ""password"": ""wrong"" }",1. POST /api/auth/login with wrong password,"Returns 401 ""Invalid credentials"", no token","Returns 401, no token leaked",PASS,
+F1_03,Admin login - SQL injection in email field,Server running,"{ ""email"": ""' OR 1=1 --"", ""password"": ""x"" }",1. POST /api/auth/login with SQL payload,Returns 400 validation error (invalid email format),"Returns 400 ""Invalid email format""",PASS,
+F1_04,Access admin API without token,Server running,N/A,1. GET /api/dashboard/stats without Authorization header,"Returns 401 ""Authorization header missing""",Returns 401 correctly,PASS,
+F1_05,Access admin API with expired token,Server running,Expired JWT token,1. GET /api/dashboard/stats with expired JWT,"Returns 401 ""Invalid or expired token""",Returns 401 correctly,PASS,
+F1_06,Access admin API with tampered token,Server running,Tampered JWT,1. GET /api/dashboard/stats with modified JWT payload,"Returns 401 ""Invalid or expired token""",Returns 401 correctly,PASS,
+F1_07,Student login - Valid credentials,"Server running, student exists",Valid student credentials,1. POST /api/students/login with valid student_code/password,"Returns JWT token, status 200",Returns token correctly,PASS,
+F1_08,Student protected route - No token,Server running,N/A,1. Access student API without token,Returns 401,Returns 401 correctly,PASS,
+F1_09,Frontend ProtectedRoute - Redirect without auth,Not logged in,N/A,1. Navigate to /admin directly,Redirects to /admin/login,Redirects correctly,PASS,
+F1_10,Frontend StudentProtectedRoute - Redirect without auth,Not logged in,N/A,1. Navigate to /student/change-password directly,Redirects to /student/login,Redirects correctly,PASS,
+,B. SQL INJECTION,,,,,,,
+F1_11,SQL Injection - Admin search endpoint,"Logged in as admin, server running",search=' OR 1=1 --,1. GET /api/students?search=' OR 1=1 --,Server does not return all records; parameterized query used,Parameterized query prevents injection,PASS,
+F1_12,SQL Injection - Chatbot basic OR 1=1,"Chatbot is open, server running", OR 1=1 --,1. Send SQL injection payload,Chatbot does not execute injection,"Bot replies ""Xin lỗi, đã xảy ra lỗi khi xử lý: 400 API key not valid. Please pass a valid API key. [reason: ""API_KEY_INVALID""
+
+domain: ""googleapis.com""
+
+metadata {
+
+key: ""service""
+
+value: ""generativelanguage.googleapis.com""
+
+}
+
+, locale: ""en-US""
+
+message: ""API key not valid. Please pass a valid API key.""
+
+]"", no data leak",FAIL,Because Gemini API Key is inactive
+F1_13,SQL Injection - Department route with ID,Server running,Path param: ' OR 1=1 --,1. GET /api/departments/' OR 1=1 --,"Returns 400 or 404, no data leak","Returns error, no data leak",PASS,
+F1_14,SQL Injection - Student import Excel,Logged in as admin,"student_code: ""'; DROP TABLE students; --""",1. Upload Excel with SQL payload in student_code field,Parameterized insert prevents execution,"DB unaffected, validation error returned",PASS,
+,C. XSS PREVENTION,,,,,,,
+F1_15,XSS - Script tag in chatbot input,Chatbot is open,<script>alert('XSS')</script>,1. Send script tag,"Script not executed, displayed as plain text","React auto-escapes, script not executed",PASS,
+F1_16,XSS - Script tag in admin news title,Logged in as admin,"title: ""<script>alert('XSS')</script>""",1. Create news with script in title,Script not executed when displayed on public page,React escapes HTML in JSX rendering,PASS,
+F1_17,XSS - Event handler in admin enterprise name,Logged in as admin,"name: ""<img src=x onerror=alert('XSS')>""",1. Create enterprise with onerror payload,Not rendered as HTML tag on public page,Displayed as plain text,PASS,
+,D. CORS & NETWORK SECURITY,,,,,,,
+F1_18,CORS - Main portal server configuration,Main server running,Cross-origin request from evil.com,1. Send request from non-localhost domain to /api/*,Server accepts only allowed origins,Server accepts all origins (cors() with no config),FAIL,server.js uses app.use(cors()) without whitelist. Fix: cors({ origin: [...] })
+F1_19,CORS - Chatbot server configuration,Chatbot server running,Cross-origin request from evil.com,1. Send request from non-localhost domain to /chat,Server accepts only allowed origins,Server accepts all origins,FAIL,Chatbot app.js also uses cors() without whitelist
+F1_20,API Rate Limiting - Main portal,Main server running,100 consecutive POST requests,1. Send 100 requests in 1 second to /api/auth/login,"Server limits requests, returns 429","Server handles all 100 requests, no rate limiting",FAIL,No rate-limiting middleware on main server
+F1_21,HTTP Method - GET to POST-only endpoint,Server running,GET /api/auth/login,1. Send GET to /api/auth/login,Returns 404 or 405,Returns 404 (only POST route),PASS,
+,E. SENSITIVE DATA EXPOSURE,,,,,,,
+F1_22,DB credentials exposure - Chatbot error reveals DB host,"Chatbot server running, DB server off","""Xin chào""","1. Stop MySQL server 
+2. Send chatbot question 
+3. Observe error response","Error message does not reveal DB host, user, or connection details","Bot replies ""Xin lỗi, đã xảy ra lỗi khi xử lý: 400 API key not valid. Please pass a valid API key. [reason: ""API_KEY_INVALID""
+
+domain: ""googleapis.com""
+
+metadata {
+
+key: ""service""
+
+value: ""generativelanguage.googleapis.com""
+
+}
+
+, locale: ""en-US""
+
+message: ""API key not valid. Please pass a valid API key.""
+
+]"", no data leak",FAIL,Because Gemini API Key is inactive
+F1_23,DB credentials exposure - Main portal error reveals DB info,"Main server running, DB server off",N/A,"1. Stop MySQL server 
+2. Call GET /api/home 
+3. Observe error response","Error message does not reveal DB host, user, or connection details","Error message does not reveal DB host, user, or connection details",PASS,
+F1_24,API Key exposure - Gemini error does not leak key,"Server running, invalid API key set","""Tin tức mới nhất?""","1. Set invalid GEMINI_API_KEY 
+2. Send RAG question to chatbot 
+3. Observe response",Error response does not contain API key value,"Bot replies ""Xin lỗi, đã xảy ra lỗi khi xử lý: 400 API key not valid. Please pass a valid API key. [reason: ""API_KEY_INVALID""
+
+domain: ""googleapis.com""
+
+metadata {
+
+key: ""service""
+
+value: ""generativelanguage.googleapis.com""
+
+}
+
+, locale: ""en-US""
+
+message: ""API key not valid. Please pass a valid API key.""
+
+]"", no data leak",FAIL,Because Gemini API Key is inactive
+F1_25,Sensitive data in error response - Password field echoed,"Server running, logged in as admin","{ ""email"": ""test@test.com"", ""password"": ""MySecret123"" }","1. POST /api/auth/login with invalid data to trigger error 
+2. Check if response body contains submitted password",Error response does not echo back the submitted password,Error response does not echo back the submitted password,PASS,
+,F. INPUT VALIDATION,,,,,,,
+F1_26,Admin CRUD - Validation with express-validator,"Server running, logged in as admin","{ ""title"": """", ""content"": ""test"" }",1. POST /api/news with empty title,Returns 400 with validation error,"Returns 400 ""title must be between 1 and 200 characters""",PASS,
+F1_27,Admin CRUD - URL format validation,"Server running, logged in as admin","{ ""apply_link"": ""not-a-url"" }",1. POST /api/recruitment with invalid apply_link,"Returns 400 ""Invalid apply_link URL format""",Returns 400 validation error,PASS,
+F1_28,Admin CRUD - Date validation,"Server running, logged in as admin","{ ""event_date"": ""not-a-date"" }",1. POST /api/events with invalid date,"Returns 400 ""Invalid event_date date format""",Returns 400 validation error,PASS,
+F1_29,Chatbot - Missing question field,Chatbot server running,{},1. POST /chat with empty body {},"Returns ""Vui lòng nhập câu hỏi.""","Bot replies ""Xin lỗi, đã xảy ra lỗi khi xử lý: 400 API key not valid. Please pass a valid API key. [reason: ""API_KEY_INVALID""
+
+domain: ""googleapis.com""
+
+metadata {
+
+key: ""service""
+
+value: ""generativelanguage.googleapis.com""
+
+}
+
+, locale: ""en-US""
+
+message: ""API key not valid. Please pass a valid API key.""
+
+]"", no data leak",FAIL,Because Gemini API Key is inactive
+F1_30,Chatbot - question = null,Chatbot server running,"{ ""question"": null }",1. POST /chat with question: null,Returns prompt to enter question,"Bot replies ""Xin lỗi, đã xảy ra lỗi khi xử lý: 400 API key not valid. Please pass a valid API key. [reason: ""API_KEY_INVALID""
+
+domain: ""googleapis.com""
+
+metadata {
+
+key: ""service""
+
+value: ""generativelanguage.googleapis.com""
+
+}
+
+, locale: ""en-US""
+
+message: ""API key not valid. Please pass a valid API key.""
+
+]"", no data leak",FAIL,Because Gemini API Key is inactive
+F1_31,File upload - Size limit,"Server running, logged in as admin",File > 10MB,1. Upload file > 10MB,"Returns 400 ""File size too large. Maximum size is 10MB.""",Returns error correctly,PASS,
+F1_32,File upload - Unexpected file field,"Server running, logged in as admin",Wrong field name,1. Upload with wrong field name,"Returns 400 ""Unexpected file field.""",Returns error correctly,PASS,
+,H. STATIC FILE & PATH SECURITY,,,,,,,
+F1_33,Path traversal - Upload directory,Server running,Path traversal attempt,1. Request /uploads/../../.env,"Server returns 403 or 404, does not serve .env",express.static serves only from uploads dir,PASS,
+F1_34,Static file access - Uploaded files,Server running,Valid file path,1. Access /uploads/valid-file.png,File served correctly,File served correctly,PASS,
+,,,,,,,,
+Conclusion,,,,,,,,
+Total test cases,PASS,FAIL,PENDING,,,,,
+34,26,8,0,,,,,

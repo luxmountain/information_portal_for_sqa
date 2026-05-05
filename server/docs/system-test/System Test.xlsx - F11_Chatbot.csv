@@ -1,0 +1,75 @@
+F11 — Chatbot Q&A,,,,,,,,
+"Technical: EP + Negative (Appendix F Table F.1, F.3)  |  EP: in-scope/out-scope; Negative F.1: blank, XSS, max length; F.3: web navigation",,,,,,,,
+Test Case ID,Test Case Description,Precondition,"Input Data
+(Test Data)",Steps,Expected Result,Actual Result,"Status
+(Pass/Fail/Pending)",Notes
+F11_01,Open chatbot window,"Website fully loaded, chatbot icon visible at bottom-right",N/A,1. Click robot icon at bottom-right corner,"Chatbot popup displays with header ""Trợ lý ảo CNTT"", chat area, message input, send button","Chatbot window displays correctly with the header ""Trợ lý ảo CNTT"", and includes a welcome message.",PASS,
+F11_02,Close chatbot window,Chatbot window is open,N/A,1. Click X button at top-right of chatbot header,"Chatbot window closes, robot icon appears again at bottom-right","Chatbot window closes, robot icon reappears",PASS,
+F11_03,Show welcome message on first open,"Chatbot vừa được mở, chưa có tin nhắn nào",N/A,1. Open chatbot,"Display message: ""Xin chào! Tôi là trợ lý ảo của Khoa CNTT. Tôi có thể giúp gì cho bạn?""",Welcome message is displayed correctly.,PASS,
+F11_04,Send message with Send button,Chatbot window is open,"""Xin chào""","1. Enter question in input 
+2. Click send button (paper plane icon)","User message appears on right, chatbot greeting appears on left","User message appears right, bot replies: ""Xin lỗi, đã xảy ra lỗi khi xử lý: 400 API key not valid. Please pass a valid API key. [reason: ""API_KEY_INVALID""
+
+domain: ""googleapis.com""
+
+metadata {
+
+key: ""service""
+
+value: ""generativelanguage.googleapis.com""
+
+}
+
+, locale: ""en-US""
+
+message: ""API key not valid. Please pass a valid API key.""
+
+]""",PASS,
+F11_05,Send message with Enter key,Chatbot window is open,"""Hello""","1. Enter question in input 
+2. Press Enter","Message is sent, chatbot returns greeting","Message sent successfully, bot replies: ""Xin lỗi, đã xảy ra lỗi khi xử lý: 400 API key not valid. Please pass a valid API key. [reason: ""API_KEY_INVALID""
+
+domain: ""googleapis.com""
+
+metadata {
+
+key: ""service""
+
+value: ""generativelanguage.googleapis.com""
+
+}
+
+, locale: ""en-US""
+
+message: ""API key not valid. Please pass a valid API key.""
+
+]""",PASS,
+F11_06,Send empty message (EP - Invalid class),Chatbot window is open,""""" (empty)","1. Leave input blank 
+2. Click send","Send button disabled, message is not sent","Send button disabled, cannot send",PASS,
+F11_07,Send spaces-only message (BVA),Chatbot window is open,""" "" (spaces)","1. Enter only spaces 
+2. Click send","Send button disabled, message is not sent","Send button disabled, cannot send",PASS,
+F11_08,Ask infomation,Chatbot window is open,"""Xin thông tin về khoa CNTT1""","1. Enter the question
+2. Send",Chatbot replies about the info of CNTT1 Department,"Bot replies: ""Xin lỗi, đã xảy ra lỗi khi xử lý: 400 API key not valid. Please pass a valid API key. [reason: ""API_KEY_INVALID""
+
+domain: ""googleapis.com""
+
+metadata {
+
+key: ""service""
+
+value: ""generativelanguage.googleapis.com""
+
+}
+
+, locale: ""en-US""
+
+message: ""API key not valid. Please pass a valid API key.""",PENDING,Gemini API Key is inactive
+F11_09,Show loading animation while waiting for response,"Chatbot is open, server running","""Nghiên cứu khoa học mới nhất?""",1. Send a RAG question (takes processing time),Show 3-dot bouncing animation while waiting,3-dot loading animation is shown,PASS,
+F11_10,Handle error when server does not respond (Error Guessing),"Chatbot is open, server NOT running","""Xin chào""","1. Stop backend server 
+2. Send message","Show error message: ""Xin lỗi, không thể kết nối với chatbot...""","Bot shows connection error message: ""Xin lỗi, không thể kết nối với chatbot. Failed to fetch""",PASS,
+F11_11,Cannot send message while loading,"Chatbot is open, waiting for response","Msg 1: ""Nghiên cứu khoa học?"", Msg 2: ""Xin chào""","1. Send message 
+2. While loading, attempt another send",Input and send button disabled during loading,Input and send button disabled while loading,PASS,
+F11_12,Auto-scroll on new messages,"Chatbot is open, many messages exist","""Xin chào"" (multiple times)","1. Send many messages until scroll needed 
+2. Send one more",Chat area auto-scrolls to latest message,Chat area auto-scrolls to bottom,PASS,
+,,,,,,,,
+Conclusion,,,,,,,,
+Total test cases,PASS,FAIL,PENDING,,,,,
+12,11,0,1,,,,,
