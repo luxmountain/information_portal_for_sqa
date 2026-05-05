@@ -16,9 +16,44 @@ Trong dự án này, dùng JMeter để test hiệu năng **Content Management A
 
 ---
 
-## 2. Cấu trúc Test Plan (.jmx)
+## 2. Vị trí file trong dự án
 
-File `.jmx` là XML mô tả toàn bộ kịch bản test. Cấu trúc cây:
+```
+server/
+├── src/
+│   ├── app.js                          ← Express app, mount routes
+│   ├── config/db.js                    ← MySQL pool (connectionLimit: 10)
+│   ├── routes/                         ← Route handlers
+│   ├── middleware/                     ← Auth, validation, error handler
+│   └── utils/crudFactory.js            ← Generic CRUD router builder
+├── __tests__/
+│   └── cao-son_content-management/
+│       ├── news.test.js                ← Unit test TC101-TC106
+│       ├── events.test.js              ← Unit test TC107-TC112
+│       ├── ...                         ← Các unit test khác
+│       └── jmeter/
+│           ├── content_management.jmx  ← JMeter test plan (XML)
+│           ├── README_JMETER.md        ← Hướng dẫn chạy
+│           └── reports/
+│               ├── results.jtl         ← Raw results
+│               ├── smoke_test.csv      ← Kết quả Smoke
+│               ├── load_test.csv       ← Kết quả Load
+│               ├── stress_test.csv     ← Kết quả Stress
+│               ├── jmeter_sheet1_detail.csv
+│               ├── jmeter_sheet2_summary.csv
+│               ├── JMETER_RESULTS_SUMMARY.txt
+│               └── jmeter_html_report/ ← HTML dashboard
+├── docs/
+│   └── JMETER_EXPLANATION.md           ← File này
+├── scripts/create-admin.js             ← Tạo admin account cho test
+└── package.json
+```
+
+---
+
+## 3. Cấu trúc Test Plan (.jmx)
+
+File `.jmx` nằm tại `__tests__/cao-son_content-management/jmeter/content_management.jmx`. Cấu trúc cây:
 
 ```
 Test Plan
@@ -63,7 +98,7 @@ Test Plan
 
 ---
 
-## 3. Thread Group hoạt động thế nào?
+## 4. Thread Group hoạt động thế nào?
 
 Thread Group có 3 tham số chính:
 
@@ -99,7 +134,7 @@ Stress Test: 200 × 5 × (7 GET + 1 login + 3 CRUD) ≈ 9,200 requests
 
 ---
 
-## 4. Thứ tự thực thi (Execution Order)
+## 5. Thứ tự thực thi (Execution Order)
 
 Theo JMeter docs, trong mỗi sampler, thứ tự là:
 
@@ -120,7 +155,7 @@ Theo JMeter docs, trong mỗi sampler, thứ tự là:
 
 ---
 
-## 5. Scoping Rules (Phạm vi áp dụng)
+## 6. Scoping Rules (Phạm vi áp dụng)
 
 Theo JMeter docs, các elements áp dụng theo **vị trí trong cây**:
 
@@ -140,9 +175,9 @@ Test Plan
 
 ---
 
-## 6. Luồng CRUD Flow chi tiết
+## 7. Luồng CRUD Flow chi tiết
 
-Đây là phần đặc sắc nhất – test **Create → Update → Delete** news dưới tải, liên kết với unit test TC138/TC140/TC141.
+Đây là phần đặc sắc nhất – test **Create → Update → Delete** news dưới tải, liên kết với unit test TC101/TC103/TC104.
 
 ```
 Thread bắt đầu (iteration 1)
@@ -229,17 +264,50 @@ Biến `${auth_token}` và `${created_news_id}` là **thread-local** (mỗi thre
 
 ---
 
-## 7. Kết quả và phân tích
+## 8. Cách chạy test
 
-### 7.1. Tổng quan
+### Chuẩn bị
+```bash
+cd server
+npm install
+npm start                    # Server chạy tại http://localhost:4000
+node scripts/create-admin.js "Admin User" admin@fit.edu.vn admin123 admin
+```
 
-| Thread Group | Users | Ramp-Up | Loops | Total Req | Avg | Max | Error Rate | Throughput |
-|---|---|---|---|---|---|---|---|---|
-| Smoke | 1 | 1s | 1 | 14 | 12ms | 75ms | 0.00% | 13.3 req/s |
-| Load | 50 | 10s | 10 | 6,000 | 53ms | 2,180ms | 0.22% | 38.5 req/s |
-| Stress | 200 | 30s | 5 | 9,200 | 21ms | 940ms | 0.00% | 33.2 req/s |
+### Chạy JMeter CLI mode
+```bash
+cd server
+JMETER_DIR=__tests__/cao-son_content-management/jmeter
 
-### 7.2. Tại sao Load Test có error mà Stress Test thì không?
+mkdir -p $JMETER_DIR/reports
+rm -f $JMETER_DIR/reports/results.jtl
+rm -rf $JMETER_DIR/reports/jmeter_html_report/
+
+jmeter -n \
+  -t $JMETER_DIR/content_management.jmx \
+  -l $JMETER_DIR/reports/results.jtl \
+  -e -o $JMETER_DIR/reports/jmeter_html_report/
+```
+
+Kết quả xuất ra:
+- `reports/results.jtl` – raw data
+- `reports/jmeter_html_report/index.html` – dashboard trực quan
+
+---
+
+## 9. Kết quả và phân tích
+
+### 9.1. Tổng quan
+
+| Thread Group | Users | Ramp-Up | Loops | Total Req | Avg | 90th pct | Max | Error Rate | Throughput |
+|---|---|---|---|---|---|---|---|---|---|
+| Smoke | 1 | 1s | 1 | 14 | 12ms | 75ms | 75ms | 0.00% | 13.3 req/s |
+| Load | 50 | 10s | 10 | 6,000 | 53ms | 105ms | 2,180ms | 0.22% | 38.5 req/s |
+| Stress | 200 | 30s | 5 | 9,200 | 21ms | 86ms | 940ms | 0.00% | 33.2 req/s |
+
+**Tổng:** 15,214 requests | 13 errors (0.08%)
+
+### 9.2. Tại sao Load Test có error mà Stress Test thì không?
 
 Đây là câu hỏi giáo viên **rất có thể hỏi**:
 
@@ -252,11 +320,11 @@ Tuy Stress có nhiều users hơn, nhưng:
 
 1. **Ramp-up dài hơn (30s vs 10s)** → requests phân bổ đều hơn theo thời gian
 2. **Loops ít hơn (5 vs 10)** → mỗi thread gửi ít CRUD operations hơn
-3. **Connection pool = 10**: Load Test có 50 threads × 10 loops = 500 lần write DB. Khi nhiều threads cùng write vào MySQL qua 10 connections → **contention** (tranh chấp) → một số request phải chờ → vượt Duration Assert 2s
+3. **Connection pool = 10** (cấu hình trong `src/config/db.js`): Load Test có 50 threads × 10 loops = 500 lần write DB. Khi nhiều threads cùng write vào MySQL qua 10 connections → **contention** (tranh chấp) → một số request phải chờ → vượt Duration Assert 2s
 
-**Bottleneck thực sự:** MySQL connection pool = 10 không đủ cho 50 concurrent write operations. Đây là giới hạn cấu hình trong `src/config/db.js`.
+**Bottleneck thực sự:** MySQL connection pool = 10 không đủ cho 50 concurrent write operations.
 
-### 7.3. Chi tiết errors (13 errors trong Load Test)
+### 9.3. Chi tiết errors (13 errors trong Load Test)
 
 | Sampler | Errors | Error Rate | Nguyên nhân |
 |---|---|---|---|
@@ -267,21 +335,39 @@ Tuy Stress có nhiều users hơn, nhưng:
 
 **Pattern:** Tất cả errors đều là **Duration Assertion failure** (response > 2000ms), không phải HTTP error. Server vẫn trả 200/201 đúng, chỉ là **chậm quá ngưỡng**.
 
-### 7.4. Liên kết với Unit Test
+### 9.4. Liên kết với Unit Test
 
 | JMeter TC | Unit Test TC | Mô tả | JMeter phát hiện thêm |
 |---|---|---|---|
-| TJ-J003 (GET /api/news) | TC142 | Read news list | Avg 44ms dưới 50 users – OK |
-| TJ-J011 (POST /api/news) | TC138 | Create news | 0.4% error dưới 50 concurrent writes |
-| TJ-J011 (PUT /api/news) | TC140 | Update news | 1.0% error – bottleneck rõ nhất |
-| TJ-J011 (DELETE /api/news) | TC141 | Delete news | 0.8% error – DB lock contention |
-| TJ-J010 (Pagination) | TC174 | Pagination | Max 548ms – OK |
+| TJ-J003 (GET /api/news) | TC105 | Read news list | Avg 44ms dưới 50 users – OK |
+| TJ-J011 (POST /api/news) | TC101 | Create news | 0.4% error dưới 50 concurrent writes |
+| TJ-J011 (PUT /api/news) | TC103 | Update news | 1.0% error – bottleneck rõ nhất |
+| TJ-J011 (DELETE /api/news) | TC104 | Delete news | 0.8% error – DB lock contention |
+| TJ-J010 (Pagination) | TC137 | Pagination | Max 548ms – OK |
 
 Unit test chỉ test **1 request tại 1 thời điểm** (functional correctness). JMeter test phát hiện thêm **performance issues khi nhiều users đồng thời** – đây là giá trị chính của performance testing.
 
 ---
 
-## 8. Câu hỏi giáo viên có thể hỏi
+## 10. Mapping đầy đủ JMeter Samplers → API Endpoints
+
+| JMeter ID | API Endpoint | Scenario | Liên quan Unit Test |
+|---|---|---|---|
+| TJ-J001 | GET /api/health | Smoke/Load/Stress | - |
+| TJ-J002 | GET /api/home | Smoke/Load/Stress | - |
+| TJ-J003 | GET /api/news | Smoke/Load/Stress | TC105 |
+| TJ-J004 | GET /api/events | Smoke/Load/Stress | TC107 |
+| TJ-J005 | GET /api/recruitment | Smoke/Load/Stress | TC111 |
+| TJ-J006 | GET /api/departments | Smoke/Load/Stress | TC119 |
+| TJ-J007 | GET /api/majors | Smoke/Load | TC131 |
+| TJ-J008 | GET /api/banners | Smoke | - |
+| TJ-J009 | GET /api/enterprises | Smoke | - |
+| TJ-J010 | GET /api/news?page=1&limit=10 | Smoke/Load/Stress | TC137 |
+| TJ-J011 | Login → POST/PUT/DELETE /api/news | Smoke/Load/Stress | TC101/TC103/TC104 |
+
+---
+
+## 11. Câu hỏi giáo viên có thể hỏi
 
 ### Q: Tại sao chọn 50 users cho Load Test và 200 cho Stress?
 **A:** Dựa trên đặc thù hệ thống – cổng thông tin Khoa CNTT1 phục vụ ~500 sinh viên + giảng viên. Load 50 users mô phỏng tải bình thường (10% users online). Stress 200 users mô phỏng peak (đầu kỳ, mùa tuyển sinh). Connection pool = 10 nên 50 concurrent writes đã đủ tìm bottleneck.
@@ -305,4 +391,27 @@ Unit test chỉ test **1 request tại 1 thời điểm** (functional correctnes
 **A:** Để test có thể chạy lại nhiều lần mà không cần reset DB. Mỗi iteration tạo 1 bài news → sửa → xóa. Không để dữ liệu rác ảnh hưởng lần chạy sau.
 
 ### Q: Phần JMeter test liên quan gì đến unit test?
-**A:** Unit test (Jest/Supertest) test **functional correctness** – 1 request, kiểm tra logic đúng/sai. JMeter test **performance** – nhiều requests đồng thời, kiểm tra hệ thống có chịu được tải không. Cùng test các API (TC138 Create, TC140 Update, TC141 Delete) nhưng ở góc độ khác nhau. JMeter phát hiện được DB write contention mà unit test không thể thấy.
+**A:** Unit test (Jest/Supertest) test **functional correctness** – 1 request, kiểm tra logic đúng/sai. JMeter test **performance** – nhiều requests đồng thời, kiểm tra hệ thống có chịu được tải không. Cùng test các API (TC101 Create, TC103 Update, TC104 Delete) nhưng ở góc độ khác nhau. JMeter phát hiện được DB write contention mà unit test không thể thấy.
+
+### Q: File .jmx nằm ở đâu? Cách mở?
+**A:** File nằm tại `__tests__/cao-son_content-management/jmeter/content_management.jmx`. Mở bằng JMeter GUI để xem/sửa cấu trúc, nhưng chạy test thì dùng CLI mode.
+
+### Q: Kết quả test lưu ở đâu?
+**A:** Tất cả trong `__tests__/cao-son_content-management/jmeter/reports/`:
+- `results.jtl` – raw data (mỗi request 1 dòng)
+- `jmeter_html_report/` – dashboard HTML (mở index.html)
+- `smoke_test.csv`, `load_test.csv`, `stress_test.csv` – kết quả từng phase
+- `JMETER_RESULTS_SUMMARY.txt` – tổng hợp text
+
+---
+
+## 12. Môi trường chạy test
+
+| Component | Version |
+|---|---|
+| OS | Windows 11 (26200.8246) |
+| Node.js | v24.10.0 |
+| MySQL | 8.0.45 (Docker) |
+| Java | 24.0.1 |
+| Apache JMeter | 5.6.3 (CLI mode) |
+| Server | localhost:4000 (Express + MySQL pool=10) |
