@@ -1,34 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- ╔══════════════════════════════════════════════════════════════════════════╗ -->
+<!-- ║ JMETER TEST PLAN – Content Management Performance Test                   ║ -->
+<!-- ║ Tác giả: Cao Sơn | Server: localhost:4000 (Express + MySQL)              ║ -->
+<!-- ║ File .jmx là định dạng XML mô tả toàn bộ kịch bản test của JMeter        ║ -->
+<!-- ╚══════════════════════════════════════════════════════════════════════════╝ -->
+
+<!-- jmeterTestPlan: Thẻ gốc của file .jmx
+     - version="1.2": Phiên bản định dạng file
+     - properties="5.0": Phiên bản properties
+     - jmeter="5.6.3": Phiên bản JMeter tạo file này -->
 <jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.3">
+
+  <!-- hashTree: Thẻ container chứa các phần tử con trong JMeter.
+       Mỗi element trong JMeter đều được theo sau bởi 1 hashTree chứa các child elements.
+       hashTree rỗng (<hashTree/>) = element đó không có con. -->
   <hashTree>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════ -->
+    <!-- TEST PLAN: Node gốc chứa toàn bộ test plan                            -->
+    <!-- guiclass: Class hiển thị trên GUI JMeter                               -->
+    <!-- testclass: Class thực thi logic                                        -->
+    <!-- testname: Tên hiển thị trong JMeter GUI                                -->
+    <!-- enabled="true": Bật/tắt element này                                    -->
+    <!-- ═══════════════════════════════════════════════════════════════════════ -->
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Content Management Performance Test - Cao Son" enabled="true">
+      <!-- functional_mode=false: Không lưu response data cho mỗi request (tiết kiệm RAM) -->
       <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <!-- serialize_threadgroups=true: Các Thread Group chạy TUẦN TỰ (Smoke → Load → Stress)
+           Nếu false thì tất cả Thread Group chạy song song cùng lúc -->
       <boolProp name="TestPlan.serialize_threadgroups">true</boolProp>
+      <!-- comments: Ghi chú mô tả test plan -->
       <stringProp name="TestPlan.comments">JMeter Performance Test cho Content Management API. Server: localhost:4000</stringProp>
+      <!-- user_define_classpath: Đường dẫn tới JAR bổ sung (không dùng) -->
       <stringProp name="TestPlan.user_define_classpath"></stringProp>
+      <!-- user_defined_variables: Biến toàn cục định nghĩa ở Test Plan level (không dùng) -->
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments">
         <collectionProp name="Arguments.arguments"/>
       </elementProp>
     </TestPlan>
     <hashTree>
 
+      <!-- ═══════════════════════════════════════════════════════════════════════ -->
+      <!-- HTTP REQUEST DEFAULTS: Cấu hình mặc định cho TẤT CẢ HTTP Request     -->
+      <!-- Đặt ở Test Plan level → áp dụng cho mọi sampler trong toàn bộ plan    -->
+      <!-- Tránh phải lặp lại host/port ở mỗi request                            -->
+      <!-- ═══════════════════════════════════════════════════════════════════════ -->
       <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults" enabled="true">
+        <!-- domain: Địa chỉ server (IP của WSL host, dùng khi chạy JMeter từ Windows) -->
         <stringProp name="HTTPSampler.domain">172.17.176.1</stringProp>
+        <!-- port: Cổng server Express đang lắng nghe -->
         <stringProp name="HTTPSampler.port">4000</stringProp>
+        <!-- protocol: Giao thức HTTP (không dùng HTTPS vì là local dev) -->
         <stringProp name="HTTPSampler.protocol">http</stringProp>
+        <!-- path: Đường dẫn mặc định (rỗng, mỗi sampler tự định nghĩa) -->
         <stringProp name="HTTPSampler.path"></stringProp>
+        <!-- concurrentPool: Số kết nối đồng thời tối đa trong pool HTTP client -->
         <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+        <!-- connect_timeout: Thời gian tối đa chờ kết nối TCP (5 giây) -->
         <stringProp name="HTTPSampler.connect_timeout">5000</stringProp>
+        <!-- response_timeout: Thời gian tối đa chờ server phản hồi (10 giây) -->
         <stringProp name="HTTPSampler.response_timeout">10000</stringProp>
       </ConfigTestElement>
+      <!-- hashTree rỗng = HTTP Defaults không có child elements -->
       <hashTree/>
 
+      <!-- ═══════════════════════════════════════════════════════════════════════ -->
+      <!-- HTTP HEADER MANAGER: Định nghĩa headers gửi kèm MỌI request          -->
+      <!-- Đặt ở Test Plan level → áp dụng cho tất cả samplers (Scoping Rule)    -->
+      <!-- ═══════════════════════════════════════════════════════════════════════ -->
       <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+        <!-- collectionProp: Danh sách các header -->
         <collectionProp name="HeaderManager.headers">
+          <!-- Header 1: Báo server rằng body request là JSON -->
           <elementProp name="" elementType="Header">
             <stringProp name="Header.name">Content-Type</stringProp>
             <stringProp name="Header.value">application/json</stringProp>
           </elementProp>
+          <!-- Header 2: Báo server rằng client muốn nhận JSON response -->
           <elementProp name="" elementType="Header">
             <stringProp name="Header.name">Accept</stringProp>
             <stringProp name="Header.value">application/json</stringProp>
@@ -37,29 +85,57 @@
       </HeaderManager>
       <hashTree/>
 
-      <!-- ============================================ -->
-      <!-- THREAD GROUP 1: SMOKE TEST (1 user, 1 loop)  -->
-      <!-- ============================================ -->
+
+      <!-- ╔══════════════════════════════════════════════════════════════════════╗ -->
+      <!-- ║ THREAD GROUP 1: SMOKE TEST – 1 user, 1 loop                         ║ -->
+      <!-- ║ Mục đích: Kiểm tra tất cả API hoạt động đúng với 1 user duy nhất    ║ -->
+      <!-- ║ Nếu Smoke fail → server có vấn đề cơ bản, không cần test tiếp       ║ -->
+      <!-- ╚══════════════════════════════════════════════════════════════════════╝ -->
+
+      <!-- ThreadGroup: Mô phỏng 1 nhóm virtual users
+           - Mỗi thread = 1 user ảo, chạy song song và độc lập
+           - on_sample_error="continue": Nếu 1 request lỗi, vẫn tiếp tục chạy các request sau -->
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Smoke Test - 1 User" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <!-- LoopController: Điều khiển số lần lặp
+             - continue_forever=false: Không lặp vô hạn
+             - loops=1: Mỗi thread chạy toàn bộ samplers 1 lần -->
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController">
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <stringProp name="LoopController.loops">1</stringProp>
         </elementProp>
+        <!-- num_threads=1: Chỉ 1 virtual user (smoke test) -->
         <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <!-- ramp_time=1: Thời gian khởi động tất cả threads (1 giây, vì chỉ có 1 thread) -->
         <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <!-- scheduler=false: Không dùng scheduler (chạy ngay lập tức) -->
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <!-- same_user_on_next_iteration=true: Giữ nguyên context (cookies, biến) giữa các iteration -->
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
+      <!-- hashTree chứa tất cả samplers bên trong Thread Group này -->
       <hashTree>
 
+        <!-- ─────────────────────────────────────────────────────────────────── -->
+        <!-- SAMPLER 1: GET /api/health – Kiểm tra server có sống không          -->
+        <!-- HTTPSamplerProxy: Gửi 1 HTTP request tới server                     -->
+        <!-- ─────────────────────────────────────────────────────────────────── -->
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-S01 - GET /api/health" enabled="true">
+          <!-- path: Đường dẫn API (kết hợp với domain/port từ HTTP Defaults) -->
           <stringProp name="HTTPSampler.path">/api/health</stringProp>
+          <!-- method: Phương thức HTTP (GET = đọc dữ liệu) -->
           <stringProp name="HTTPSampler.method">GET</stringProp>
+          <!-- follow_redirects: Tự động theo redirect 3xx -->
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <!-- use_keepalive: Giữ kết nối TCP mở (tái sử dụng cho request tiếp) -->
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
         </HTTPSamplerProxy>
+        <!-- hashTree chứa các Assertion (kiểm tra kết quả) của sampler này -->
         <hashTree>
+          <!-- ResponseAssertion: Kiểm tra response code = 200
+               - test_field=Assertion.response_code: Kiểm tra mã HTTP status
+               - test_type=2: Kiểu so sánh "Contains" (chứa chuỗi "200")
+               - assume_success=false: Không giả định thành công trước khi kiểm tra -->
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert 200" enabled="true">
             <collectionProp name="Asserion.test_strings"><stringProp name="49586">200</stringProp></collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
@@ -67,12 +143,18 @@
             <intProp name="Assertion.test_type">2</intProp>
           </ResponseAssertion>
           <hashTree/>
+          <!-- DurationAssertion: Kiểm tra thời gian phản hồi ≤ 2000ms
+               Nếu server trả về chậm hơn 2s → FAIL (dù HTTP status đúng) -->
           <DurationAssertion guiclass="DurationAssertionGui" testclass="DurationAssertion" testname="Duration &lt; 2s" enabled="true">
             <stringProp name="DurationAssertion.duration">2000</stringProp>
           </DurationAssertion>
           <hashTree/>
         </hashTree>
 
+        <!-- ─────────────────────────────────────────────────────────────────── -->
+        <!-- SAMPLER 2: GET /api/home – Trang chủ (6 query DB đồng thời)         -->
+        <!-- Endpoint nặng nhất: lấy stats, banners, events, news, admissions... -->
+        <!-- ─────────────────────────────────────────────────────────────────── -->
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-S02 - GET /api/home" enabled="true">
           <stringProp name="HTTPSampler.path">/api/home</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -93,6 +175,7 @@
           <hashTree/>
         </hashTree>
 
+        <!-- SAMPLER 3: GET /api/news – Danh sách tin tức (liên quan Unit Test TC105) -->
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-S03 - GET /api/news (TC105)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/news</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -113,6 +196,7 @@
           <hashTree/>
         </hashTree>
 
+        <!-- SAMPLER 4: GET /api/events – Danh sách sự kiện (TC107) -->
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-S04 - GET /api/events (TC107)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/events</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -133,6 +217,7 @@
           <hashTree/>
         </hashTree>
 
+        <!-- SAMPLER 5: GET /api/recruitment – Danh sách tuyển dụng (TC111) -->
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-S05 - GET /api/recruitment (TC111)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/recruitment</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -153,6 +238,7 @@
           <hashTree/>
         </hashTree>
 
+        <!-- SAMPLER 6: GET /api/departments – Danh sách bộ môn kèm JOIN lecturers (TC119) -->
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-S06 - GET /api/departments (TC119)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/departments</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -173,6 +259,7 @@
           <hashTree/>
         </hashTree>
 
+        <!-- SAMPLER 7: GET /api/majors – Danh sách ngành học (TC131) -->
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-S07 - GET /api/majors (TC131)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/majors</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -193,6 +280,7 @@
           <hashTree/>
         </hashTree>
 
+        <!-- SAMPLER 8: GET /api/banners – Danh sách banner trang chủ -->
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-S08 - GET /api/banners" enabled="true">
           <stringProp name="HTTPSampler.path">/api/banners</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -213,6 +301,7 @@
           <hashTree/>
         </hashTree>
 
+        <!-- SAMPLER 9: GET /api/enterprises – Danh sách doanh nghiệp -->
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-S09 - GET /api/enterprises" enabled="true">
           <stringProp name="HTTPSampler.path">/api/enterprises</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -233,13 +322,20 @@
           <hashTree/>
         </hashTree>
 
+        <!-- ─────────────────────────────────────────────────────────────────── -->
+        <!-- SAMPLER 10: GET /api/news?page=1&limit=10 – Test phân trang (TC137) -->
+        <!-- Khác với sampler 3: có query parameters page và limit               -->
+        <!-- ─────────────────────────────────────────────────────────────────── -->
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-S10 - GET /api/news Pagination (TC137)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/news</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <!-- HTTPsampler.Arguments: Danh sách query parameters (?key=value)
+               JMeter tự nối vào URL: /api/news?page=1&limit=10 -->
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments">
             <collectionProp name="Arguments.arguments">
+              <!-- Parameter: page=1 (trang đầu tiên) -->
               <elementProp name="page" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.name">page</stringProp>
@@ -247,6 +343,7 @@
                 <stringProp name="Argument.metadata">=</stringProp>
                 <boolProp name="HTTPArgument.use_equals">true</boolProp>
               </elementProp>
+              <!-- Parameter: limit=10 (10 bản ghi mỗi trang) -->
               <elementProp name="limit" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.name">limit</stringProp>
@@ -271,19 +368,31 @@
           <hashTree/>
         </hashTree>
 
-        <!-- TJ-S11: Admin Login (Once Only) - get token for CRUD -->
+
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- ONCE ONLY CONTROLLER: Login chỉ chạy 1 lần ở iteration đầu tiên   -->
+        <!-- Theo JMeter docs: "The login request will be executed only the     -->
+        <!-- first time through. Subsequent iterations will skip it."           -->
+        <!-- Lý do: Login gọi bcrypt.compare() tốn ~75-139ms, không cần lặp    -->
+        <!-- Token JWT có hạn 8h → đủ dùng cho toàn bộ test                    -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
         <OnceOnlyController guiclass="OnceOnlyControllerGui" testclass="OnceOnlyController" testname="Login Once" enabled="true"/>
         <hashTree>
+          <!-- SAMPLER 11: POST /api/auth/login – Đăng nhập lấy JWT token -->
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-S11 - POST /api/auth/login" enabled="true">
             <stringProp name="HTTPSampler.path">/api/auth/login</stringProp>
+            <!-- method=POST: Gửi dữ liệu lên server (tạo session/token) -->
             <stringProp name="HTTPSampler.method">POST</stringProp>
             <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
             <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <!-- postBodyRaw=true: Gửi body dạng raw JSON (không phải form-data) -->
             <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <!-- Arguments: Nội dung body request (JSON login credentials) -->
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
               <collectionProp name="Arguments.arguments">
                 <elementProp name="" elementType="HTTPArgument">
                   <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <!-- Body JSON: email + password của admin account -->
                   <stringProp name="Argument.value">{"email":"admin@fit.edu.vn","password":"admin123"}</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                 </elementProp>
@@ -298,17 +407,34 @@
               <intProp name="Assertion.test_type">2</intProp>
             </ResponseAssertion>
             <hashTree/>
+            <!-- ─────────────────────────────────────────────────────────────── -->
+            <!-- JSON POST PROCESSOR: Trích xuất giá trị từ JSON response        -->
+            <!-- Chạy SAU khi sampler nhận response (Post-Processor)              -->
+            <!-- Dùng JSONPath expression để lấy token từ response body           -->
+            <!-- Response: {"success":true, "token":"eyJhbG..."} → lấy $.token   -->
+            <!-- Lưu vào biến thread-local "auth_token" để dùng ở samplers sau   -->
+            <!-- ─────────────────────────────────────────────────────────────── -->
             <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="Extract Token" enabled="true">
+              <!-- referenceNames: Tên biến lưu kết quả (dùng ${auth_token} ở sau) -->
               <stringProp name="JSONPostProcessor.referenceNames">auth_token</stringProp>
+              <!-- jsonPathExprs: JSONPath expression – $.token = lấy field "token" ở root -->
               <stringProp name="JSONPostProcessor.jsonPathExprs">$.token</stringProp>
+              <!-- match_numbers=1: Lấy kết quả đầu tiên tìm được -->
               <stringProp name="JSONPostProcessor.match_numbers">1</stringProp>
+              <!-- defaultValues: Giá trị mặc định nếu không tìm thấy (debug) -->
               <stringProp name="JSONPostProcessor.defaultValues">NOT_FOUND</stringProp>
             </JSONPostProcessor>
             <hashTree/>
           </hashTree>
         </hashTree>
 
-        <!-- TJ-S12: POST /api/news - Create News with Token (TC101) -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- SAMPLER 12: POST /api/news – Tạo tin tức mới (TC101)               -->
+        <!-- Cần Authorization header với JWT token từ login ở trên              -->
+        <!-- Dùng hàm JMeter: ${__threadNum} = số thứ tự thread hiện tại        -->
+        <!--                   ${__iterationNum} = số thứ tự iteration hiện tại  -->
+        <!-- → Tạo title unique cho mỗi request, tránh trùng lặp                -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-S12 - POST /api/news Create (TC101)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/news</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -319,6 +445,7 @@
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <!-- Body: JSON tạo news với title chứa threadNum và iterationNum -->
                 <stringProp name="Argument.value">{"title":"JMeter Perf ${__threadNum}-${__iterationNum}","summary":"Perf test","content":"Content by JMeter"}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
@@ -326,15 +453,20 @@
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
+          <!-- HeaderManager ở SAMPLER level: CHỈ áp dụng cho sampler này
+               Thêm Authorization header với token đã extract từ login
+               Scoping Rule: Header ở child level override/bổ sung cho parent -->
           <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="Auth Header" enabled="true">
             <collectionProp name="HeaderManager.headers">
               <elementProp name="" elementType="Header">
                 <stringProp name="Header.name">Authorization</stringProp>
+                <!-- ${auth_token}: Biến thread-local chứa JWT token từ login -->
                 <stringProp name="Header.value">Bearer ${auth_token}</stringProp>
               </elementProp>
             </collectionProp>
           </HeaderManager>
           <hashTree/>
+          <!-- Assert 201: Create thành công trả về HTTP 201 Created -->
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert 201" enabled="true">
             <collectionProp name="Asserion.test_strings"><stringProp name="49587">201</stringProp></collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
@@ -346,6 +478,9 @@
             <stringProp name="DurationAssertion.duration">2000</stringProp>
           </DurationAssertion>
           <hashTree/>
+          <!-- Extract ID của news vừa tạo để dùng cho Update và Delete
+               Response: {"id":157, "title":"..."} → lấy $.id = 157
+               Lưu vào biến ${created_news_id} -->
           <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="Extract News ID" enabled="true">
             <stringProp name="JSONPostProcessor.referenceNames">created_news_id</stringProp>
             <stringProp name="JSONPostProcessor.jsonPathExprs">$.id</stringProp>
@@ -355,9 +490,15 @@
           <hashTree/>
         </hashTree>
 
-        <!-- TJ-S13: PUT /api/news/:id - Update News with Token (TC103) -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- SAMPLER 13: PUT /api/news/:id – Cập nhật tin tức (TC103)            -->
+        <!-- Path dùng biến ${created_news_id} từ Create ở trên                  -->
+        <!-- VD: /api/news/157 (ID 157 được extract từ response Create)          -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-S13 - PUT /api/news Update (TC103)" enabled="true">
+          <!-- Path chứa biến: /api/news/${created_news_id} → /api/news/157 -->
           <stringProp name="HTTPSampler.path">/api/news/${created_news_id}</stringProp>
+          <!-- method=PUT: Cập nhật toàn bộ/một phần resource -->
           <stringProp name="HTTPSampler.method">PUT</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -395,9 +536,14 @@
           <hashTree/>
         </hashTree>
 
-        <!-- TJ-S14: DELETE /api/news/:id - Delete News with Token (TC104) -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- SAMPLER 14: DELETE /api/news/:id – Xóa tin tức (TC104)              -->
+        <!-- Xóa bài vừa tạo → tự cleanup, không để rác trong DB                -->
+        <!-- Flow hoàn chỉnh: Create → Update → Delete (mỗi iteration)          -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-S14 - DELETE /api/news Delete (TC104)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/news/${created_news_id}</stringProp>
+          <!-- method=DELETE: Xóa resource -->
           <stringProp name="HTTPSampler.method">DELETE</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -426,23 +572,33 @@
         </hashTree>
 
       </hashTree>
-      <!-- END Smoke Test -->
+      <!-- ═══ KẾT THÚC SMOKE TEST ═══ -->
 
-      <!-- ============================================ -->
-      <!-- THREAD GROUP 2: LOAD TEST (50 users, 10 loops) -->
-      <!-- ============================================ -->
+
+      <!-- ╔══════════════════════════════════════════════════════════════════════╗ -->
+      <!-- ║ THREAD GROUP 2: LOAD TEST – 50 users, 10 loops                      ║ -->
+      <!-- ║ Mục đích: Mô phỏng tải bình thường (10% users online đồng thời)     ║ -->
+      <!-- ║ Tổng requests: 50 users × 10 loops × 12 samplers = 6,000 requests   ║ -->
+      <!-- ║ Ramp-up 10s: Mỗi 0.2s thêm 1 user mới (50/10 = 5 users/giây)       ║ -->
+      <!-- ╚══════════════════════════════════════════════════════════════════════╝ -->
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Load Test - 50 Users" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController">
           <boolProp name="LoopController.continue_forever">false</boolProp>
+          <!-- loops=10: Mỗi user lặp lại 10 lần toàn bộ samplers -->
           <stringProp name="LoopController.loops">10</stringProp>
         </elementProp>
+        <!-- num_threads=50: 50 virtual users chạy song song -->
         <stringProp name="ThreadGroup.num_threads">50</stringProp>
+        <!-- ramp_time=10: Mất 10 giây để khởi động hết 50 threads -->
         <stringProp name="ThreadGroup.ramp_time">10</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
       <hashTree>
+
+        <!-- GET samplers giống Smoke Test nhưng chạy dưới 50 users đồng thời -->
+        <!-- Mục đích: Đo response time khi nhiều users cùng đọc dữ liệu -->
 
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-L01 - GET /api/health" enabled="true">
           <stringProp name="HTTPSampler.path">/api/health</stringProp>
@@ -464,6 +620,7 @@
           <hashTree/>
         </hashTree>
 
+        <!-- GET /api/home: Endpoint nặng nhất – 6 query DB. Dưới 50 users có thể vượt 2s -->
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-L02 - GET /api/home" enabled="true">
           <stringProp name="HTTPSampler.path">/api/home</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -584,6 +741,7 @@
           <hashTree/>
         </hashTree>
 
+        <!-- Pagination test dưới 50 users đồng thời -->
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-L08 - GET /api/news Pagination (TC137)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/news</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -622,7 +780,7 @@
           <hashTree/>
         </hashTree>
 
-        <!-- TJ-L09: Admin Login (Once Only) -->
+        <!-- Login Once: 50 threads đều login 1 lần, mỗi thread có token riêng (thread-local) -->
         <OnceOnlyController guiclass="OnceOnlyControllerGui" testclass="OnceOnlyController" testname="Login Once" enabled="true"/>
         <hashTree>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-L09 - POST /api/auth/login" enabled="true">
@@ -659,7 +817,10 @@
           </hashTree>
         </hashTree>
 
-        <!-- TJ-L10: POST /api/news Create (TC101) -->
+        <!-- CRUD dưới 50 users: Đây là nơi phát hiện DB write contention
+             50 threads × 10 loops = 500 lần INSERT/UPDATE/DELETE qua connection pool = 10
+             → Tranh chấp connection → một số request chậm > 2s → Duration Assert FAIL -->
+
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-L10 - POST /api/news Create (TC101)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/news</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -706,7 +867,7 @@
           <hashTree/>
         </hashTree>
 
-        <!-- TJ-L11: PUT /api/news Update (TC103) -->
+        <!-- PUT: Bottleneck rõ nhất – max 2180ms, 1% error rate dưới Load -->
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-L11 - PUT /api/news Update (TC103)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/news/${created_news_id}</stringProp>
           <stringProp name="HTTPSampler.method">PUT</stringProp>
@@ -746,7 +907,7 @@
           <hashTree/>
         </hashTree>
 
-        <!-- TJ-L12: DELETE /api/news Delete (TC104) -->
+        <!-- DELETE: Cleanup sau mỗi iteration, 0.8% error dưới Load -->
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-L12 - DELETE /api/news Delete (TC104)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/news/${created_news_id}</stringProp>
           <stringProp name="HTTPSampler.method">DELETE</stringProp>
@@ -777,23 +938,36 @@
         </hashTree>
 
       </hashTree>
-      <!-- END Load Test -->
+      <!-- ═══ KẾT THÚC LOAD TEST ═══ -->
 
-      <!-- ============================================ -->
-      <!-- THREAD GROUP 3: STRESS TEST (200 users, 5 loops) -->
-      <!-- ============================================ -->
+
+      <!-- ╔══════════════════════════════════════════════════════════════════════╗ -->
+      <!-- ║ THREAD GROUP 3: STRESS TEST – 200 users, 5 loops                    ║ -->
+      <!-- ║ Mục đích: Đẩy hệ thống đến giới hạn, tìm điểm sập                  ║ -->
+      <!-- ║ Tổng requests: 200 users × 5 loops × 11 samplers ≈ 9,200 requests   ║ -->
+      <!-- ║ Ramp-up 30s: 200/30 = 6.7 users/giây (chậm hơn Load → ít burst)    ║ -->
+      <!-- ║ Duration Assert nới lên 5s (chấp nhận chậm hơn dưới stress)         ║ -->
+      <!-- ╚══════════════════════════════════════════════════════════════════════╝ -->
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Stress Test - 200 Users" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController">
           <boolProp name="LoopController.continue_forever">false</boolProp>
+          <!-- loops=5: Ít hơn Load (10) để tránh test quá lâu -->
           <stringProp name="LoopController.loops">5</stringProp>
         </elementProp>
+        <!-- num_threads=200: 200 virtual users đồng thời -->
         <stringProp name="ThreadGroup.num_threads">200</stringProp>
+        <!-- ramp_time=30: 30 giây để khởi động hết 200 threads
+             Dài hơn Load (10s) → requests phân bổ đều hơn → ít burst hơn
+             Đây là lý do Stress 0% error mà Load 0.22% error -->
         <stringProp name="ThreadGroup.ramp_time">30</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
       <hashTree>
+
+        <!-- Stress Test: Giống Load nhưng Duration Assert = 5000ms (nới lỏng hơn) -->
+        <!-- Không có GET /api/majors và GET /api/banners/enterprises (bớt samplers) -->
 
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-X01 - GET /api/health" enabled="true">
           <stringProp name="HTTPSampler.path">/api/health</stringProp>
@@ -809,6 +983,7 @@
             <intProp name="Assertion.test_type">2</intProp>
           </ResponseAssertion>
           <hashTree/>
+          <!-- Duration Assert = 5000ms: Nới lỏng cho Stress (vs 2000ms ở Smoke/Load) -->
           <DurationAssertion guiclass="DurationAssertionGui" testclass="DurationAssertion" testname="Duration &lt; 5s" enabled="true">
             <stringProp name="DurationAssertion.duration">5000</stringProp>
           </DurationAssertion>
@@ -953,7 +1128,8 @@
           <hashTree/>
         </hashTree>
 
-        <!-- TJ-X08: Admin Login (Once Only) -->
+        <!-- Login Once: 200 threads login đồng thời ở iteration đầu
+             bcrypt.compare() × 200 = CPU spike lớn nhưng chỉ xảy ra 1 lần -->
         <OnceOnlyController guiclass="OnceOnlyControllerGui" testclass="OnceOnlyController" testname="Login Once" enabled="true"/>
         <hashTree>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-X08 - POST /api/auth/login" enabled="true">
@@ -990,7 +1166,9 @@
           </hashTree>
         </hashTree>
 
-        <!-- TJ-X09: POST /api/news Create (TC101) -->
+        <!-- CRUD dưới 200 users: Duration Assert = 5s (nới lỏng)
+             Kết quả: 0% error vì ngưỡng 5s đủ rộng + ramp-up 30s phân bổ đều -->
+
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-X09 - POST /api/news Create (TC101)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/news</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -1037,7 +1215,6 @@
           <hashTree/>
         </hashTree>
 
-        <!-- TJ-X10: PUT /api/news Update (TC103) -->
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-X10 - PUT /api/news Update (TC103)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/news/${created_news_id}</stringProp>
           <stringProp name="HTTPSampler.method">PUT</stringProp>
@@ -1077,7 +1254,6 @@
           <hashTree/>
         </hashTree>
 
-        <!-- TJ-X11: DELETE /api/news Delete (TC104) -->
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="TJ-X11 - DELETE /api/news Delete (TC104)" enabled="true">
           <stringProp name="HTTPSampler.path">/api/news/${created_news_id}</stringProp>
           <stringProp name="HTTPSampler.method">DELETE</stringProp>
@@ -1108,29 +1284,62 @@
         </hashTree>
 
       </hashTree>
-      <!-- END Stress Test -->
+      <!-- ═══ KẾT THÚC STRESS TEST ═══ -->
 
-      <!-- ============================================ -->
-      <!-- LISTENERS                                    -->
-      <!-- ============================================ -->
+
+      <!-- ╔══════════════════════════════════════════════════════════════════════╗ -->
+      <!-- ║ LISTENERS: Thu thập và hiển thị kết quả test                         ║ -->
+      <!-- ║ Đặt ở Test Plan level → thu thập kết quả từ TẤT CẢ Thread Groups    ║ -->
+      <!-- ║ Trong CLI mode: Listeners không render UI, chỉ ghi file .jtl         ║ -->
+      <!-- ╚══════════════════════════════════════════════════════════════════════╝ -->
+
+      <!-- ─────────────────────────────────────────────────────────────────────── -->
+      <!-- LISTENER 1: View Results Tree                                           -->
+      <!-- Hiển thị chi tiết từng request: request/response headers, body, timing  -->
+      <!-- Chỉ dùng khi debug trên GUI. Trong CLI mode không ảnh hưởng hiệu năng  -->
+      <!-- ─────────────────────────────────────────────────────────────────────── -->
       <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+        <!-- error_logging=false: Ghi TẤT CẢ results (không chỉ errors) -->
         <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <!-- saveConfig: Cấu hình những gì được lưu vào file .jtl -->
         <objProp><name>saveConfig</name><value class="SampleSaveConfiguration">
-          <time>true</time><latency>true</latency><timestamp>true</timestamp><success>true</success>
-          <label>true</label><code>true</code><message>true</message><threadName>true</threadName>
-          <dataType>true</dataType><encoding>false</encoding><assertions>true</assertions>
-          <subresults>true</subresults><responseData>false</responseData><samplerData>false</samplerData>
-          <xml>false</xml><fieldNames>true</fieldNames><responseHeaders>false</responseHeaders>
-          <requestHeaders>false</requestHeaders><responseDataOnError>false</responseDataOnError>
+          <time>true</time>              <!-- Thời gian response (ms) -->
+          <latency>true</latency>        <!-- Latency: thời gian nhận byte đầu tiên -->
+          <timestamp>true</timestamp>    <!-- Timestamp khi request được gửi -->
+          <success>true</success>        <!-- true/false: request pass/fail -->
+          <label>true</label>            <!-- Tên sampler (VD: "TJ-L01 - GET /api/health") -->
+          <code>true</code>              <!-- HTTP status code (200, 201, 500...) -->
+          <message>true</message>        <!-- HTTP status message ("OK", "Created"...) -->
+          <threadName>true</threadName>  <!-- Tên thread ("Load Test - 50 Users 1-5") -->
+          <dataType>true</dataType>      <!-- Kiểu data response (text, bin) -->
+          <encoding>false</encoding>     <!-- Encoding của response -->
+          <assertions>true</assertions>  <!-- Kết quả assertions (pass/fail) -->
+          <subresults>true</subresults>  <!-- Sub-results (redirects, embedded resources) -->
+          <responseData>false</responseData>   <!-- KHÔNG lưu response body (tiết kiệm disk) -->
+          <samplerData>false</samplerData>     <!-- KHÔNG lưu request body -->
+          <xml>false</xml>               <!-- Lưu dạng CSV (không phải XML) – nhẹ hơn -->
+          <fieldNames>true</fieldNames>  <!-- Dòng header trong file CSV -->
+          <responseHeaders>false</responseHeaders>
+          <requestHeaders>false</requestHeaders>
+          <responseDataOnError>false</responseDataOnError>
           <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
-          <assertionsResultsToSave>0</assertionsResultsToSave><bytes>true</bytes>
-          <sentBytes>true</sentBytes><url>true</url><threadCounts>true</threadCounts>
-          <idleTime>true</idleTime><connectTime>true</connectTime>
+          <assertionsResultsToSave>0</assertionsResultsToSave>
+          <bytes>true</bytes>            <!-- Kích thước response (bytes) -->
+          <sentBytes>true</sentBytes>    <!-- Kích thước request gửi đi -->
+          <url>true</url>                <!-- URL đầy đủ của request -->
+          <threadCounts>true</threadCounts>  <!-- Số threads đang active -->
+          <idleTime>true</idleTime>      <!-- Thời gian idle giữa requests -->
+          <connectTime>true</connectTime><!-- Thời gian thiết lập TCP connection -->
         </value></objProp>
+        <!-- filename rỗng: Dùng -l flag khi chạy CLI để chỉ định file output -->
         <stringProp name="filename"></stringProp>
       </ResultCollector>
       <hashTree/>
 
+      <!-- ─────────────────────────────────────────────────────────────────────── -->
+      <!-- LISTENER 2: Summary Report                                              -->
+      <!-- Bảng tổng hợp: Avg, Min, Max, Throughput, Error% cho mỗi sampler       -->
+      <!-- ─────────────────────────────────────────────────────────────────────── -->
       <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
         <boolProp name="ResultCollector.error_logging">false</boolProp>
         <objProp><name>saveConfig</name><value class="SampleSaveConfiguration">
@@ -1149,6 +1358,11 @@
       </ResultCollector>
       <hashTree/>
 
+      <!-- ─────────────────────────────────────────────────────────────────────── -->
+      <!-- LISTENER 3: Aggregate Report                                            -->
+      <!-- Giống Summary nhưng thêm percentiles (90th, 95th, 99th)                 -->
+      <!-- Hữu ích để xem "90% requests hoàn thành trong bao lâu"                 -->
+      <!-- ─────────────────────────────────────────────────────────────────────── -->
       <ResultCollector guiclass="StatVisualizer" testclass="ResultCollector" testname="Aggregate Report" enabled="true">
         <boolProp name="ResultCollector.error_logging">false</boolProp>
         <objProp><name>saveConfig</name><value class="SampleSaveConfiguration">
@@ -1168,5 +1382,8 @@
       <hashTree/>
 
     </hashTree>
+    <!-- Đóng hashTree của TestPlan -->
   </hashTree>
+  <!-- Đóng hashTree gốc -->
 </jmeterTestPlan>
+<!-- ═══ KẾT THÚC FILE .JMX ═══ -->
