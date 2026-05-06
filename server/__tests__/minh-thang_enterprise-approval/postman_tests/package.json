@@ -1,0 +1,17 @@
+{
+  "name": "postman_tests",
+  "version": "1.0.0",
+  "description": "> **Đã căn chỉnh toàn bộ test scripts theo source code thực tế:** > `period-enterprises.js` · `internship-registrations.js` · `students.js`",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "newman": "^6.2.2",
+    "newman-reporter-htmlextra": "^1.23.1"
+  }
+}

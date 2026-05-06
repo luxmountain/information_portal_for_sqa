@@ -1,0 +1,80 @@
+{
+  "name": "Local Environment",
+  "values": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:4000/api",
+      "enabled": true
+    },
+    {
+      "key": "adminToken",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZG1pbkBmaXQuZWR1LnZuIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzc4MDM0MDI0LCJleHAiOjE3NzgwNjI4MjR9.4am_JVAD0AEweiMv0JgrvO7yqCpJ5DZADy18JZ-jpns",
+      "enabled": true
+    },
+    {
+      "key": "studentToken",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDEsImVtYWlsIjoibm10aGFuZzIwMDRAZ21haWwuY29tIiwicm9sZSI6InN0dWRlbnQiLCJzdHVkZW50X2NvZGUiOiJCMjFEQ0NOMDAxIiwiaWF0IjoxNzc4MDM1MDMwLCJleHAiOjE3ODA2MjcwMzB9.uHi6QiYYNBiSIwXQbn4JTiCBDZLX82AFeHagOiNZ5E8",
+      "enabled": true
+    },
+    {
+      "key": "periodId",
+      "value": "5",
+      "enabled": true
+    },
+    {
+      "key": "sampleEnterpriseId",
+      "value": "17",
+      "enabled": true
+    },
+    {
+      "key": "studentCode",
+      "value": "B21DCCN002",
+      "enabled": true
+    },
+    {
+      "key": "studentPassword",
+      "value": "123456",
+      "enabled": true
+    },
+    {
+      "key": "studentCode_B21",
+      "value": "B21DCCN001",
+      "enabled": true
+    },
+    {
+      "key": "studentPass_B21",
+      "value": "123456",
+      "enabled": true
+    },
+    {
+      "key": "studentId_B21",
+      "value": "41",
+      "enabled": true
+    },
+    {
+      "key": "studentId",
+      "value": "",
+      "enabled": true
+    },
+    {
+      "key": "importedStudentIds",
+      "value": "[]",
+      "enabled": true
+    },
+    {
+      "key": "newEnterpriseId",
+      "value": "",
+      "enabled": true
+    },
+    {
+      "key": "preferenceId",
+      "value": "",
+      "enabled": true
+    },
+    {
+      "key": "newStudentId",
+      "value": "",
+      "enabled": true
+    }
+  ]
+}
