@@ -1,0 +1,4 @@
+tc_id,period_id,name,max_slots,is_active,expected_status,description
+TC066,1,FPT Software TC_1,10,true,201,Tạo enterprise thành công
+TC067,1,,10,true,400,Thiếu field name → 400
+TC071,1,FPT Software TC_1,10,true,400,Tên đã tồn tại trong đợt → 400

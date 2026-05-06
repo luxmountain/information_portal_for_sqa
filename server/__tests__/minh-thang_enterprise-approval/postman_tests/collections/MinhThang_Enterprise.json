@@ -1,0 +1,2601 @@
+{
+  "info": {
+    "name": "MinhThang_Enterprise",
+    "_postman_id": "minhthang-enterprise-v2-2026",
+    "description": "Minh Thắng – TC066–TC100 | Đã căn chỉnh theo source code thực tế",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Auto login để lấy adminToken",
+          "// Source: POST /api/auth/login → { token, profile }",
+          "const loginData = { email: \"admin@fit.edu.vn\", password: \"admin123\" };",
+          "pm.sendRequest({",
+          "  url: pm.environment.get(\"baseUrl\") + \"/auth/login\",",
+          "  method: \"POST\",",
+          "  header: { \"Content-Type\": \"application/json\" },",
+          "  body: { mode: \"raw\", raw: JSON.stringify(loginData) }",
+          "}, (err, res) => {",
+          "  if (!err && res.code === 200) {",
+          "    pm.environment.set(\"adminToken\", res.json().token);",
+          "  }",
+          "});"
+        ]
+      }
+    }
+  ],
+    "item": [
+      {
+        "name": "01 – Period Enterprises (CRUD)",
+        "item": [
+
+          {
+            "name": "TC066 – POST tạo enterprise hợp lệ + CheckDB + Rollback",
+            "request": {
+              "method": "POST",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+                { "key": "Content-Type",  "value": "application/json" }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/period-enterprises",
+                "host": ["{{baseUrl}}"],
+                "path": ["period-enterprises"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\"period_id\": \"{{periodId}}\", \"name\": \"TC066_Enterprise_{{$timestamp}}\", \"job_description\": \"Backend intern\", \"address\": \"Hà Nội\", \"contact_info\": \"hr@fpt.com\", \"max_slots\": 10, \"is_active\": true}"
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// ✅ INDEPENDENT: Tự tạo data, tự rollback, không share ra ngoài",
+                    "pm.test('TC066 – Status 201', () => pm.response.to.have.status(201));",
+                    "pm.test('TC066 – Body có id, name, period_id', () => {",
+                    "  const b = pm.response.json();",
+                    "  pm.expect(b).to.have.property('id');",
+                    "  pm.expect(b).to.have.property('name');",
+                    "  pm.expect(b).to.have.property('period_id');",
+                    "});",
+                    "pm.test('TC066 – name chứa TC066', () => {",
+                    "  pm.expect(pm.response.json().name).to.include('TC066_Enterprise_');",
+                    "});",
+                    "",
+                    "const eid = pm.response.json().id;",
+                    "const base = pm.environment.get('baseUrl');",
+                    "const token = 'Bearer ' + pm.environment.get('adminToken');",
+                    "",
+                    "// CheckDB",
+                    "pm.sendRequest({",
+                    "  url: base + '/period-enterprises/' + eid,",
+                    "  method: 'GET',",
+                    "  header: { Authorization: token }",
+                    "}, (err, res) => {",
+                    "  pm.expect(res.json().id).to.equal(eid);",
+                    "  console.log('CheckDB TC066: ✅');",
+                    "});",
+                    "",
+                    "// Rollback – TC066 tự dọn, KHÔNG lưu newEnterpriseId ra ngoài",
+                    "pm.sendRequest({",
+                    "  url: base + '/period-enterprises/' + eid,",
+                    "  method: 'DELETE',",
+                    "  header: { Authorization: token }",
+                    "}, (err, res) => console.log('Rollback TC066:', res.code === 200 ? '✅' : '❌'));"
+                  ]
+                }
+              }
+            ]
+          },
+
+          {
+            "name": "TC067 – POST thiếu name → 400",
+            "request": {
+              "method": "POST",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+                { "key": "Content-Type",  "value": "application/json" }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/period-enterprises",
+                "host": ["{{baseUrl}}"],
+                "path": ["period-enterprises"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\"period_id\": \"{{periodId}}\"}"
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// ✅ INDEPENDENT: Không tạo data → không cần rollback",
+                    "pm.test('TC067 – Status 400', () => pm.response.to.have.status(400));",
+                    "pm.test('TC067 – error message đúng', () => {",
+                    "  pm.expect(pm.response.json().error).to.equal('period_id và name là bắt buộc');",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          },
+
+          {
+            "name": "TC071 – POST trùng tên trong cùng đợt → 400",
+            "request": {
+              "method": "POST",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+                { "key": "Content-Type",  "value": "application/json" }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/period-enterprises",
+                "host": ["{{baseUrl}}"],
+                "path": ["period-enterprises"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\"period_id\": \"{{periodId}}\", \"name\": \"PLACEHOLDER_WILL_BE_OVERRIDDEN\"}"
+              }
+            },
+            "event": [
+              {
+                "listen": "prerequest",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// Setup: tạo seed enterprise với tên unique",
+                    "const ts       = Date.now();",
+                    "const seedName = 'TC071_DupSeed_' + ts;",
+                    "pm.environment.set('tc071SeedName', seedName);",
+                    "",
+                    "// Tạo seed",
+                    "pm.sendRequest({",
+                    "  url: pm.environment.get('baseUrl') + '/period-enterprises',",
+                    "  method: 'POST',",
+                    "  header: {",
+                    "    'Authorization': 'Bearer ' + pm.environment.get('adminToken'),",
+                    "    'Content-Type': 'application/json'",
+                    "  },",
+                    "  body: {",
+                    "    mode: 'raw',",
+                    "    raw: JSON.stringify({",
+                    "      period_id: pm.environment.get('periodId'),",
+                    "      name: seedName,",
+                    "      max_slots: 5",
+                    "    })",
+                    "  }",
+                    "}, (err, res) => {",
+                    "  pm.environment.set('tc071SeedId', res.json().id);",
+                    "  console.log('Setup TC071 seed:', res.json().id);",
+                    "});",
+                    "",
+                    "// ✅ FIX: Override body để dùng đúng seedName",
+                    "// Không dùng {{$timestamp}} trong body vì nó render khác với Date.now() ở trên",
+                    "pm.request.body.update({",
+                    "  mode: 'raw',",
+                    "  raw: JSON.stringify({",
+                    "    period_id: pm.environment.get('periodId'),",
+                    "    name: seedName",
+                    "  })",
+                    "});"
+                  ]
+                }
+              },
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// ✅ INDEPENDENT: seed tự tạo, body đã được override cùng tên → server trả 400",
+                    "pm.test('TC071 – Status 400', () => pm.response.to.have.status(400));",
+                    "pm.test('TC071 – error message trùng tên', () => {",
+                    "  pm.expect(pm.response.json().error).to.equal('Doanh nghiệp này đã được thêm vào đợt này');",
+                    "});",
+                    "",
+                    "// Rollback seed",
+                    "pm.sendRequest({",
+                    "  url: pm.environment.get('baseUrl') + '/period-enterprises/' + pm.environment.get('tc071SeedId'),",
+                    "  method: 'DELETE',",
+                    "  header: { Authorization: 'Bearer ' + pm.environment.get('adminToken') }",
+                    "}, (err, res) => {",
+                    "  pm.environment.unset('tc071SeedId');",
+                    "  pm.environment.unset('tc071SeedName');",
+                    "  console.log('Rollback TC071 seed:', res.code === 200 ? '✅' : '❌');",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          },
+
+          {
+            "name": "TC068 – PUT update enterprise + CheckDB",
+            "request": {
+              "method": "PUT",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+                { "key": "Content-Type",  "value": "application/json" }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/period-enterprises/{{tc068Id}}",
+                "host": ["{{baseUrl}}"],
+                "path": ["period-enterprises", "{{tc068Id}}"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\"name\": \"TC068_Updated\", \"job_description\": \"Fullstack Dev\", \"address\": \"Hà Nội\", \"contact_info\": \"hr@cmc.com.vn\", \"max_slots\": 15, \"is_active\": false}"
+              }
+            },
+            "event": [
+              {
+                "listen": "prerequest",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// Setup: Tự POST tạo enterprise riêng cho TC068",
+                    "pm.sendRequest({",
+                    "  url: pm.environment.get('baseUrl') + '/period-enterprises',",
+                    "  method: 'POST',",
+                    "  header: {",
+                    "    'Authorization': 'Bearer ' + pm.environment.get('adminToken'),",
+                    "    'Content-Type': 'application/json'",
+                    "  },",
+                    "  body: {",
+                    "    mode: 'raw',",
+                    "    raw: JSON.stringify({",
+                    "      period_id: pm.environment.get('periodId'),",
+                    "      name: 'TC068_Seed_' + Date.now(),",
+                    "      max_slots: 5",
+                    "    })",
+                    "  }",
+                    "}, (err, res) => {",
+                    "  pm.environment.set('tc068Id', res.json().id);",
+                    "  console.log('Setup TC068 seed id:', res.json().id);",
+                    "});"
+                  ]
+                }
+              },
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// ✅ INDEPENDENT: Dùng tc068Id riêng, tự rollback sau",
+                    "pm.test('TC068 – Status 200', () => pm.response.to.have.status(200));",
+                    "pm.test('TC068 – Trả về object updated', () => {",
+                    "  const b = pm.response.json();",
+                    "  pm.expect(b).to.have.property('id');",
+                    "  pm.expect(b.max_slots).to.equal(15);",
+                    "});",
+                    "",
+                    "const base = pm.environment.get('baseUrl');",
+                    "const token = 'Bearer ' + pm.environment.get('adminToken');",
+                    "const eid = pm.environment.get('tc068Id');",
+                    "",
+                    "// CheckDB",
+                    "pm.sendRequest({",
+                    "  url: base + '/period-enterprises/' + eid,",
+                    "  method: 'GET',",
+                    "  header: { Authorization: token }",
+                    "}, (err, res) => {",
+                    "  pm.expect(res.json().max_slots).to.equal(15);",
+                    "  pm.expect(res.json().is_active).to.equal(0);",
+                    "  console.log('CheckDB TC068: ✅');",
+                    "});",
+                    "",
+                    "// Rollback",
+                    "pm.sendRequest({",
+                    "  url: base + '/period-enterprises/' + eid,",
+                    "  method: 'DELETE',",
+                    "  header: { Authorization: token }",
+                    "}, (err, res) => {",
+                    "  pm.environment.unset('tc068Id');",
+                    "  console.log('Rollback TC068:', res.code === 200 ? '✅' : '❌');",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          },
+
+          {
+            "name": "TC071b – PUT đổi tên sang tên đã tồn tại → 400",
+            "request": {
+              "method": "PUT",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+                { "key": "Content-Type",  "value": "application/json" }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/period-enterprises/{{tc071bId}}",
+                "host": ["{{baseUrl}}"],
+                "path": ["period-enterprises", "{{tc071bId}}"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\"name\": \"{{tc071bDupName}}\"}"
+              }
+            },
+            "event": [
+              {
+                "listen": "prerequest",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// Setup: Tạo enterprise A (tên sẽ bị trùng) và enterprise B (sẽ đổi tên)",
+                    "const base = pm.environment.get('baseUrl');",
+                    "const headers = {",
+                    "  'Authorization': 'Bearer ' + pm.environment.get('adminToken'),",
+                    "  'Content-Type': 'application/json'",
+                    "};",
+                    "const ts = Date.now();",
+                    "const nameA = 'TC071b_A_' + ts;",
+                    "const nameB = 'TC071b_B_' + ts;",
+                    "pm.environment.set('tc071bDupName', nameA);",
+                    "",
+                    "// Tạo A",
+                    "pm.sendRequest({",
+                    "  url: base + '/period-enterprises', method: 'POST', header: headers,",
+                    "  body: { mode: 'raw', raw: JSON.stringify({ period_id: pm.environment.get('periodId'), name: nameA, max_slots: 5 }) }",
+                    "}, (err, res) => {",
+                    "  pm.environment.set('tc071bIdA', res.json().id);",
+                    "  console.log('Setup TC071b A:', res.json().id);",
+                    "});",
+                    "",
+                    "// Tạo B",
+                    "pm.sendRequest({",
+                    "  url: base + '/period-enterprises', method: 'POST', header: headers,",
+                    "  body: { mode: 'raw', raw: JSON.stringify({ period_id: pm.environment.get('periodId'), name: nameB, max_slots: 5 }) }",
+                    "}, (err, res) => {",
+                    "  pm.environment.set('tc071bId', res.json().id);",
+                    "  console.log('Setup TC071b B:', res.json().id);",
+                    "});"
+                  ]
+                }
+              },
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// ✅ INDEPENDENT: Cả A và B đều tự tạo, tự rollback",
+                    "pm.test('TC071b – Status 400', () => pm.response.to.have.status(400));",
+                    "pm.test('TC071b – error message trùng tên update', () => {",
+                    "  pm.expect(pm.response.json().error).to.equal('Tên doanh nghiệp này đã tồn tại trong đợt này');",
+                    "});",
+                    "",
+                    "const base = pm.environment.get('baseUrl');",
+                    "const token = 'Bearer ' + pm.environment.get('adminToken');",
+                    "",
+                    "// Rollback A",
+                    "pm.sendRequest({",
+                    "  url: base + '/period-enterprises/' + pm.environment.get('tc071bIdA'),",
+                    "  method: 'DELETE', header: { Authorization: token }",
+                    "}, (err, res) => {",
+                    "  pm.environment.unset('tc071bIdA');",
+                    "  console.log('Rollback TC071b A:', res.code === 200 ? '✅' : '❌');",
+                    "});",
+                    "",
+                    "// Rollback B",
+                    "pm.sendRequest({",
+                    "  url: base + '/period-enterprises/' + pm.environment.get('tc071bId'),",
+                    "  method: 'DELETE', header: { Authorization: token }",
+                    "}, (err, res) => {",
+                    "  pm.environment.unset('tc071bId');",
+                    "  pm.environment.unset('tc071bDupName');",
+                    "  console.log('Rollback TC071b B:', res.code === 200 ? '✅' : '❌');",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          },
+
+          {
+            "name": "TC069 – PUT ID không tồn tại → 404",
+            "request": {
+              "method": "PUT",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+                { "key": "Content-Type",  "value": "application/json" }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/period-enterprises/99999",
+                "host": ["{{baseUrl}}"],
+                "path": ["period-enterprises", "99999"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\"name\": \"Ghost Corp\"}"
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// ✅ INDEPENDENT: Dùng ID cố định 99999 chắc không tồn tại, không tạo data",
+                    "pm.test('TC069 – Status 404', () => pm.response.to.have.status(404));",
+                    "pm.test('TC069 – error message đúng', () => {",
+                    "  pm.expect(pm.response.json().error).to.equal('Không tìm thấy doanh nghiệp');",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          },
+
+          {
+            "name": "TC070 – DELETE enterprise + CheckDB",
+            "request": {
+              "method": "DELETE",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/period-enterprises/{{tc070Id}}",
+                "host": ["{{baseUrl}}"],
+                "path": ["period-enterprises", "{{tc070Id}}"]
+              }
+            },
+            "event": [
+              {
+                "listen": "prerequest",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// Setup: Tự tạo enterprise riêng để xóa",
+                    "pm.sendRequest({",
+                    "  url: pm.environment.get('baseUrl') + '/period-enterprises',",
+                    "  method: 'POST',",
+                    "  header: {",
+                    "    'Authorization': 'Bearer ' + pm.environment.get('adminToken'),",
+                    "    'Content-Type': 'application/json'",
+                    "  },",
+                    "  body: {",
+                    "    mode: 'raw',",
+                    "    raw: JSON.stringify({",
+                    "      period_id: pm.environment.get('periodId'),",
+                    "      name: 'TC070_ToDelete_' + Date.now(),",
+                    "      max_slots: 3",
+                    "    })",
+                    "  }",
+                    "}, (err, res) => {",
+                    "  pm.environment.set('tc070Id', res.json().id);",
+                    "  console.log('Setup TC070 id:', res.json().id);",
+                    "});"
+                  ]
+                }
+              },
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// ✅ INDEPENDENT: tc070Id tự tạo ở pre-req, sau delete là hết, không cần rollback thêm",
+                    "pm.test('TC070 – Status 200', () => pm.response.to.have.status(200));",
+                    "pm.test('TC070 – message xóa thành công', () => {",
+                    "  pm.expect(pm.response.json().message).to.equal('Xóa doanh nghiệp khỏi đợt thành công');",
+                    "});",
+                    "",
+                    "// CheckDB: GET phải trả 404 vì đã xóa",
+                    "pm.sendRequest({",
+                    "  url: pm.environment.get('baseUrl') + '/period-enterprises/' + pm.environment.get('tc070Id'),",
+                    "  method: 'GET',",
+                    "  header: { Authorization: 'Bearer ' + pm.environment.get('adminToken') }",
+                    "}, (err, res) => {",
+                    "  pm.expect(res.code).to.equal(404);",
+                    "  pm.environment.unset('tc070Id');",
+                    "  console.log('CheckDB TC070 (đã xóa → 404): ✅');",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          }
+
+        ]
+      },
+      {
+        "name": "02 – GET Period Enterprises",
+        "item": [
+
+          {
+            "name": "TC_GET01 – GET list có period_id → 200 array",
+            "request": {
+              "method": "GET",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/period-enterprises?period_id={{periodId}}",
+                "host": ["{{baseUrl}}"],
+                "path": ["period-enterprises"],
+                "query": [{ "key": "period_id", "value": "{{periodId}}" }]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// ✅ INDEPENDENT: Chỉ đọc data có sẵn theo periodId, không cần tạo/xóa gì",
+                    "// Điều kiện: periodId trong environment phải trỏ đến 1 đợt thực sự tồn tại",
+                    "pm.test('TC_GET01 – Status 200', () => pm.response.to.have.status(200));",
+                    "pm.test('TC_GET01 – Trả về array', () => {",
+                    "  pm.expect(pm.response.json()).to.be.an('array');",
+                    "});",
+                    "pm.test('TC_GET01 – Mỗi item có id, name, period_id', () => {",
+                    "  const arr = pm.response.json();",
+                    "  if (arr.length > 0) {",
+                    "    pm.expect(arr[0]).to.have.property('id');",
+                    "    pm.expect(arr[0]).to.have.property('name');",
+                    "    pm.expect(arr[0]).to.have.property('period_id');",
+                    "  }",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          },
+
+          {
+            "name": "TC_GET02 – GET list thiếu period_id → 400",
+            "request": {
+              "method": "GET",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/period-enterprises",
+                "host": ["{{baseUrl}}"],
+                "path": ["period-enterprises"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// ✅ INDEPENDENT: Không gửi gì cả, chỉ expect 400",
+                    "pm.test('TC_GET02 – Status 400', () => pm.response.to.have.status(400));",
+                    "pm.test('TC_GET02 – error message đúng', () => {",
+                    "  pm.expect(pm.response.json().error).to.equal('period_id là bắt buộc');",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          },
+
+          {
+            "name": "TC_GET03 – GET by ID → 200",
+            "request": {
+              "method": "GET",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/period-enterprises/{{tc_get03_id}}",
+                "host": ["{{baseUrl}}"],
+                "path": ["period-enterprises", "{{tc_get03_id}}"]
+              }
+            },
+            "event": [
+              {
+                "listen": "prerequest",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// Setup: Tự tạo enterprise riêng để GET, không dùng newEnterpriseId từ TC khác",
+                    "pm.sendRequest({",
+                    "  url: pm.environment.get('baseUrl') + '/period-enterprises',",
+                    "  method: 'POST',",
+                    "  header: {",
+                    "    'Authorization': 'Bearer ' + pm.environment.get('adminToken'),",
+                    "    'Content-Type': 'application/json'",
+                    "  },",
+                    "  body: {",
+                    "    mode: 'raw',",
+                    "    raw: JSON.stringify({",
+                    "      period_id: pm.environment.get('periodId'),",
+                    "      name: 'TC_GET03_Seed_' + Date.now(),",
+                    "      max_slots: 3",
+                    "    })",
+                    "  }",
+                    "}, (err, res) => {",
+                    "  pm.environment.set('tc_get03_id', res.json().id);",
+                    "  console.log('Setup TC_GET03 id:', res.json().id);",
+                    "});"
+                  ]
+                }
+              },
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// ✅ INDEPENDENT: Dùng tc_get03_id tự tạo ở pre-req, rollback sau khi test",
+                    "pm.test('TC_GET03 – Status 200', () => pm.response.to.have.status(200));",
+                    "pm.test('TC_GET03 – Có id field', () => {",
+                    "  pm.expect(pm.response.json()).to.have.property('id');",
+                    "});",
+                    "pm.test('TC_GET03 – id khớp với seed', () => {",
+                    "  pm.expect(pm.response.json().id).to.equal(pm.environment.get('tc_get03_id'));",
+                    "});",
+                    "pm.test('TC_GET03 – Có đủ các field cơ bản', () => {",
+                    "  const b = pm.response.json();",
+                    "  pm.expect(b).to.have.property('name');",
+                    "  pm.expect(b).to.have.property('period_id');",
+                    "});",
+                    "",
+                    "// Rollback",
+                    "pm.sendRequest({",
+                    "  url: pm.environment.get('baseUrl') + '/period-enterprises/' + pm.environment.get('tc_get03_id'),",
+                    "  method: 'DELETE',",
+                    "  header: { Authorization: 'Bearer ' + pm.environment.get('adminToken') }",
+                    "}, (err, res) => {",
+                    "  pm.environment.unset('tc_get03_id');",
+                    "  console.log('Rollback TC_GET03:', res.code === 200 ? '✅' : '❌');",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          },
+
+          {
+            "name": "TC_GET04 – GET by ID không tồn tại → 404",
+            "request": {
+              "method": "GET",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/period-enterprises/99999",
+                "host": ["{{baseUrl}}"],
+                "path": ["period-enterprises", "99999"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// ✅ INDEPENDENT: ID 99999 cố định, chắc chắn không tồn tại, không cần setup/teardown",
+                    "pm.test('TC_GET04 – Status 404', () => pm.response.to.have.status(404));",
+                    "pm.test('TC_GET04 – error message đúng', () => {",
+                    "  pm.expect(pm.response.json().error).to.equal('Không tìm thấy doanh nghiệp');",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          }
+
+        ]
+      },
+      {
+        "name": "03 – Approval (Duyệt nguyện vọng)",
+        "item": [
+
+          {
+  "name": "TC074 – PUT approve thành công + CheckDB",
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "const base   = pm.environment.get('baseUrl');",
+          "const adminH = { 'Authorization': 'Bearer ' + pm.environment.get('adminToken'), 'Content-Type': 'application/json' };",
+          "pm.sendRequest({",
+          "  url: base + '/students/login', method: 'POST',",
+          "  header: { 'Content-Type': 'application/json' },",
+          "  body: { mode: 'raw', raw: JSON.stringify({ student_code: 'B21DCCN001', password: '123456' }) }",
+          "}, (err, rLogin) => {",
+          "  if (rLogin.code !== 200) { console.log('TC074 Login FAILED'); return; }",
+          "  const stuToken = rLogin.json().token || rLogin.json().accessToken || rLogin.json().data?.token;",
+          "  pm.environment.set('tc074_stuToken', stuToken);",
+          "  const stuH = { 'Authorization': 'Bearer ' + stuToken, 'Content-Type': 'application/json' };",
+          "  pm.sendRequest({",
+          "    url: base + '/internship-registrations/my-preferences?period_id=5', method: 'GET', header: stuH",
+          "  }, (err, rGet) => {",
+          "    const list = Array.isArray(rGet.json()) ? rGet.json() : (rGet.json().data || []);",
+          "    const pending = list.find(p => p.status === 'pending');",
+          "    if (pending) {",
+          "      pm.environment.set('tc074_prefId', pending.id);",
+          "      console.log('TC074 reuse prefId:', pending.id);",
+          "    } else {",
+          "      pm.sendRequest({",
+          "        url: base + '/internship-registrations/preferences', method: 'POST', header: stuH,",
+          "        body: { mode: 'raw', raw: JSON.stringify({",
+          "          period_id: 5,",
+          "          preferences: [",
+          "            { enterprise_id: 17,   preference_order: 1 },",
+          "            { enterprise_id: 1133, preference_order: 2 },",
+          "            { enterprise_id: 1134, preference_order: 3 },",
+          "            { enterprise_id: 1137, preference_order: 4 },",
+          "            { enterprise_id: 1138, preference_order: 5 }",
+          "          ]",
+          "        })}",
+          "      }, (err, rPref) => {",
+          "        if (rPref.code !== 201) { console.log('TC074 Pref FAILED:', JSON.stringify(rPref.json())); return; }",
+          "        pm.sendRequest({",
+          "          url: base + '/internship-registrations/my-preferences?period_id=5', method: 'GET', header: stuH",
+          "        }, (err, rGet2) => {",
+          "          const arr = Array.isArray(rGet2.json()) ? rGet2.json() : (rGet2.json().data || []);",
+          "          const pref = arr.find(p => p.preference_order === 1);",
+          "          pm.environment.set('tc074_prefId', pref ? pref.id : null);",
+          "          console.log('TC074 OK – prefId:', pref ? pref.id : 'NOT FOUND');",
+          "        });",
+          "      });",
+          "    }",
+          "  });",
+          "});"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "pm.test('TC074 – Status 200', () => pm.response.to.have.status(200));",
+          "pm.test('TC074 – message duyệt thành công', () => {",
+          "  pm.expect(pm.response.json().message).to.exist;",
+          "});",
+          "",
+          "const base     = pm.environment.get('baseUrl');",
+          "const adminH   = { 'Authorization': 'Bearer ' + pm.environment.get('adminToken'), 'Content-Type': 'application/json' };",
+          "const stuToken = pm.environment.get('tc074_stuToken');",
+          "const stuH     = { 'Authorization': 'Bearer ' + stuToken, 'Content-Type': 'application/json' };",
+          "const prefId   = pm.environment.get('tc074_prefId');",
+          "",
+          "// CheckDB: GET lại my-preferences để verify status = approved",
+          "pm.sendRequest({",
+          "  url: base + '/internship-registrations/my-preferences?period_id=5',",
+          "  method: 'GET', header: stuH",
+          "}, (err, rCheck) => {",
+          "  const arr = Array.isArray(rCheck.json()) ? rCheck.json() : (rCheck.json().data || []);",
+          "  const pref = arr.find(p => p.id == prefId);",
+          "  pm.test('TC074 – CheckDB status approved', () => {",
+          "    pm.expect(pref, 'preference not found').to.exist;",
+          "    pm.expect(pref.status).to.equal('approved');",
+          "  });",
+          "",
+          "  // Rollback: reset về pending SAU KHI verify xong",
+          "  pm.sendRequest({",
+          "    url: base + '/internship-registrations/preference/' + prefId + '/status',",
+          "    method: 'PUT', header: adminH,",
+          "    body: { mode: 'raw', raw: JSON.stringify({ status: 'pending' }) }",
+          "  }, (err, res) => {",
+          "    pm.environment.unset('tc074_prefId');",
+          "    pm.environment.unset('tc074_stuToken');",
+          "    console.log('Rollback TC074:', res.code === 200 ? '✅' : '❌');",
+          "  });",
+          "});"
+        ]
+      }
+    }
+  ],
+  "request": {
+    "method": "PUT",
+    "header": [
+      { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+      { "key": "Content-Type", "value": "application/json" }
+    ],
+    "url": {
+      "raw": "{{baseUrl}}/internship-registrations/preference/{{tc074_prefId}}/status",
+      "host": ["{{baseUrl}}"],
+      "path": ["internship-registrations", "preference", "{{tc074_prefId}}", "status"]
+    },
+    "body": { "mode": "raw", "raw": "{\"status\": \"approved\"}" }
+  }
+},
+
+          {
+            "name": "TC075 – PUT approve enterprise hết slot → 400",
+            "request": {
+              "method": "PUT",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+                { "key": "Content-Type",  "value": "application/json" }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/internship-registrations/preference/{{tc075_prefId}}/status",
+                "host": ["{{baseUrl}}"],
+                "path": ["internship-registrations","preference","{{tc075_prefId}}","status"]
+              },
+              "body": { "mode": "raw", "raw": "{\"status\": \"approved\"}" }
+            },
+            "event": [
+              {
+                "listen": "prerequest",
+                "script": {
+                  "type": "text/javascript",
+"exec": [
+  "const base   = pm.environment.get('baseUrl');",
+  "const adminH = { 'Authorization': 'Bearer ' + pm.environment.get('adminToken'), 'Content-Type': 'application/json' };",
+  "pm.sendRequest({",
+  "  url: base + '/period-enterprises', method: 'POST', header: adminH,",
+  "  body: { mode: 'raw', raw: JSON.stringify({ period_id: 5, name: 'TC075_FullSlot_' + Date.now(), max_slots: 1 }) }",
+  "}, (err, rEnt) => {",
+  "  if (rEnt.code !== 201) { console.log('TC075 Ent FAILED:', JSON.stringify(rEnt.json())); return; }",
+  "  const entId = rEnt.json().id || rEnt.json().data?.id;",
+  "  pm.environment.set('tc075_entId', entId);",
+  "  pm.sendRequest({",
+  "    url: base + '/students/login', method: 'POST',",
+  "    header: { 'Content-Type': 'application/json' },",
+  "    body: { mode: 'raw', raw: JSON.stringify({ student_code: 'B21DCCN004', password: '123456' }) }",
+  "  }, (err, rLogin) => {",
+  "    const stuToken = rLogin.json().token || rLogin.json().accessToken || rLogin.json().data?.token;",
+  "    pm.environment.set('tc075_stuToken', stuToken);",
+  "    const stuH = { 'Authorization': 'Bearer ' + stuToken, 'Content-Type': 'application/json' };",
+  "    pm.sendRequest({",
+  "      url: base + '/internship-registrations/my-preferences?period_id=5', method: 'GET', header: stuH",
+  "    }, (err, rGet) => {",
+  "      const list = Array.isArray(rGet.json()) ? rGet.json() : (rGet.json().data || []);",
+  "      const pending = list.find(p => p.status === 'pending');",
+  "      if (pending) {",
+  "        pm.environment.set('tc075_prefId', pending.id);",
+  "        console.log('TC075 reuse prefId:', pending.id);",
+  "        pm.sendRequest({",
+  "          url: base + '/internship-registrations/preference/' + pending.id + '/status',",
+  "          method: 'PUT', header: adminH,",
+  "          body: { mode: 'raw', raw: JSON.stringify({ status: 'approved' }) }",
+  "        }, (err, rA) => console.log('TC075 slot filled (reuse):', rA.code === 200 ? '✅' : '❌'));",
+  "      } else {",
+  "        pm.sendRequest({",
+  "          url: base + '/internship-registrations/preferences', method: 'POST', header: stuH,",
+  "          body: { mode: 'raw', raw: JSON.stringify({",
+  "            period_id: 5,",
+  "            preferences: [",
+  "              { enterprise_id: entId, preference_order: 1 },",
+  "              { enterprise_id: 17,    preference_order: 2 },",
+  "              { enterprise_id: 1133,  preference_order: 3 },",
+  "              { enterprise_id: 1134,  preference_order: 4 },",
+  "              { enterprise_id: 1137,  preference_order: 5 }",
+  "            ]",
+  "          })}",
+  "        }, (err, rPref) => {",
+  "          if (rPref.code !== 201) { console.log('TC075 Pref FAILED:', JSON.stringify(rPref.json())); return; }",
+  "          pm.sendRequest({",
+  "            url: base + '/internship-registrations/my-preferences?period_id=5', method: 'GET', header: stuH",
+  "          }, (err, rGet2) => {",
+  "            const arr = Array.isArray(rGet2.json()) ? rGet2.json() : (rGet2.json().data || []);",
+  "            const pref = arr.find(p => p.preference_order === 1);",
+  "            if (!pref) { console.log('TC075 FAILED: No pref found'); return; }",
+  "            pm.environment.set('tc075_prefId', pref.id);",
+  "            pm.sendRequest({",
+  "              url: base + '/internship-registrations/preference/' + pref.id + '/status',",
+  "              method: 'PUT', header: adminH,",
+  "              body: { mode: 'raw', raw: JSON.stringify({ status: 'approved' }) }",
+  "            }, (err, rA) => console.log('TC075 slot filled:', rA.code === 200 ? '✅' : '❌'));",
+  "          });",
+  "        });",
+  "      }",
+  "    });",
+  "  });",
+  "});"
+]
+                }
+              },
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                 "exec": [
+  "pm.test('TC075 – Status 400', () => pm.response.to.have.status(400));",
+  "pm.test('TC075 – error hết slot', () => {",
+  "  const b = pm.response.json();",
+  "  pm.expect(b.message || b.error).to.include('slot');",
+  "});",
+  "",
+  "const base   = pm.environment.get('baseUrl');",
+  "const adminH = { 'Authorization': 'Bearer ' + pm.environment.get('adminToken'), 'Content-Type': 'application/json' };",
+  "",
+  "// Rollback preference về pending rồi xóa enterprise",
+  "pm.sendRequest({",
+  "  url: base + '/internship-registrations/preference/' + pm.environment.get('tc075_prefId') + '/status',",
+  "  method: 'PUT', header: adminH,",
+  "  body: { mode: 'raw', raw: JSON.stringify({ status: 'pending' }) }",
+  "}, () => {",
+  "  pm.sendRequest({",
+  "    url: base + '/period-enterprises/' + pm.environment.get('tc075_entId'),",
+  "    method: 'DELETE', header: adminH",
+  "  }, (err, res) => {",
+  "    pm.environment.unset('tc075_prefId');",
+  "    pm.environment.unset('tc075_entId');",
+  "    console.log('Rollback TC075:', res.code === 200 ? '✅' : '❌');",
+  "  });",
+  "});"
+]
+                }
+              }
+            ]
+          },
+
+          {
+            "name": "TC076 – PUT reject preference → 200",
+            "request": {
+              "method": "PUT",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+                { "key": "Content-Type",  "value": "application/json" }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/internship-registrations/preference/{{tc076_prefId}}/status",
+                "host": ["{{baseUrl}}"],
+                "path": ["internship-registrations","preference","{{tc076_prefId}}","status"]
+              },
+              "body": { "mode": "raw", "raw": "{\"status\": \"rejected\"}" }
+            },
+            "event": [
+              {
+                "listen": "prerequest",
+                "script": {
+                  "type": "text/javascript",
+"exec": [
+  "const base   = pm.environment.get('baseUrl');",
+  "const adminH = { 'Authorization': 'Bearer ' + pm.environment.get('adminToken'), 'Content-Type': 'application/json' };",
+  "pm.sendRequest({",
+  "  url: base + '/students/login', method: 'POST',",
+  "  header: { 'Content-Type': 'application/json' },",
+  "  body: { mode: 'raw', raw: JSON.stringify({ student_code: 'B21DCCN002', password: '123456' }) }",
+  "}, (err, rLogin) => {",
+  "  const stuToken = rLogin.json().token || rLogin.json().accessToken || rLogin.json().data?.token;",
+  "  pm.environment.set('tc076_stuToken', stuToken);",
+  "  const stuH = { 'Authorization': 'Bearer ' + stuToken, 'Content-Type': 'application/json' };",
+  "  pm.sendRequest({",
+  "    url: base + '/internship-registrations/my-preferences?period_id=5', method: 'GET', header: stuH",
+  "  }, (err, rGet) => {",
+  "    const list = Array.isArray(rGet.json()) ? rGet.json() : (rGet.json().data || []);",
+  "    const pending = list.find(p => p.status === 'pending');",
+  "    if (pending) {",
+  "      pm.environment.set('tc076_prefId', pending.id);",
+  "      console.log('TC076 reuse prefId:', pending.id);",
+  "    } else {",
+  "      pm.sendRequest({",
+  "        url: base + '/internship-registrations/preferences', method: 'POST', header: stuH,",
+  "        body: { mode: 'raw', raw: JSON.stringify({",
+  "          period_id: 5,",
+  "          preferences: [",
+  "            { enterprise_id: 17,   preference_order: 1 },",
+  "            { enterprise_id: 1133, preference_order: 2 },",
+  "            { enterprise_id: 1134, preference_order: 3 },",
+  "            { enterprise_id: 1137, preference_order: 4 },",
+  "            { enterprise_id: 1138, preference_order: 5 }",
+  "          ]",
+  "        })}",
+  "      }, (err, rPref) => {",
+  "        if (rPref.code !== 201) { console.log('TC076 Pref FAILED:', JSON.stringify(rPref.json())); return; }",
+  "        pm.sendRequest({",
+  "          url: base + '/internship-registrations/my-preferences?period_id=5', method: 'GET', header: stuH",
+  "        }, (err, rGet2) => {",
+  "          const arr = Array.isArray(rGet2.json()) ? rGet2.json() : (rGet2.json().data || []);",
+  "          const pref = arr.find(p => p.preference_order === 1);",
+  "          pm.environment.set('tc076_prefId', pref ? pref.id : null);",
+  "          console.log('TC076 OK – prefId:', pref ? pref.id : 'NOT FOUND');",
+  "        });",
+  "      });",
+  "    }",
+  "  });",
+  "});"
+]
+                }
+              },
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+  "pm.test('TC076 – Status 200', () => pm.response.to.have.status(200));",
+  "pm.test('TC076 – message reject thành công', () => {",
+  "  const b = pm.response.json();",
+  "  pm.expect(b.message).to.exist;",
+  "});",
+  "",
+  "const base   = pm.environment.get('baseUrl');",
+  "const adminH = { 'Authorization': 'Bearer ' + pm.environment.get('adminToken'), 'Content-Type': 'application/json' };",
+  "",
+  "// Rollback: reset về pending",
+  "pm.sendRequest({",
+  "  url: base + '/internship-registrations/preference/' + pm.environment.get('tc076_prefId') + '/status',",
+  "  method: 'PUT', header: adminH,",
+  "  body: { mode: 'raw', raw: JSON.stringify({ status: 'pending' }) }",
+  "}, (err, res) => {",
+  "  pm.environment.unset('tc076_prefId');",
+  "  console.log('Rollback TC076:', res.code === 200 ? '✅' : '❌');",
+  "});"
+]
+                }
+              }
+            ]
+          },
+
+          {
+            "name": "TC077 – PUT preference ID không tồn tại → 404",
+            "request": {
+              "method": "PUT",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+                { "key": "Content-Type",  "value": "application/json" }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/internship-registrations/preference/99999/status",
+                "host": ["{{baseUrl}}"],
+                "path": ["internship-registrations","preference","99999","status"]
+              },
+              "body": { "mode": "raw", "raw": "{\"status\": \"approved\"}" }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// ✅ INDEPENDENT: không cần setup/rollback",
+                    "pm.test('TC077 – Status 404', () => pm.response.to.have.status(404));",
+                    "pm.test('TC077 – error message đúng', () => {",
+                    "  pm.expect(pm.response.json().error).to.equal('Không tìm thấy nguyện vọng');",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          },
+
+
+{
+  "name": "TC078 – POST approve-to-academy intern_at_academy=true",
+  "request": {
+    "method": "POST",
+    "header": [
+      { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+      { "key": "Content-Type",  "value": "application/json" }
+    ],
+    "url": {
+      "raw": "{{baseUrl}}/internship-registrations/approve-to-academy",
+      "host": ["{{baseUrl}}"],
+      "path": ["internship-registrations","approve-to-academy"]
+    },
+    "body": { "mode": "raw", "raw": "{\"student_id\": 53, \"period_id\": 5}" }
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "const base   = pm.environment.get('baseUrl');",
+          "const adminH = { 'Authorization': 'Bearer ' + pm.environment.get('adminToken'), 'Content-Type': 'application/json' };",
+          "",
+          "// Bước 1: Tạo enterprise 'Học viện Công nghệ Bưu chính Viễn thông' trong period 5",
+          "pm.sendRequest({",
+          "  url: base + '/period-enterprises', method: 'POST', header: adminH,",
+          "  body: { mode: 'raw', raw: JSON.stringify({",
+          "    period_id: 5,",
+          "    name: 'Học viện Công nghệ Bưu chính Viễn thông',",
+          "    max_slots: 10",
+          "  })}",
+          "}, (err, rEnt) => {",
+          "  if (rEnt.code !== 201) { console.log('TC078 Ent FAILED:', JSON.stringify(rEnt.json())); return; }",
+          "  const hvId = rEnt.json().id || rEnt.json().data?.id;",
+          "  pm.environment.set('tc078_hvId', hvId);",
+          "",
+          "  // Bước 2: Login sinh viên B21DCCN013 (id=53, đã có giảng viên hướng dẫn)",
+          "  pm.sendRequest({",
+          "    url: base + '/students/login', method: 'POST',",
+          "    header: { 'Content-Type': 'application/json' },",
+          "    body: { mode: 'raw', raw: JSON.stringify({ student_code: 'B21DCCN013', password: '123456' }) }",
+          "  }, (err, rLogin) => {",
+          "    const stuToken = rLogin.json().token || rLogin.json().accessToken || rLogin.json().data?.token;",
+          "    pm.environment.set('tc078_stuToken', stuToken);",
+          "    const stuH = { 'Authorization': 'Bearer ' + stuToken, 'Content-Type': 'application/json' };",
+          "",
+          "    // Bước 3: Kiểm tra đã có preference pending chưa",
+          "    pm.sendRequest({",
+          "      url: base + '/internship-registrations/my-preferences?period_id=5', method: 'GET', header: stuH",
+          "    }, (err, rGet) => {",
+          "      const list = Array.isArray(rGet.json()) ? rGet.json() : (rGet.json().data || []);",
+          "      const hasPending = list.some(p => p.status === 'pending');",
+          "      if (hasPending) {",
+          "        console.log('TC078 reuse existing preferences');",
+          "      } else {",
+          "        // Bước 4: Đăng ký 5 nguyện vọng doanh nghiệp bên ngoài",
+          "        pm.sendRequest({",
+          "          url: base + '/internship-registrations/preferences', method: 'POST', header: stuH,",
+          "          body: { mode: 'raw', raw: JSON.stringify({",
+          "            period_id: 5,",
+          "            preferences: [",
+          "              { enterprise_id: 17,   preference_order: 1 },",
+          "              { enterprise_id: 1133, preference_order: 2 },",
+          "              { enterprise_id: 1134, preference_order: 3 },",
+          "              { enterprise_id: 1137, preference_order: 4 },",
+          "              { enterprise_id: 1138, preference_order: 5 }",
+          "            ]",
+          "          })}",
+          "        }, (err, rPref) => {",
+          "          if (rPref.code !== 201) { console.log('TC078 Pref FAILED:', JSON.stringify(rPref.json())); return; }",
+          "          console.log('TC078 OK – hvId:', hvId, '| preferences created for B21DCCN013');",
+          "        });",
+          "      }",
+          "    });",
+          "  });",
+          "});"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "pm.test('TC078 – Status 200', () => pm.response.to.have.status(200));",
+          "pm.test('TC078 – message duyệt HVBCVT', () => {",
+          "  pm.expect(pm.response.json().message).to.equal('Duyệt sinh viên vào Học viện thành công');",
+          "});",
+          "",
+          "const base     = pm.environment.get('baseUrl');",
+          "const adminH   = { 'Authorization': 'Bearer ' + pm.environment.get('adminToken'), 'Content-Type': 'application/json' };",
+          "const stuToken = pm.environment.get('tc078_stuToken');",
+          "const stuH     = { 'Authorization': 'Bearer ' + stuToken, 'Content-Type': 'application/json' };",
+          "",
+          "// CheckDB: dùng stuToken của B21DCCN013 để GET lại preferences",
+          "pm.sendRequest({",
+          "  url: base + '/internship-registrations/my-preferences?period_id=5',",
+          "  method: 'GET', header: stuH",
+          "}, (err, rCheck) => {",
+          "  const arr = Array.isArray(rCheck.json()) ? rCheck.json() : (rCheck.json().data || []);",
+          "  const academyPref = arr.find(p => p.preference_order === 6);",
+          "  pm.test('TC078 – CheckDB preference order=6 status=approved', () => {",
+          "    pm.expect(academyPref, 'academy preference not found').to.exist;",
+          "    pm.expect(academyPref.status).to.equal('approved');",
+          "  });",
+          "  pm.test('TC078 – CheckDB các nguyện vọng khác bị rejected', () => {",
+          "    const others = arr.filter(p => p.preference_order !== 6);",
+          "    others.forEach(p => pm.expect(p.status).to.equal('rejected'));",
+          "  });",
+          "",
+          "  // Rollback: xóa enterprise HVBCVT (cascade xóa preference order=6)",
+          "  pm.sendRequest({",
+          "    url: base + '/period-enterprises/' + pm.environment.get('tc078_hvId'),",
+          "    method: 'DELETE', header: adminH",
+          "  }, (err, res) => {",
+          "    pm.environment.unset('tc078_hvId');",
+          "    pm.environment.unset('tc078_stuToken');",
+          "    console.log('Rollback TC078 enterprise:', res.code === 200 ? '✅' : '❌');",
+          "    console.log('⚠️ Rollback thủ công DB: UPDATE student_enterprise_preferences SET status=\\'pending\\' WHERE student_id=53 AND period_enterprise_id IN (SELECT id FROM period_enterprises WHERE period_id=5)');",
+          "  });",
+          "});"
+        ]
+      }
+    }
+  ]
+},
+
+          {
+            "name": "TC079 – PUT status không hợp lệ → 400",
+            "request": {
+              "method": "PUT",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+                { "key": "Content-Type",  "value": "application/json" }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/internship-registrations/preference/99999/status",
+                "host": ["{{baseUrl}}"],
+                "path": ["internship-registrations","preference","99999","status"]
+              },
+              "body": { "mode": "raw", "raw": "{\"status\": \"unknown\"}" }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// ✅ FIX: Nếu server validate status TRƯỚC khi check ID → dùng ID 99999 luôn, không cần tạo preference",
+                    "// Không cần setup/rollback → hoàn toàn độc lập",
+                    "pm.test('TC079 – Status 400', () => pm.response.to.have.status(400));",
+                    "pm.test('TC079 – error message đúng', () => {",
+                    "  pm.expect(pm.response.json().error).to.equal('Trạng thái không hợp lệ');",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          },
+
+          {
+            "name": "TC090 – PUT không có token → 401",
+            "request": {
+              "method": "PUT",
+              "header": [
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/internship-registrations/preference/99999/status",
+                "host": ["{{baseUrl}}"],
+                "path": ["internship-registrations","preference","99999","status"]
+              },
+              "body": { "mode": "raw", "raw": "{\"status\": \"approved\"}" }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// ✅ INDEPENDENT: không cần setup/rollback",
+                    "pm.test('TC090 – Status 401 không có token', () => pm.response.to.have.status(401));"
+                  ]
+                }
+              }
+            ]
+          }
+
+        ]
+      },
+      {
+        "name": "04 – GET Registrations & Results",
+        "item": [
+
+          {
+            "name": "TC072 – GET /all?type=preferences → 200 array",
+            "request": {
+              "method": "GET",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/internship-registrations/all?type=preferences&period_id={{periodId}}",
+                "host": ["{{baseUrl}}"],
+                "path": ["internship-registrations", "all"],
+                "query": [
+                  { "key": "type",      "value": "preferences" },
+                  { "key": "period_id", "value": "{{periodId}}" }
+                ]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// ✅ INDEPENDENT: chỉ đọc, dùng periodId có sẵn, không tạo/xóa data",
+                    "pm.test('TC072 – Status 200', () => pm.response.to.have.status(200));",
+                    "pm.test('TC072 – Trả về array', () => {",
+                    "  pm.expect(pm.response.json()).to.be.an('array');",
+                    "});",
+                    "pm.test('TC072 – Mỗi item có student_id và enterprise info', () => {",
+                    "  const arr = pm.response.json();",
+                    "  if (arr.length > 0) {",
+                    "    pm.expect(arr[0]).to.have.property('student_id');",
+                    "    pm.expect(arr[0]).to.have.property('status');",
+                    "  }",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          },
+
+          {
+            "name": "TC073 – GET /all?type=preferences period rỗng → []",
+            "request": {
+              "method": "GET",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/internship-registrations/all?type=preferences&period_id=9999",
+                "host": ["{{baseUrl}}"],
+                "path": ["internship-registrations", "all"],
+                "query": [
+                  { "key": "type",      "value": "preferences" },
+                  { "key": "period_id", "value": "9999" }
+                ]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// ✅ INDEPENDENT: period_id=9999 cố định chắc không có dữ liệu",
+                    "pm.test('TC073 – Status 200', () => pm.response.to.have.status(200));",
+                    "pm.test('TC073 – Body là mảng rỗng []', () => {",
+                    "  pm.expect(pm.response.json()).to.eql([]);",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          },
+
+          {
+            "name": "TC_GET_ALL01 – GET /all thiếu type → 400",
+            "request": {
+              "method": "GET",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/internship-registrations/all?period_id={{periodId}}",
+                "host": ["{{baseUrl}}"],
+                "path": ["internship-registrations", "all"],
+                "query": [
+                  { "key": "period_id", "value": "{{periodId}}" }
+                ]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// ✅ INDEPENDENT: không truyền type → validation fail ngay, không cần data",
+                    "pm.test('TC_GET_ALL01 – Status 400', () => pm.response.to.have.status(400));",
+                    "pm.test('TC_GET_ALL01 – error message chứa type', () => {",
+                    "  pm.expect(pm.response.json().error).to.include('type');",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          },
+
+          {
+            "name": "TC079 – GET /results by lecturer_id → 200",
+            "request": {
+              "method": "GET",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/internship-registrations/results?period_id={{periodId}}&lecturer_id=1",
+                "host": ["{{baseUrl}}"],
+                "path": ["internship-registrations", "results"],
+                "query": [
+                  { "key": "period_id",   "value": "{{periodId}}" },
+                  { "key": "lecturer_id", "value": "1" }
+                ]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// ✅ INDEPENDENT: chỉ đọc, lecturer_id=1 cố định (giảng viên mẫu có sẵn trong DB)",
+                    "pm.test('TC079 – Status 200', () => pm.response.to.have.status(200));",
+                    "pm.test('TC079 – Trả về array', () => {",
+                    "  pm.expect(pm.response.json()).to.be.an('array');",
+                    "});",
+                    "pm.test('TC079 – Mỗi item có student_id nếu có data', () => {",
+                    "  const arr = pm.response.json();",
+                    "  if (arr.length > 0) {",
+                    "    pm.expect(arr[0]).to.have.property('student_id');",
+                    "  }",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          },
+
+          {
+            "name": "TC080 – GET /results by enterprise → 200",
+            "request": {
+              "method": "GET",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/internship-registrations/results?period_id={{periodId}}&type=enterprises",
+                "host": ["{{baseUrl}}"],
+                "path": ["internship-registrations", "results"],
+                "query": [
+                  { "key": "period_id", "value": "{{periodId}}" },
+                  { "key": "type",      "value": "enterprises" }
+                ]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// ✅ INDEPENDENT: chỉ đọc, type=enterprises cố định",
+                    "pm.test('TC080 – Status 200', () => pm.response.to.have.status(200));",
+                    "pm.test('TC080 – Trả về array', () => {",
+                    "  pm.expect(pm.response.json()).to.be.an('array');",
+                    "});",
+                    "pm.test('TC080 – Mỗi item có enterprise_name nếu có data', () => {",
+                    "  const arr = pm.response.json();",
+                    "  if (arr.length > 0) {",
+                    "    pm.expect(arr[0]).to.have.property('enterprise_name');",
+                    "  }",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          },
+
+          {
+            "name": "TC081 – GET /my-preferences (student token) → 200",
+            "request": {
+              "method": "GET",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{studentToken}}" }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/internship-registrations/my-preferences?period_id={{periodId}}",
+                "host": ["{{baseUrl}}"],
+                "path": ["internship-registrations", "my-preferences"],
+                "query": [
+                  { "key": "period_id", "value": "{{periodId}}" }
+                ]
+              }
+            },
+            "event": [
+              {
+                "listen": "prerequest",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// ✅ FIX: studentToken chưa được set → login trước để lấy token",
+                    "// Nếu collection đã có bước login student ở folder-level pre-request thì bỏ block này",
+                    "if (!pm.environment.get('studentToken')) {",
+                    "  pm.sendRequest({",
+                    "    url: pm.environment.get('baseUrl') + '/auth/login',",
+                    "    method: 'POST',",
+                    "    header: { 'Content-Type': 'application/json' },",
+                    "    body: {",
+                    "      mode: 'raw',",
+                    "      raw: JSON.stringify({",
+                    "        email:    pm.environment.get('studentEmail'),",
+                    "        password: pm.environment.get('studentPassword')",
+                    "      })",
+                    "    }",
+                    "  }, (err, res) => {",
+                    "    const token = res.json().token || res.json().accessToken || res.json().data?.token;",
+                    "    pm.environment.set('studentToken', token);",
+                    "    console.log('TC081 auto-login student:', token ? '✅' : '❌ token undefined');",
+                    "  });",
+                    "} else {",
+                    "  console.log('TC081: studentToken đã có sẵn ✅');",
+                    "}"
+                  ]
+                }
+              },
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "pm.test('TC081 – Status 200', () => pm.response.to.have.status(200));",
+                    "pm.test('TC081 – Trả về array', () => {",
+                    "  pm.expect(pm.response.json()).to.be.an('array');",
+                    "});",
+                    "pm.test('TC081 – Mỗi preference có status field', () => {",
+                    "  const arr = pm.response.json();",
+                    "  if (arr.length > 0) {",
+                    "    pm.expect(arr[0]).to.have.property('status');",
+                    "    pm.expect(['pending','approved','rejected']).to.include(arr[0].status);",
+                    "  }",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          },
+
+          {
+            "name": "TC082 – GET /my-preferences không có token → 401",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/internship-registrations/my-preferences?period_id={{periodId}}",
+                "host": ["{{baseUrl}}"],
+                "path": ["internship-registrations", "my-preferences"],
+                "query": [
+                  { "key": "period_id", "value": "{{periodId}}" }
+                ]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// ✅ INDEPENDENT: không có token → authGuard chặn ngay",
+                    "pm.test('TC082 – Status 401 không có token', () => pm.response.to.have.status(401));"
+                  ]
+                }
+              }
+            ]
+          },
+
+          {
+  "name": "TC083 – GET /results/export by enterprise_id → xlsx",
+  "request": {
+    "method": "GET",
+    "header": [
+      { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+    ],
+    "url": {
+      "raw": "{{baseUrl}}/internship-registrations/results/export?period_id=5&enterprise_id=17",
+      "host": ["{{baseUrl}}"],
+      "path": ["internship-registrations", "results", "export"],
+      "query": [
+        { "key": "period_id",    "value": "5" },
+        { "key": "enterprise_id","value": "17" }
+      ]
+    }
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Đảm bảo có ít nhất 1 sinh viên approved với enterprise_id=17, period_id=5",
+          "// Dùng B21DCCN001 (student_id=41) đã có preference pending với enterprise_id=17",
+          "const base   = pm.environment.get('baseUrl');",
+          "const adminH = { 'Authorization': 'Bearer ' + pm.environment.get('adminToken'), 'Content-Type': 'application/json' };",
+          "",
+          "pm.sendRequest({",
+          "  url: base + '/students/login', method: 'POST',",
+          "  header: { 'Content-Type': 'application/json' },",
+          "  body: { mode: 'raw', raw: JSON.stringify({ student_code: 'B21DCCN001', password: '123456' }) }",
+          "}, (err, rLogin) => {",
+          "  const stuToken = rLogin.json().token || rLogin.json().accessToken || rLogin.json().data?.token;",
+          "  const stuH = { 'Authorization': 'Bearer ' + stuToken, 'Content-Type': 'application/json' };",
+          "  pm.sendRequest({",
+          "    url: base + '/internship-registrations/my-preferences?period_id=5', method: 'GET', header: stuH",
+          "  }, (err, rGet) => {",
+          "    const list = Array.isArray(rGet.json()) ? rGet.json() : (rGet.json().data || []);",
+          "    const pref17 = list.find(p => p.enterprise_id === 17);",
+          "    if (!pref17) { console.log('TC083: Không tìm thấy preference enterprise_id=17'); return; }",
+          "    pm.environment.set('tc083_prefId', pref17.id);",
+          "    // Approve preference đó để có data export",
+          "    pm.sendRequest({",
+          "      url: base + '/internship-registrations/preference/' + pref17.id + '/status',",
+          "      method: 'PUT', header: adminH,",
+          "      body: { mode: 'raw', raw: JSON.stringify({ status: 'approved' }) }",
+          "    }, (err, rA) => console.log('TC083 setup approved:', rA.code === 200 ? '✅' : '❌'));",
+          "  });",
+          "});"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "pm.test('TC083 – Status 200', () => pm.response.to.have.status(200));",
+          "pm.test('TC083 – Content-Type là xlsx', () => {",
+          "  pm.expect(pm.response.headers.get('Content-Type'))",
+          "    .to.include('spreadsheetml.sheet');",
+          "});",
+          "pm.test('TC083 – Content-Disposition có filename', () => {",
+          "  const cd = pm.response.headers.get('Content-Disposition') || '';",
+          "  pm.expect(cd).to.include('attachment');",
+          "});",
+          "pm.test('TC083 – Response body không rỗng (file có dữ liệu)', () => {",
+          "  pm.expect(pm.response.stream.byteLength).to.be.above(0);",
+          "});",
+          "",
+          "// Rollback: reset preference về pending",
+          "const base   = pm.environment.get('baseUrl');",
+          "const adminH = { 'Authorization': 'Bearer ' + pm.environment.get('adminToken'), 'Content-Type': 'application/json' };",
+          "const prefId = pm.environment.get('tc083_prefId');",
+          "pm.sendRequest({",
+          "  url: base + '/internship-registrations/preference/' + prefId + '/status',",
+          "  method: 'PUT', header: adminH,",
+          "  body: { mode: 'raw', raw: JSON.stringify({ status: 'pending' }) }",
+          "}, (err, res) => {",
+          "  pm.environment.unset('tc083_prefId');",
+          "  console.log('Rollback TC083:', res.code === 200 ? '✅' : '❌');",
+          "});"
+        ]
+      }
+    }
+  ]
+}
+        ]
+      },
+      {
+        "name": "05 – Students CRUD",
+        "item": [
+
+          {
+            "name": "TC084 – GET /students?q=B99 → 200",
+            "request": {
+              "method": "GET",
+              "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+              "url": {
+                "raw": "{{baseUrl}}/students?q=B99",
+                "host": ["{{baseUrl}}"],
+                "path": ["students"],
+                "query": [{ "key": "q", "value": "B99" }]
+              }
+            },
+            "event": [{
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// ✅ INDEPENDENT: chỉ đọc, keyword cố định",
+                  "pm.test('TC084 – Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('TC084 – Trả về array', () => {",
+                  "  pm.expect(pm.response.json()).to.be.an('array');",
+                  "});",
+                  "pm.test('TC084 – Mỗi item có student_code', () => {",
+                  "  const arr = pm.response.json();",
+                  "  if (arr.length > 0) pm.expect(arr[0]).to.have.property('student_code');",
+                  "});"
+                ]
+              }
+            }]
+          },
+
+          {
+            "name": "TC093 – GET /students?q=Nguyen → 200",
+            "request": {
+              "method": "GET",
+              "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+              "url": {
+                "raw": "{{baseUrl}}/students?q=Nguyen",
+                "host": ["{{baseUrl}}"],
+                "path": ["students"],
+                "query": [{ "key": "q", "value": "Nguyen" }]
+              }
+            },
+            "event": [{
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// ✅ INDEPENDENT: chỉ đọc",
+                  "pm.test('TC093 – Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('TC093 – Trả về array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                ]
+              }
+            }]
+          },
+
+          {
+            "name": "TC094 – GET /students?q=ZZNOTEXIST → []",
+            "request": {
+              "method": "GET",
+              "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+              "url": {
+                "raw": "{{baseUrl}}/students?q=ZZNOTEXIST_XYZ_99999",
+                "host": ["{{baseUrl}}"],
+                "path": ["students"],
+                "query": [{ "key": "q", "value": "ZZNOTEXIST_XYZ_99999" }]
+              }
+            },
+            "event": [{
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// ✅ INDEPENDENT: keyword đủ lạ để chắc không có kết quả",
+                  "pm.test('TC094 – Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('TC094 – Body là mảng rỗng []', () => pm.expect(pm.response.json()).to.eql([]));"
+                ]
+              }
+            }]
+          },
+
+          {
+  "name": "TC086 – POST /register thiếu field bắt buộc → 400",
+  "request": {
+    "method": "POST",
+    "header": [
+      { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+      { "key": "Content-Type",  "value": "application/json" }
+    ],
+    "url": {
+      "raw": "{{baseUrl}}/students/register",
+      "host": ["{{baseUrl}}"],
+      "path": ["students", "register"]
+    },
+    "body": {
+      "mode": "raw",
+      "raw": "{\"name\": \"Missing Code\"}"
+    }
+  },
+  "event": [{
+    "listen": "test",
+    "script": {
+      "type": "text/javascript",
+      "exec": [
+      "pm.test('TC086 – Status 400', () => pm.response.to.have.status(400));",
+      "pm.test('TC086 – Có details array', () => {",
+      "  const b = pm.response.json();",
+      "  pm.expect(b).to.have.property('details');",
+      "  pm.expect(b.details).to.be.an('array').that.is.not.empty;",
+      "});",
+      "pm.test('TC086 – details[0] chứa msg bắt buộc', () => {",
+      "  const b = pm.response.json();",
+      "  pm.expect(b.details[0].msg).to.include('bắt buộc');",
+      "});"
+    ]
+    }
+  }]
+},
+          {
+            "name": "TC087c – POST GPA > 4.0 → 400",
+            "request": {
+              "method": "POST",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+                { "key": "Content-Type",  "value": "application/json" }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/students/register",
+                "host": ["{{baseUrl}}"],
+                "path": ["students", "register"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\"student_code\": \"B99PM_GPA\", \"name\": \"GPA Test\", \"email\": \"gpatest@ptit.edu.vn\", \"password\": \"pass123456\", \"phone\": \"0911000002\", \"major_id\": 1, \"class_name\": \"D22CNPM\", \"date_of_birth\": \"2003-01-01\", \"gpa\": 5.0}"
+              }
+            },
+            "event": [{
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// ✅ INDEPENDENT: validation GPA fail trước INSERT → không cần rollback",
+                  "pm.test('TC087c – Status 400 GPA invalid', () => pm.response.to.have.status(400));",
+                  "pm.test('TC087c – error GPA message', () => {",
+                  "  pm.expect(pm.response.json().message).to.equal('GPA phải là số từ 0.0 đến 4.0');",
+                  "});"
+                ]
+              }
+            }]
+          },
+
+          {
+            "name": "TC085 – POST /register valid + CheckDB + Rollback",
+            "request": {
+              "method": "POST",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+                { "key": "Content-Type",  "value": "application/json" }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/students/register",
+                "host": ["{{baseUrl}}"],
+                "path": ["students", "register"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\"student_code\": \"TC085_{{$timestamp}}\", \"name\": \"Nguyen Test TC085\", \"email\": \"tc085_{{$timestamp}}@ptit.edu.vn\", \"password\": \"pass123456\", \"phone\": \"0911111001\", \"major_id\": 1, \"class_name\": \"D22CNPM\", \"date_of_birth\": \"2003-01-01\", \"gpa\": 3.5}"
+              }
+            },
+            "event": [
+              {
+                "listen": "prerequest",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// Tạo timestamp unique để tránh trùng student_code và email mỗi lần chạy",
+                    "pm.environment.set('tc085_ts', Date.now());"
+                  ]
+                }
+              },
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// ✅ INDEPENDENT: student_code và email dùng timestamp → không bao giờ trùng",
+                    "// Tự rollback ngay trong TC này, KHÔNG set newStudentId ra ngoài",
+                    "pm.test('TC085 – Status 201', () => pm.response.to.have.status(201));",
+                    "pm.test('TC085 – Trả về student object có id', () => {",
+                    "  const b = pm.response.json();",
+                    "  pm.expect(b).to.have.property('id');",
+                    "  pm.expect(b).to.have.property('student_code');",
+                    "  pm.expect(b.student_code).to.include('TC085_');",
+                    "});",
+                    "pm.test('TC085 – Không trả về password', () => {",
+                    "  pm.expect(pm.response.json()).not.to.have.property('password');",
+                    "});",
+                    "",
+                    "const base  = pm.environment.get('baseUrl');",
+                    "const token = 'Bearer ' + pm.environment.get('adminToken');",
+                    "const sid   = pm.response.json().id;",
+                    "",
+                    "// CheckDB",
+                    "pm.sendRequest({",
+                    "  url: base + '/students/' + sid,",
+                    "  method: 'GET',",
+                    "  header: { Authorization: token }",
+                    "}, (err, res) => {",
+                    "  pm.expect(res.json().student_code).to.include('TC085_');",
+                    "  pm.expect(res.json()).not.to.have.property('password');",
+                    "  console.log('CheckDB TC085: ✅ password_hash ẩn, student_code khớp');",
+                    "});",
+                    "",
+                    "// Rollback – KHÔNG lưu id ra ngoài",
+                    "pm.sendRequest({",
+                    "  url: base + '/students/' + sid,",
+                    "  method: 'DELETE',",
+                    "  header: { Authorization: token }",
+                    "}, (err, res) => console.log('Rollback TC085:', res.code === 204 ? '✅' : '❌'));"
+                  ]
+                }
+              }
+            ]
+          },
+
+          {
+  "name": "TC087 – POST /register trùng mã sinh viên → 409",
+  "request": {
+    "method": "POST",
+    "header": [
+      { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+      { "key": "Content-Type",  "value": "application/json" }
+    ],
+    "url": {
+      "raw": "{{baseUrl}}/students/register",
+      "host": ["{{baseUrl}}"],
+      "path": ["students", "register"]
+    },
+    "body": {
+      "mode": "raw",
+      "raw": "{\"student_code\": \"{{tc087_code}}\", \"name\": \"Duplicate TC087\", \"email\": \"tc087dup_{{$timestamp}}@ptit.edu.vn\", \"password\": \"pass123456\", \"phone\": \"0911111087\", \"major_id\": 1, \"class_name\": \"D22CNPM\", \"date_of_birth\": \"2003-01-01\", \"gpa\": 3.0}"
+    }
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Seed: tạo 1 sinh viên trước để register trùng mã",
+          "const base  = pm.environment.get('baseUrl');",
+          "const token = 'Bearer ' + pm.environment.get('adminToken');",
+          "const code  = 'TC087_' + Date.now();",
+          "pm.environment.set('tc087_code', code);",
+          "",
+          "pm.sendRequest({",
+          "  url: base + '/students/register',",
+          "  method: 'POST',",
+          "  header: { Authorization: token, 'Content-Type': 'application/json' },",
+          "  body: {",
+          "    mode: 'raw',",
+          "    raw: JSON.stringify({",
+          "      student_code: code,",
+          "      name: 'Seed TC087',",
+          "      email: 'tc087seed_' + Date.now() + '@ptit.edu.vn',",
+          "      password: 'pass123456',",
+          "      phone: '0911111088',",
+          "      major_id: 1,",
+          "      class_name: 'D22CNPM',",
+          "      date_of_birth: '2003-01-01',",
+          "      gpa: 3.0",
+          "    })",
+          "  }",
+          "}, (err, res) => {",
+          "  pm.environment.set('tc087_seedId', res.json().id);",
+          "  console.log('Seed TC087:', code, '– id:', res.json().id);",
+          "});"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "pm.test('TC087 – Status 409', () => pm.response.to.have.status(409));",
+          "pm.test('TC087 – error mã SV trùng', () => {",
+          "  const b = pm.response.json();",
+          "  pm.expect(b.message).to.equal('Mã sinh viên đã tồn tại');",
+          "});",
+          "",
+          "// Rollback seed",
+          "pm.sendRequest({",
+          "  url: pm.environment.get('baseUrl') + '/students/' + pm.environment.get('tc087_seedId'),",
+          "  method: 'DELETE',",
+          "  header: { Authorization: 'Bearer ' + pm.environment.get('adminToken') }",
+          "}, (err, res) => {",
+          "  pm.environment.unset('tc087_code');",
+          "  pm.environment.unset('tc087_seedId');",
+          "  console.log('Rollback TC087 seed:', res.code === 204 ? '✅' : '❌');",
+          "});"
+        ]
+      }
+    }
+  ]
+},
+
+          {
+            "name": "TC087b – POST email trùng → 409",
+            "request": {
+              "method": "POST",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+                { "key": "Content-Type",  "value": "application/json" }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/students/register",
+                "host": ["{{baseUrl}}"],
+                "path": ["students", "register"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\"student_code\": \"TC087B_DUP_{{$timestamp}}\", \"name\": \"Dup Email\", \"email\": \"{{tc087b_email}}\", \"password\": \"pass123456\", \"phone\": \"0911222099\", \"major_id\": 1, \"class_name\": \"D22CNPM\", \"date_of_birth\": \"2003-01-01\"}"
+              }
+            },
+            "event": [
+              {
+                "listen": "prerequest",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// Setup: Tạo student seed, lưu email để request sau dùng lại email đó",
+                    "const ts    = Date.now();",
+                    "const email = 'tc087b_' + ts + '@ptit.edu.vn';",
+                    "pm.environment.set('tc087b_email', email);",
+                    "",
+                    "pm.sendRequest({",
+                    "  url: pm.environment.get('baseUrl') + '/students/register',",
+                    "  method: 'POST',",
+                    "  header: {",
+                    "    'Authorization': 'Bearer ' + pm.environment.get('adminToken'),",
+                    "    'Content-Type': 'application/json'",
+                    "  },",
+                    "  body: {",
+                    "    mode: 'raw',",
+                    "    raw: JSON.stringify({",
+                    "      student_code: 'TC087B_SEED_' + ts,",
+                    "      name: 'TC087b Seed',",
+                    "      email: email,",
+                    "      password: 'pass123456',",
+                    "      phone: '0911222002',",
+                    "      major_id: 1,",
+                    "      class_name: 'D22CNPM',",
+                    "      date_of_birth: '2003-01-01'",
+                    "    })",
+                    "  }",
+                    "}, (err, res) => {",
+                    "  pm.environment.set('tc087b_seedId', res.json().id);",
+                    "  console.log('Setup TC087b seed id:', res.json().id);",
+                    "});"
+                  ]
+                }
+              },
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// ✅ INDEPENDENT: seed tự tạo với email unique, request dùng lại cùng email → 409",
+                    "pm.test('TC087b – Status 409', () => pm.response.to.have.status(409));",
+                    "pm.test('TC087b – error email trùng', () => {",
+                    "  pm.expect(pm.response.json().message).to.equal('Email đã tồn tại');",
+                    "});",
+                    "",
+                    "// Rollback seed",
+                    "pm.sendRequest({",
+                    "  url: pm.environment.get('baseUrl') + '/students/' + pm.environment.get('tc087b_seedId'),",
+                    "  method: 'DELETE',",
+                    "  header: { Authorization: 'Bearer ' + pm.environment.get('adminToken') }",
+                    "}, (err, res) => {",
+                    "  pm.environment.unset('tc087b_email');",
+                    "  pm.environment.unset('tc087b_seedId');",
+                    "  console.log('Rollback TC087b seed:', res.code === 204 ? '✅' : '❌');",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          },
+
+          {
+            "name": "TC095 – GET /students/:id → 200",
+            "request": {
+              "method": "GET",
+              "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+              "url": {
+                "raw": "{{baseUrl}}/students/{{tc095_studentId}}",
+                "host": ["{{baseUrl}}"],
+                "path": ["students", "{{tc095_studentId}}"]
+              }
+            },
+            "event": [
+              {
+                "listen": "prerequest",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// Setup: Tự tạo student riêng để GET, không dùng newStudentId từ TC085",
+                    "const ts = Date.now();",
+                    "pm.sendRequest({",
+                    "  url: pm.environment.get('baseUrl') + '/students/register',",
+                    "  method: 'POST',",
+                    "  header: {",
+                    "    'Authorization': 'Bearer ' + pm.environment.get('adminToken'),",
+                    "    'Content-Type': 'application/json'",
+                    "  },",
+                    "  body: {",
+                    "    mode: 'raw',",
+                    "    raw: JSON.stringify({",
+                    "      student_code: 'TC095_' + ts,",
+                    "      name: 'TC095 Student',",
+                    "      email: 'tc095_' + ts + '@ptit.edu.vn',",
+                    "      password: 'pass123456',",
+                    "      phone: '0911333001',",
+                    "      major_id: 1,",
+                    "      class_name: 'D22CNPM',",
+                    "      date_of_birth: '2003-01-01',",
+                    "      gpa: 3.2",
+                    "    })",
+                    "  }",
+                    "}, (err, res) => {",
+                    "  pm.environment.set('tc095_studentId', res.json().id);",
+                    "  console.log('Setup TC095 studentId:', res.json().id);",
+                    "});"
+                  ]
+                }
+              },
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// ✅ INDEPENDENT: student tự tạo ở pre-req, rollback sau",
+                    "pm.test('TC095 – Status 200', () => pm.response.to.have.status(200));",
+                    "pm.test('TC095 – Có student_code', () => {",
+                    "  pm.expect(pm.response.json()).to.have.property('student_code');",
+                    "  pm.expect(pm.response.json().student_code).to.include('TC095_');",
+                    "});",
+                    "pm.test('TC095 – Có major_name', () => {",
+                    "  pm.expect(pm.response.json()).to.have.property('major_name');",
+                    "});",
+                    "pm.test('TC095 – Không lộ password', () => {",
+                    "  pm.expect(pm.response.json()).not.to.have.property('password');",
+                    "});",
+                    "",
+                    "// Rollback",
+                    "pm.sendRequest({",
+                    "  url: pm.environment.get('baseUrl') + '/students/' + pm.environment.get('tc095_studentId'),",
+                    "  method: 'DELETE',",
+                    "  header: { Authorization: 'Bearer ' + pm.environment.get('adminToken') }",
+                    "}, (err, res) => {",
+                    "  pm.environment.unset('tc095_studentId');",
+                    "  console.log('Rollback TC095:', res.code === 204 ? '✅' : '❌');",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          },
+
+          {
+            "name": "TC088 – PUT update student gpa + CheckDB",
+            "request": {
+              "method": "PUT",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+                { "key": "Content-Type",  "value": "application/json" }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/students/{{tc088_studentId}}",
+                "host": ["{{baseUrl}}"],
+                "path": ["students", "{{tc088_studentId}}"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\"gpa\": 3.8, \"phone\": \"0999888777\"}"
+              }
+            },
+            "event": [
+              {
+                "listen": "prerequest",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// Setup: Tạo student riêng để update",
+                    "const ts = Date.now();",
+                    "pm.sendRequest({",
+                    "  url: pm.environment.get('baseUrl') + '/students/register',",
+                    "  method: 'POST',",
+                    "  header: {",
+                    "    'Authorization': 'Bearer ' + pm.environment.get('adminToken'),",
+                    "    'Content-Type': 'application/json'",
+                    "  },",
+                    "  body: {",
+                    "    mode: 'raw',",
+                    "    raw: JSON.stringify({",
+                    "      student_code: 'TC088_' + ts,",
+                    "      name: 'TC088 Student',",
+                    "      email: 'tc088_' + ts + '@ptit.edu.vn',",
+                    "      password: 'pass123456',",
+                    "      phone: '0911444001',",
+                    "      major_id: 1,",
+                    "      class_name: 'D22CNPM',",
+                    "      date_of_birth: '2003-01-01',",
+                    "      gpa: 3.0",
+                    "    })",
+                    "  }",
+                    "}, (err, res) => {",
+                    "  pm.environment.set('tc088_studentId', res.json().id);",
+                    "  console.log('Setup TC088 studentId:', res.json().id);",
+                    "});"
+                  ]
+                }
+              },
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// ✅ INDEPENDENT: student tự tạo với gpa=3.0, update lên 3.8, rollback bằng DELETE",
+                    "pm.test('TC088 – Status 200', () => pm.response.to.have.status(200));",
+                    "pm.test('TC088 – GPA đã cập nhật thành 3.8', () => {",
+                    "  pm.expect(parseFloat(pm.response.json().gpa)).to.equal(3.8);",
+                    "});",
+                    "",
+                    "const base  = pm.environment.get('baseUrl');",
+                    "const token = 'Bearer ' + pm.environment.get('adminToken');",
+                    "const sid   = pm.environment.get('tc088_studentId');",
+                    "",
+                    "// CheckDB",
+                    "pm.sendRequest({",
+                    "  url: base + '/students/' + sid,",
+                    "  method: 'GET',",
+                    "  header: { Authorization: token }",
+                    "}, (err, res) => {",
+                    "  pm.expect(parseFloat(res.json().gpa)).to.equal(3.8);",
+                    "  console.log('CheckDB TC088: gpa=3.8 ✅');",
+                    "});",
+                    "",
+                    "// Rollback",
+                    "pm.sendRequest({",
+                    "  url: base + '/students/' + sid,",
+                    "  method: 'DELETE',",
+                    "  header: { Authorization: token }",
+                    "}, (err, res) => {",
+                    "  pm.environment.unset('tc088_studentId');",
+                    "  console.log('Rollback TC088:', res.code === 204 ? '✅' : '❌');",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          },
+
+          {
+            "name": "TC089 – DELETE student + CheckDB",
+            "request": {
+              "method": "DELETE",
+              "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+              "url": {
+                "raw": "{{baseUrl}}/students/{{tc089_studentId}}",
+                "host": ["{{baseUrl}}"],
+                "path": ["students", "{{tc089_studentId}}"]
+              }
+            },
+            "event": [
+              {
+                "listen": "prerequest",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// Setup: Tạo student riêng để xóa",
+                    "const ts = Date.now();",
+                    "pm.sendRequest({",
+                    "  url: pm.environment.get('baseUrl') + '/students/register',",
+                    "  method: 'POST',",
+                    "  header: {",
+                    "    'Authorization': 'Bearer ' + pm.environment.get('adminToken'),",
+                    "    'Content-Type': 'application/json'",
+                    "  },",
+                    "  body: {",
+                    "    mode: 'raw',",
+                    "    raw: JSON.stringify({",
+                    "      student_code: 'TC089_' + ts,",
+                    "      name: 'TC089 ToDelete',",
+                    "      email: 'tc089_' + ts + '@ptit.edu.vn',",
+                    "      password: 'pass123456',",
+                    "      phone: '0911555001',",
+                    "      major_id: 1,",
+                    "      class_name: 'D22CNPM',",
+                    "      date_of_birth: '2003-01-01'",
+                    "    })",
+                    "  }",
+                    "}, (err, res) => {",
+                    "  pm.environment.set('tc089_studentId', res.json().id);",
+                    "  console.log('Setup TC089 studentId:', res.json().id);",
+                    "});"
+                  ]
+                }
+              },
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// ✅ INDEPENDENT: student tự tạo, DELETE là chính TC này, CheckDB xác nhận → 404",
+                    "// Không cần rollback thêm vì DELETE chính là hành động test",
+                    "pm.test('TC089 – Status 204', () => pm.response.to.have.status(204));",
+                    "",
+                    "// CheckDB: GET phải trả 404",
+                    "pm.sendRequest({",
+                    "  url: pm.environment.get('baseUrl') + '/students/' + pm.environment.get('tc089_studentId'),",
+                    "  method: 'GET',",
+                    "  header: { Authorization: 'Bearer ' + pm.environment.get('adminToken') }",
+                    "}, (err, res) => {",
+                    "  pm.expect(res.code).to.equal(404);",
+                    "  pm.environment.unset('tc089_studentId');",
+                    "  console.log('CheckDB TC089 (đã xóa → 404): ✅');",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          }
+
+        ]
+      },
+      {
+        "name": "06 – Import Excel",
+        "item": [
+
+          {
+            "name": "TC091 – POST /students/import-excel 3 rows valid + Rollback",
+            "request": {
+              "method": "POST",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/students/import-excel",
+                "host": ["{{baseUrl}}"],
+                "path": ["students", "import-excel"]
+              },
+              "body": {
+                "mode": "formdata",
+                "formdata": [
+                  {
+                    "key": "file",
+                    "type": "file",
+                    "src": "TC091_students_valid.xlsx",
+                    "description": "File Excel 3 sinh viên hợp lệ – đặt cùng thư mục với collection JSON"
+                  }
+                ]
+              }
+            },
+            "event": [
+              {
+                "listen": "prerequest",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// ⚠️ File TC091_students_valid.xlsx phải đặt cùng thư mục với collection",
+                    "// Nội dung file: 3 dòng với student_code = TC091_A, TC091_B, TC091_C",
+                    "// File Excel dùng codes: IMP091_A, IMP091_B, IMP091_C"
+                  ]
+                }
+              },
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+              "exec": 
+                [
+                    "pm.test('TC091 – Status 200', () => pm.response.to.have.status(200));",
+                    "const resp91 = pm.response.json();",
+                    "const data91 = resp91.data || resp91;",
+                    "pm.test('TC091 – successCount=3, errorCount=0', () => {",
+                    "  pm.expect(data91.successCount).to.equal(3);",
+                    "  pm.expect(data91.errorCount).to.equal(0);",
+                    "});",
+                    "",
+                    "const base  = pm.environment.get('baseUrl');",
+                    "const token = 'Bearer ' + pm.environment.get('adminToken');",
+                    "const codes = ['B99IMP001', 'B99IMP002', 'B99IMP003'];",
+                    "",
+                    "codes.forEach(code => {",
+                    "  pm.sendRequest({",
+                    "    url: base + '/students?q=' + code,",
+                    "    method: 'GET',",
+                    "    header: { Authorization: token }",
+                    "  }, (err, res) => {",
+                    "    const body = res.json();",
+                    "    const list = Array.isArray(body) ? body : (body.data || []);",
+                    "    if (list.length > 0) {",
+                    "      pm.sendRequest({",
+                    "        url: base + '/students/' + list[0].id,",
+                    "        method: 'DELETE',",
+                    "        header: { Authorization: token }",
+                    "      }, (e, r) => console.log('Rollback TC091 ' + code + ':', r.code === 204 ? '✅' : '❌'));",
+                    "    } else {",
+                    "      console.log('Rollback TC091 ' + code + ': không tìm thấy');",
+                    "    }",
+                    "  });",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          },
+
+          {
+            "name": "TC092 – POST /students/import-excel partial (1 valid + 1 thiếu mã)",
+            "request": {
+              "method": "POST",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/students/import-excel",
+                "host": ["{{baseUrl}}"],
+                "path": ["students", "import-excel"]
+              },
+              "body": {
+                "mode": "formdata",
+                "formdata": [
+                  {
+                    "key": "file",
+                    "type": "file",
+                    "src": "TC092_students_partial.xlsx",
+                    "description": "File Excel 2 dòng: dòng 1 hợp lệ (code=TC092_OK), dòng 2 thiếu student_code"
+                  }
+                ]
+              }
+            },
+            "event": [
+              {
+                "listen": "prerequest",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// File TC092_students_partial.xlsx:",
+                    "// Dòng 1: student_code=IMP092_OK, name=..., email=imp092ok@ptit.edu.vn, ...",
+                    "// Dòng 2: student_code=(để trống), name=Missing Code, email=imp092bad@ptit.edu.vn, ..."
+                  ]
+                }
+              },
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "pm.test('TC092 – Status 200', () => pm.response.to.have.status(200));",
+                    "const resp92 = pm.response.json();",
+                    "const data92 = resp92.data || resp92;",
+                    "",
+                    "pm.test('TC092 – successCount=1, errorCount=1', () => {",
+                    "  pm.expect(data92.successCount).to.equal(1);",
+                    "  pm.expect(data92.errorCount).to.equal(1);",
+                    "});",
+                    "",
+                    "// DEBUG – chạy 1 lần xem backend trả về message lỗi gì, sau đó xóa dòng này",
+                    "console.log('DEBUG TC092 errors:', JSON.stringify(data92.errors));",
+                    "",
+                    "pm.test('TC092 – errors[0] chứa bắt buộc', () => {",
+                    "  const errs = data92.errors || [];",
+                    "  pm.expect(errs[0].error || errs[0]).to.include('Thiếu mã sinh viên');",
+                    "});",
+                    "",
+                    "const base92  = pm.environment.get('baseUrl');",
+                    "const token92 = 'Bearer ' + pm.environment.get('adminToken');",
+                    "",
+                    "pm.sendRequest({",
+                    "  url: base92 + '/students?q=B99IMP011',",
+                    "  method: 'GET',",
+                    "  header: { Authorization: token92 }",
+                    "}, (err, res) => {",
+                    "  const body = res.json();",
+                    "  const list = Array.isArray(body) ? body : (body.data || []);",
+                    "  if (list.length > 0) {",
+                    "    pm.sendRequest({",
+                    "      url: base92 + '/students/' + list[0].id,",
+                    "      method: 'DELETE',",
+                    "      header: { Authorization: token92 }",
+                    "    }, (e, r) => console.log('Rollback TC092 B99IMP011:', r.code === 204 ? '✅' : '❌'));",
+                    "  } else {",
+                    "    console.log('Rollback TC092 B99IMP011: không tìm thấy');",
+                    "  }",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          },
+
+          {
+            "name": "TC093_IMPORT – POST /students/import-excel không có file → 400",
+            "request": {
+              "method": "POST",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/students/import-excel",
+                "host": ["{{baseUrl}}"],
+                "path": ["students", "import-excel"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// ✅ INDEPENDENT: không gửi file → server validate ngay → không tạo data",
+                    "pm.test('TC093_IMPORT – Status 400', () => pm.response.to.have.status(400));",
+                    "pm.test('TC093_IMPORT – error message đúng', () => {",
+                    "  pm.expect(pm.response.json().message).to.equal('Vui lòng chọn file Excel');",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          },
+
+          {
+            "name": "TC099 – POST /period-enterprises/import 2 enterprises + CheckDB + Rollback",
+            "request": {
+              "method": "POST",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/period-enterprises/import",
+                "host": ["{{baseUrl}}"],
+                "path": ["period-enterprises", "import"]
+              },
+              "body": {
+                "mode": "formdata",
+                "formdata": [
+                  {
+                    "key": "file",
+                    "type": "file",
+                    "src": "TC099_enterprises_valid.xlsx",
+                    "description": "File Excel 2 dòng: name=Import Corp A, name=Import Corp B"
+                  },
+                  {
+                    "key": "period_id",
+                    "value": "{{periodId}}",
+                    "type": "text"
+                  }
+                ]
+              }
+            },
+            "event": [
+              {
+                "listen": "prerequest",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// ⚠️ File TC099_students_valid.xlsx:",
+                    "// Dòng 1: name=Import Corp A, max_slots=5, address=Hà Nội, contact=hr@impa.com",
+                    "// Dòng 2: name=Import Corp B, max_slots=8, address=TP. Hồ Chí Minh, contact=hr@impb.com"
+                  ]
+                }
+              },
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "pm.test('TC099 – Status 200', () => pm.response.to.have.status(200));",
+                    "pm.test('TC099 – success=2, failed=0', () => {",
+                    "  const b = pm.response.json();",
+                    "  const data = b.data || b;",
+                    "  pm.expect(data.success).to.equal(2);",
+                    "  pm.expect(data.failed).to.equal(0);",
+                    "});",
+                    "",
+                    "const base  = pm.environment.get('baseUrl');",
+                    "const token = 'Bearer ' + pm.environment.get('adminToken');",
+                    "",
+                    "// CheckDB + Rollback",
+                    "pm.sendRequest({",
+                    "  url: base + '/period-enterprises?period_id=' + pm.environment.get('periodId'),",
+                    "  method: 'GET',",
+                    "  header: { Authorization: token }",
+                    "}, (err, res) => {",
+                    "  const body = res.json();",
+                    "  const list = Array.isArray(body) ? body : (body.data || []);",
+                    "  const imported = list.filter(e => e.name === 'Import Corp A' || e.name === 'Import Corp B');",
+                    "  pm.expect(imported.length).to.equal(2, 'Phải tìm thấy đúng 2 enterprise đã import');",
+                    "  console.log('CheckDB TC099:', imported.length, 'enterprises ✅');",
+                    "",
+                    "  // Rollback từng enterprise",
+                    "  imported.forEach(e => {",
+                    "    pm.sendRequest({",
+                    "      url: base + '/period-enterprises/' + e.id,",
+                    "      method: 'DELETE',",
+                    "      header: { Authorization: token }",
+                    "    }, (err2, r) => console.log('Rollback TC099', e.name + ':', r.code === 200 ? '✅' : '❌'));",
+                    "  });",
+                    "});"
+                  ]
+                }
+              }
+          ]
+        },         
+      {
+            "name": "TC099b – POST /period-enterprises/import thiếu period_id → 400",
+            "request": {
+              "method": "POST",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+              ],
+              "url": {
+                "raw": "{{baseUrl}}/period-enterprises/import",
+                "host": ["{{baseUrl}}"],
+                "path": ["period-enterprises", "import"]
+              },
+              "body": {
+                "mode": "formdata",
+                "formdata": [
+                  {
+                    "key": "file",
+                    "type": "file",
+                    "src": "TC099_enterprises_valid.xlsx",
+                    "description": "Dùng lại file TC099 – server sẽ reject trước khi đọc file vì thiếu period_id"
+                  }
+                ]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [
+                    "// ✅ INDEPENDENT: server check period_id trước khi xử lý file → 400 ngay",
+                    "// Không insert gì vào DB → không cần rollback",
+                    "pm.test('TC099b – Status 400', () => pm.response.to.have.status(400));",
+                    "pm.test('TC099b – error period_id bắt buộc', () => {",
+                    "  pm.expect(pm.response.json().error).to.equal('period_id là bắt buộc');",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          }
+
+        ]
+      }
+  ]
+}
