@@ -14,13 +14,20 @@
     "test:minh-thang": "jest --verbose --forceExit --detectOpenHandles --runInBand __tests__/minh-thang_enterprise-approval",
     "test:minh-vu": "jest --verbose --forceExit --detectOpenHandles --runInBand __tests__/minh-vu_internship-reg",
     "test:coverage": "jest --coverage --verbose --forceExit --detectOpenHandles --runInBand",
-    "lint": "echo \"No linters configured\""
+    "lint": "echo \"No linters configured\"",
+    "newman:v2": "newman run postman_tests/collections/MinhVu_Internship.json -e postman_tests/environments/local_env.json --iteration-data postman_tests/data/internship_test_data_v2.csv --reporters cli,json,htmlextra --reporter-json-export postman_tests/reports/results.json --reporter-htmlextra-export postman_tests/reports/results.html --reporter-htmlextra-title \"Internship API Test Report\""
   },
   "jest": {
     "testEnvironment": "node",
-    "testMatch": ["**/__tests__/**/*.test.js", "**/test/unit/**/*.test.js"],
+    "testMatch": [
+      "**/__tests__/**/*.test.js",
+      "**/test/unit/**/*.test.js"
+    ],
     "coverageDirectory": "coverage",
-    "coveragePathIgnorePatterns": ["/node_modules/", "/scripts/"],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/scripts/"
+    ],
     "testTimeout": 10000
   },
   "keywords": [],
@@ -42,6 +49,8 @@
   },
   "devDependencies": {
     "jest": "^29.7.0",
+    "newman": "^6.2.2",
+    "newman-reporter-htmlextra": "^1.23.1",
     "nodemon": "^3.1.11",
     "supertest": "^7.2.2"
   }
